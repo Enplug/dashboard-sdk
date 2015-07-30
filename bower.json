@@ -21,6 +21,6 @@
         "*.iml",
         "Gruntfile.js",
         "package.json",
-        "grunt/*"
+        "grunt"
     ]
 }
