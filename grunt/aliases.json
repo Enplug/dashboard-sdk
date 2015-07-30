@@ -1,0 +1,23 @@
+{
+    "build": [
+        "clean:build",
+        "copy:sdk",
+        "concat:modules",
+        "concat:components",
+        "uglify:build"
+    ],
+    "version": [
+        "build",
+        "checkbranch:!master",
+        "checkrepo:version",
+        "prompt:version",
+        "bump"
+    ],
+    "release": [
+        "checkbranch:master",
+        "checkrepo:release",
+        "gittag:release",
+        "gitpush:release",
+        "s3:release"
+    ]
+}
