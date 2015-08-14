@@ -88,7 +88,9 @@ angular.module('enplug.sdk').factory('$enplugTransport', ['$log', '$timeout', '$
             debug('Calling method:' + methodCall.name);
             methodCall.callId = callId++;
             methodCall.defer = $q.defer();
-            pendingCalls[methodCall.callId] = methodCall;
+            if (!methodCall.transient) {
+                pendingCalls[methodCall.callId] = methodCall;
+            }
             var json = JSON.stringify(methodCall);
             this.sendMessage(json);
             return methodCall.defer.promise;

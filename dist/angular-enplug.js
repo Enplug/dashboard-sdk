@@ -218,7 +218,7 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
     };
 }]);
 
-angular.module('enplug.sdk').factory('$enplugDashboard', ['$log', '$enplugTransport', function ($log, $enplugTransport) {
+angular.module('enplug.sdk').factory('$enplugDashboard', function ($log, $enplugTransport, $document) {
 
     var transport = $enplugTransport,
 
@@ -237,6 +237,15 @@ angular.module('enplug.sdk').factory('$enplugDashboard', ['$log', '$enplugTransp
         method.name = methodPrefix + method.name;
         return transport.callMethod(method);
     }
+
+    // Broadcast clicks up to parent window so that we can react to clicks for things like
+    // closing nav dropdowns
+    $document.on('click', function () {
+        callMethod({
+            name: 'click',
+            transient: true // don't wait for a response
+        });
+    });
 
     return {
 
@@ -348,7 +357,7 @@ angular.module('enplug.sdk').factory('$enplugDashboard', ['$log', '$enplugTransp
             return callMethod(method);
         }
     };
-}]);
+});
 
 angular.module('enplug', []).service('$enplug', function ($timeout) {
 
@@ -601,7 +610,9 @@ angular.module('enplug.sdk').factory('$enplugTransport', ['$log', '$timeout', '$
             debug('Calling method:' + methodCall.name);
             methodCall.callId = callId++;
             methodCall.defer = $q.defer();
-            pendingCalls[methodCall.callId] = methodCall;
+            if (!methodCall.transient) {
+                pendingCalls[methodCall.callId] = methodCall;
+            }
             var json = JSON.stringify(methodCall);
             this.sendMessage(json);
             return methodCall.defer.promise;

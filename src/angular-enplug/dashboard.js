@@ -1,4 +1,4 @@
-angular.module('enplug.sdk').factory('$enplugDashboard', ['$log', '$enplugTransport', function ($log, $enplugTransport) {
+angular.module('enplug.sdk').factory('$enplugDashboard', function ($log, $enplugTransport, $document) {
 
     var transport = $enplugTransport,
 
@@ -17,6 +17,15 @@ angular.module('enplug.sdk').factory('$enplugDashboard', ['$log', '$enplugTransp
         method.name = methodPrefix + method.name;
         return transport.callMethod(method);
     }
+
+    // Broadcast clicks up to parent window so that we can react to clicks for things like
+    // closing nav dropdowns
+    $document.on('click', function () {
+        callMethod({
+            name: 'click',
+            transient: true // don't wait for a response
+        });
+    });
 
     return {
 
@@ -128,4 +137,4 @@ angular.module('enplug.sdk').factory('$enplugDashboard', ['$log', '$enplugTransp
             return callMethod(method);
         }
     };
-}]);
+});
