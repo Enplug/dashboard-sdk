@@ -43,6 +43,30 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
             return transport.callMethod(methodCall);
         },
 
+        bulkCreateAssets: function (values) {
+            var methodCall = {
+                name: 'app.bulkCreateAssets',
+                params: values
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        bulkUpdateAssets: function (assets) {
+            var methodCall = {
+                name: 'app.bulkUpdateAssets',
+                params: assets
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        bulkRemoveAssets: function (assetIds) {
+            var methodCall = {
+                name: 'app.bulkRemoveAssets',
+                params: assetIds
+            };
+            return transport.callMethod(methodCall);
+        },
+
         removeAsset: function (id) {
             var methodCall = {
                 name: 'app.removeAsset',

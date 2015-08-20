@@ -25,6 +25,7 @@ angular.module('enplug.sdk').factory('$enplugDashboard', function ($log, $enplug
             name: 'click',
             transient: true // don't wait for a response
         });
+        return true;
     });
 
     return {
