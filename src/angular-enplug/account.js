@@ -43,10 +43,10 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
             return transport.callMethod(methodCall);
         },
 
-        bulkCreateAssets: function (values) {
+        bulkCreateAssets: function (assets) {
             var methodCall = {
                 name: 'app.bulkCreateAssets',
-                params: values
+                params: assets
             };
             return transport.callMethod(methodCall);
         },
@@ -71,6 +71,35 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
             var methodCall = {
                 name: 'app.removeAsset',
                 params: [id]
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        getThemes: function () {
+            var methodCall = { name: 'app.getThemes' };
+            return transport.callMethod(methodCall);
+        },
+
+        createTheme: function (newTheme) {
+            var methodCall = {
+                name: 'app.createTheme',
+                params: newTheme
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        removeTheme: function (themeId) {
+            var methodCall = {
+                name: 'app.removeTheme',
+                params: themeId
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        activateTheme: function (themeId) {
+            var methodCall = {
+                name: 'app.activateTheme',
+                params: themeId
             };
             return transport.callMethod(methodCall);
         }
