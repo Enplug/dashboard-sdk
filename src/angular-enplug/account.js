@@ -9,6 +9,11 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
             return transport.callMethod(methodCall);
         },
 
+        getInstances: function () {
+            var methodCall = { name: 'app.getInstances' };
+            return transport.callMethod(methodCall);
+        },
+
         getAssets: function () {
             var methodCall = { name: 'app.getAssets' };
             return transport.callMethod(methodCall);
