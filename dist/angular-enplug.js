@@ -105,6 +105,16 @@ enplug.Apps = function () {
             transport.callMethod(methodCall);
         },
 
+        getDisplay: function (accountId, successCallback, errorCallback) {
+            var methodCall = {
+                name: 'getAccount',
+                params: [accountId],
+                successCallback: successCallback,
+                errorCallback: errorCallback
+            };
+            transport.callMethod(methodCall);
+        },
+
         getAssets: function (successCallback, errorCallback) {
             var methodCall = { name: 'getAssets', successCallback: successCallback, errorCallback: errorCallback };
             transport.callMethod(methodCall);
@@ -161,6 +171,14 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
 
         getAccount: function () {
             var methodCall = { name: 'app.getAccount' };
+            return transport.callMethod(methodCall);
+        },
+
+        getDisplay: function (accountId) {
+            var methodCall = {
+                name: 'app.getDisplay',
+                params: accountId
+            };
             return transport.callMethod(methodCall);
         },
 
