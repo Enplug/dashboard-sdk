@@ -105,6 +105,16 @@ enplug.Apps = function () {
             transport.callMethod(methodCall);
         },
 
+        getDisplay: function (accountId, successCallback, errorCallback) {
+            var methodCall = {
+                name: 'getAccount',
+                params: [accountId],
+                successCallback: successCallback,
+                errorCallback: errorCallback
+            };
+            transport.callMethod(methodCall);
+        },
+
         getAssets: function (successCallback, errorCallback) {
             var methodCall = { name: 'getAssets', successCallback: successCallback, errorCallback: errorCallback };
             transport.callMethod(methodCall);
