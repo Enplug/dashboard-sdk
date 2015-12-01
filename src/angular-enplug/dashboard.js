@@ -144,11 +144,11 @@ angular.module('enplug.sdk').factory('$enplugDashboard', function ($log, $enplug
          * @returns {*}
          */
         upload: function (options) {
-            var methodCall = {
+            var method = {
                 name: 'upload',
                 params: options
             };
-            return transport.callMethod(methodCall);
+            return callMethod(method);
         }
     };
 });
