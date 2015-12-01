@@ -136,6 +136,19 @@ angular.module('enplug.sdk').factory('$enplugDashboard', function ($log, $enplug
                 name: 'unsavedChanges'
             };
             return callMethod(method);
+        },
+
+        /**
+         * Uses Filepicker upload interface and Enplug encoding service, returns uploaded object
+         * @param options - Filepicker options
+         * @returns {*}
+         */
+        upload: function (options) {
+            var methodCall = {
+                name: 'upload',
+                params: options
+            };
+            return transport.callMethod(methodCall);
         }
     };
 });
