@@ -1,26 +1,30 @@
 {
-    "name": "enplug-dashboard-sdk",
-    "version": "2.5.1",
-    "homepage": "https://github.com/Enplug/dashboard-sdk",
-    "authors": [
-        "Alex Ross <alex@enplug.com>"
-    ],
-    "description": "AngularJS Enplug SDK dashboard component",
-    "main": "dist/angular-enplug.js",
-    "keywords": [
-        "enplug"
-    ],
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests",
-        "tmp/*",
-        "*.iml",
-        "Gruntfile.js",
-        "package.json",
-        "grunt"
-    ]
+  "name": "enplug-dashboard-sdk",
+  "version": "2.5.1",
+  "homepage": "https://github.com/Enplug/dashboard-sdk",
+  "authors": [
+    "Alex Ross <alex@enplug.com>"
+  ],
+  "description": "AngularJS Enplug SDK dashboard component",
+  "main": "dist/angular-enplug.js",
+  "keywords": [
+    "enplug"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "tmp/*",
+    "*.iml",
+    "Gruntfile.js",
+    "package.json",
+    "grunt"
+  ],
+  "devDependencies": {
+    "angular": "~1.4.8",
+    "angular-mocks": "~1.4.8"
+  }
 }

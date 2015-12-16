@@ -19,5 +19,9 @@
         "gittag:release",
         "gitpush:release",
         "s3:release"
-    ]
+    ],
+    "test": [
+        "karma:unit",
+        "coveralls"
+    ],
 }
