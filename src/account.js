@@ -3,6 +3,12 @@
 
     var methodPrefix = 'account';
 
+    function validate(data, expectedType, errorMessage) {
+        if (!data || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
+            throw new Error(errorMessage);
+        }
+    }
+
     enplug.account = enplug.transport.factory({
 
         getAccount: function (onSuccess, onError) {
@@ -22,6 +28,7 @@
         },
 
         getInstances: function (accountId, onSuccess, onError) {
+            validate(accountId, 'string', '');
             return this.method({
                 name: 'getInstances',
                 params: accountId,
@@ -38,101 +45,122 @@
             });
         },
 
-        getDefaultAssets: function () {
-            var methodCall = { name: 'app.getDefaultAssets' };
-            return transport.callMethod(methodCall);
+        getDefaultAssets: function (onSuccess, onError) {
+            return this.method({
+                name: 'getDefaultAssets',
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        createAsset: function (name, value) {
-            var methodCall = {
-                name: 'app.createAsset',
-                params: [name, value]
-            };
-            return transport.callMethod(methodCall);
+        createAsset: function (name, value, onSuccess, onError) {
+            validate(name, 'string', '');
+            validate(value, 'object', '');
+            return this.method({
+                name: 'createAsset',
+                params: [name, value],
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        createAssetFromDefault: function (defaultAssetId) {
-            var methodCall = {
-                name: 'app.createAssetFromDefault',
-                params: defaultAssetId
-            };
-            return transport.callMethod(methodCall);
+        createAssetFromDefault: function (defaultAssetId, onSuccess, onError) {
+            validate(defaultAssetId, 'string', '');
+            return this.method({
+                name: 'createAssetFromDefault',
+                params: defaultAssetId,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        /**
-         *
-         * @param id
-         * @param value
-         * @param {...requestCallback} callbacks
-         * @returns {*}
-         */
-        updateAsset: function (id, value, callbacks) {
-            var methodCall = {
-                name: 'app.updateAsset',
-                params: [id, value]
-            };
-            return transport.callMethod(methodCall);
+        updateAsset: function (id, value, onSuccess, onError) {
+            validate(id, 'string', '');
+            validate(value, 'object', '');
+            return this.method({
+                name: 'updateAsset',
+                params: [id, value],
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        bulkCreateAssets: function (assets) {
-            var methodCall = {
-                name: 'app.bulkCreateAssets',
-                params: assets
-            };
-            return transport.callMethod(methodCall);
+        bulkCreateAssets: function (assets, onSuccess, onError) {
+            validate(assets, 'array', '');
+            return this.method({
+                name: 'bulkCreateAssets',
+                params: assets,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        bulkUpdateAssets: function (assets) {
-            var methodCall = {
-                name: 'app.bulkUpdateAssets',
-                params: assets
-            };
-            return transport.callMethod(methodCall);
+        bulkUpdateAssets: function (assets, onSuccess, onError) {
+            validate(assets, 'array', '');
+            return this.method({
+                name: 'bulkUpdateAssets',
+                params: assets,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        bulkRemoveAssets: function (assetIds) {
-            var methodCall = {
-                name: 'app.bulkRemoveAssets',
-                params: assetIds
-            };
-            return transport.callMethod(methodCall);
+        bulkRemoveAssets: function (assetIds, onSuccess, onError) {
+            validate(assetIds, 'array', '');
+            return this.method({
+                name: 'bulkRemoveAssets',
+                params: assetIds,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        removeAsset: function (id) {
-            var methodCall = {
-                name: 'app.removeAsset',
-                params: [id]
-            };
-            return transport.callMethod(methodCall);
+        removeAsset: function (id, onSuccess, onError) {
+            validate(id, 'string', '');
+            return this.method({
+                name: 'removeAsset',
+                params: [id],
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        getThemes: function () {
-            var methodCall = { name: 'app.getThemes' };
-            return transport.callMethod(methodCall);
+        getThemes: function (onSuccess, onError) {
+            return this.method({
+                name: 'getThemes',
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        createTheme: function (newTheme) {
-            var methodCall = {
-                name: 'app.createTheme',
-                params: newTheme
-            };
-            return transport.callMethod(methodCall);
+        createTheme: function (newTheme, onSuccess, onError) {
+            validate(newTheme, 'object', '');
+            return this.method({
+                name: 'createTheme',
+                params: newTheme,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        removeTheme: function (themeId) {
-            var methodCall = {
-                name: 'app.removeTheme',
-                params: themeId
-            };
-            return transport.callMethod(methodCall);
+        removeTheme: function (themeId, onSuccess, onError) {
+            validate(themeId, 'string', '');
+            return this.method({
+                name: 'removeTheme',
+                params: themeId,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         },
 
-        activateTheme: function (themeId) {
-            var methodCall = {
-                name: 'app.activateTheme',
-                params: themeId
-            };
-            return transport.callMethod(methodCall);
+        activateTheme: function (themeId, onSuccess, onError) {
+            validate(themeId, 'string', '');
+            return this.method({
+                name: 'activateTheme',
+                params: themeId,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
         }
     }, methodPrefix);
 

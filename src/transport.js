@@ -5,6 +5,7 @@
 
     var enplug = window.enplug || (window.enplug = { debug: false }),
         targetDomain = '*',
+        namespace = 'Enplug',
         targetOrigin = targetDomain,
         tag = '[Enplug SDK] ',
         noop = function () {};  // Placeholder for when a callback isn't provided
@@ -59,7 +60,9 @@
     function receiveFromParent(event) {
         if (isValidJson(event.data)) {
             var response = window.JSON.parse(event.data);
-            if (typeof response.callId === 'number') {
+
+            // Check for success key to ignore messages being sent
+            if (response.namespace === namespace && typeof response.success === 'boolean') {
                 var methodCall = enplug.transport.pendingCalls[response.callId];
                 if (methodCall) {
                     if (!methodCall.persistent) {
@@ -67,7 +70,7 @@
                     }
 
                     debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
-                        method: methodCall,
+                        call: methodCall,
                         response: response
                     });
 
@@ -77,7 +80,11 @@
                     return true;
                 }
             } else {
-                debug('Did not recognize window message response format:', event);
+
+                // Ignore messages posted by this window
+                if (response.namespace !== namespace) {
+                    debug('Did not recognize window message response format:', event);
+                }
             }
         } else {
             debug('Did not recognize non-JSON window message:', event);
@@ -124,6 +131,7 @@
                 }
 
                 sendToParent(options);
+                return options.callId;
             } else {
                 throw new Error('');
             }
@@ -140,6 +148,7 @@
 
                 // Add implementation-specific method prefix (dashboard or app)
                 options.name = prefix + '.' + options.name;
+                options.namespace = namespace;
 
                 return enplug.transport.send(options);
             };
