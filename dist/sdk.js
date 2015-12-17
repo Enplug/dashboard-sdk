@@ -29,6 +29,21 @@
         }
     }
 
+    // Validate and assign defaults for callback methods
+    function validateCallbacks(options) {
+        if (options.successCallback && typeof options.successCallback !== 'function') {
+            throw new Error('');
+        } else {
+            options.successCallback = options.successCallback || noop;
+        }
+
+        if (options.errorCallback && typeof options.errorCallback !== 'function') {
+            throw new Error('');
+        } else {
+            options.errorCallback = options.errorCallback || noop;
+        }
+    }
+
     // Posts message to parent window
     function sendToParent(methodCall) {
         debug('Calling method:', methodCall);
@@ -101,31 +116,7 @@
                 options.transient = !!options.transient;
                 options.persistent = !!options.persistent;
 
-                if (options.transient) {
-
-                    // Transient method calls won't receive callbacks, so notify
-                    // developer if they provided one
-                    if (typeof options.errorCallback === 'function') {
-                        throw new Error('');
-                    }
-
-                    if (typeof options.successCallback === 'function') {
-                        throw new Error('');
-                    }
-                } else {
-
-                    // Validate and assign defaults for callback methods
-                    if (options.successCallback && typeof options.successCallback !== 'function') {
-                        throw new Error('');
-                    } else {
-                        options.successCallback = options.successCallback || noop;
-                    }
-
-                    if (options.errorCallback && typeof options.errorCallback !== 'function') {
-                        throw new Error('');
-                    } else {
-                        options.errorCallback = options.errorCallback || noop;
-                    }
+                if (!options.transient) {
 
                     // Push this non-transient method call into the pending stack, so that
                     // we can get it when a response is received
@@ -142,13 +133,15 @@
          *
          * @param context
          * @param prefix
-         * @returns {Object}
          */
         factory: function (context, prefix) {
             context.method = function (options) {
+                validateCallbacks(options);
+
+                // Add implementation-specific method prefix (dashboard or app)
                 options.name = prefix + '.' + options.name;
-                enplug.transport.send(options);
-                return options.callId;
+
+                return enplug.transport.send(options);
             };
 
             return context;
@@ -162,21 +155,209 @@
 (function (enplug) {
     'use strict';
 
+    var methodPrefix = 'account';
+
+    enplug.account = enplug.transport.factory({
+
+        getAccount: function (onSuccess, onError) {
+            return this.method({
+                name: 'getAccount',
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        getDisplayGroup: function (onSuccess, onError) {
+            return this.method({
+                name: 'getDisplay',
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        getInstances: function (accountId, onSuccess, onError) {
+            return this.method({
+                name: 'getInstances',
+                params: accountId,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        getAssets: function (onSuccess, onError) {
+            return this.method({
+                name: 'getAssets',
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        getDefaultAssets: function () {
+            var methodCall = { name: 'app.getDefaultAssets' };
+            return transport.callMethod(methodCall);
+        },
+
+        createAsset: function (name, value) {
+            var methodCall = {
+                name: 'app.createAsset',
+                params: [name, value]
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        createAssetFromDefault: function (defaultAssetId) {
+            var methodCall = {
+                name: 'app.createAssetFromDefault',
+                params: defaultAssetId
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        /**
+         *
+         * @param id
+         * @param value
+         * @param {...requestCallback} callbacks
+         * @returns {*}
+         */
+        updateAsset: function (id, value, callbacks) {
+            var methodCall = {
+                name: 'app.updateAsset',
+                params: [id, value]
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        bulkCreateAssets: function (assets) {
+            var methodCall = {
+                name: 'app.bulkCreateAssets',
+                params: assets
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        bulkUpdateAssets: function (assets) {
+            var methodCall = {
+                name: 'app.bulkUpdateAssets',
+                params: assets
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        bulkRemoveAssets: function (assetIds) {
+            var methodCall = {
+                name: 'app.bulkRemoveAssets',
+                params: assetIds
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        removeAsset: function (id) {
+            var methodCall = {
+                name: 'app.removeAsset',
+                params: [id]
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        getThemes: function () {
+            var methodCall = { name: 'app.getThemes' };
+            return transport.callMethod(methodCall);
+        },
+
+        createTheme: function (newTheme) {
+            var methodCall = {
+                name: 'app.createTheme',
+                params: newTheme
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        removeTheme: function (themeId) {
+            var methodCall = {
+                name: 'app.removeTheme',
+                params: themeId
+            };
+            return transport.callMethod(methodCall);
+        },
+
+        activateTheme: function (themeId) {
+            var methodCall = {
+                name: 'app.activateTheme',
+                params: themeId
+            };
+            return transport.callMethod(methodCall);
+        }
+    }, methodPrefix);
+
+    /**
+     * @deprecated
+     */
+    enplug.account.getDisplay = enplug.account.getDisplayGroup;
 }(window.enplug));
 
-(function (angular) {
+(function (angular, enplug) {
     'use strict';
+
+    function alias(original) {
+        var service = {};
+        for (var property in original) {
+            if (original.hasOwnProperty(property)) {
+                service[property] = original[property];
+            }
+        }
+
+        return service;
+    }
 
     /**
      * Sets up enplug.sdk module and associated services
      * if angular is loaded on the page.
      */
     if (angular) {
-        angular.module('enplug.sdk', []);
 
-        // Todo account and dashboard services
+        var module = angular.module('enplug.sdk', []);
+
+        // Modify the transport.send function to return a promise
+        // which will be resolved/rejected by the callbacks
+        module.config(function () {
+            var q = angular.injector(['ng']).get('$q');
+
+            // Override the send method to intercept callbacks
+            var send = enplug.transport.send;
+            enplug.transport.send = function (options) {
+
+                // Store originals
+                var defer = q.defer(),
+                    onSuccess = options.successCallback,
+                    onError = options.errorCallback;
+
+                options.successCallback = function (result) {
+                    defer.resolve(result);
+                    onSuccess(result);
+                };
+
+                options.errorCallback = function (result) {
+                    defer.reject(result);
+                    onError(result);
+                };
+
+                // Call the original transport method
+                // but use our promise as the return value
+                send.call(enplug.transport, options);
+                return defer.promise;
+            };
+        });
+
+        module.factory('$enplugDashboard', function () {
+            return alias(enplug.dashboard);
+        });
+
+        module.factory('$enplugAccount', function () {
+            return alias(enplug.account);
+        });
     }
-}(window.angular));
+}(window.angular, window.enplug));
 
 (function (enplug, document) {
     'use strict';

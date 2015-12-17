@@ -29,6 +29,21 @@
         }
     }
 
+    // Validate and assign defaults for callback methods
+    function validateCallbacks(options) {
+        if (options.successCallback && typeof options.successCallback !== 'function') {
+            throw new Error('');
+        } else {
+            options.successCallback = options.successCallback || noop;
+        }
+
+        if (options.errorCallback && typeof options.errorCallback !== 'function') {
+            throw new Error('');
+        } else {
+            options.errorCallback = options.errorCallback || noop;
+        }
+    }
+
     // Posts message to parent window
     function sendToParent(methodCall) {
         debug('Calling method:', methodCall);
@@ -101,31 +116,7 @@
                 options.transient = !!options.transient;
                 options.persistent = !!options.persistent;
 
-                if (options.transient) {
-
-                    // Transient method calls won't receive callbacks, so notify
-                    // developer if they provided one
-                    if (typeof options.errorCallback === 'function') {
-                        throw new Error('');
-                    }
-
-                    if (typeof options.successCallback === 'function') {
-                        throw new Error('');
-                    }
-                } else {
-
-                    // Validate and assign defaults for callback methods
-                    if (options.successCallback && typeof options.successCallback !== 'function') {
-                        throw new Error('');
-                    } else {
-                        options.successCallback = options.successCallback || noop;
-                    }
-
-                    if (options.errorCallback && typeof options.errorCallback !== 'function') {
-                        throw new Error('');
-                    } else {
-                        options.errorCallback = options.errorCallback || noop;
-                    }
+                if (!options.transient) {
 
                     // Push this non-transient method call into the pending stack, so that
                     // we can get it when a response is received
@@ -142,13 +133,15 @@
          *
          * @param context
          * @param prefix
-         * @returns {Object}
          */
         factory: function (context, prefix) {
             context.method = function (options) {
+                validateCallbacks(options);
+
+                // Add implementation-specific method prefix (dashboard or app)
                 options.name = prefix + '.' + options.name;
-                enplug.transport.send(options);
-                return options.callId;
+
+                return enplug.transport.send(options);
             };
 
             return context;

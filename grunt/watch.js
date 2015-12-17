@@ -3,8 +3,12 @@ module.exports = {
         livereload: true
     },
 
-    livereload: {
+    js: {
         files: ['src/**'],
         tasks: ['build']
+    },
+
+    html: {
+        files: ['example.html']
     }
 };

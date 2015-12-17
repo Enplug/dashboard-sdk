@@ -27,10 +27,6 @@ describe('transport', function () {
 
     });
 
-    it ('should throw an error if transient method calls have callbacks', function () {
-
-    });
-
     it('should encode messages as JSON', function () {
 
     });
