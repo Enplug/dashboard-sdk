@@ -1,12 +1,9 @@
 (function (window) {
     'use strict';
 
-    // Todo domains
-
     var enplug = window.enplug || (window.enplug = { debug: false }),
-        targetDomain = '*',
         namespace = 'Enplug',
-        targetOrigin = targetDomain,
+        targetOrigin = '*', // this is set to * to support various developer localhosts
         tag = '[Enplug SDK] ',
         noop = function () {};  // Placeholder for when a callback isn't provided
 
