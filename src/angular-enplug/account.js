@@ -48,7 +48,14 @@ angular.module('enplug.sdk').factory('$enplugAccount', ['$log', '$enplugTranspor
             return transport.callMethod(methodCall);
         },
 
-        updateAsset: function (id, value) {
+        /**
+         *
+         * @param id
+         * @param value
+         * @param {...requestCallback} callbacks
+         * @returns {*}
+         */
+        updateAsset: function (id, value, callbacks) {
             var methodCall = {
                 name: 'app.updateAsset',
                 params: [id, value]

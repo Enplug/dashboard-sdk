@@ -1,6 +1,9 @@
 (function (window) {
+    'use strict';
 
-    var enplug = window.enplug || (window.enplug = {}),
+    // Todo domains
+
+    var enplug = window.enplug || (window.enplug = { debug: false }),
         targetDomain = '*',
         targetOrigin = targetDomain,
         tag = '[Enplug SDK] ',
@@ -20,14 +23,14 @@
     }
 
     function debug(message) {
-        if (enplug.transport.debug) {
+        if (enplug.debug) {
             arguments[0] = tag + arguments[0];
             console.log.apply(console, arguments);
         }
     }
 
     // Posts message to parent window
-    function sendMessage(methodCall) {
+    function sendToParent(methodCall) {
         debug('Calling method:', methodCall);
         try {
             var json = JSON.stringify(methodCall);
@@ -38,7 +41,7 @@
     }
 
     // Receives responses from parent window
-    function receiveMessage(event) {
+    function receiveFromParent(event) {
         if (isValidJson(event.data)) {
             var response = window.JSON.parse(event.data);
             if (typeof response.callId === 'number') {
@@ -66,6 +69,15 @@
         }
     }
 
+    /**
+     * enplug.transport is used to communicate with the dashboard parent window
+     *
+     * @typedef {Object} enplug.transport
+     * @property {number} callId
+     * @property {boolean} debug
+     * @property {Object} pendingCalls
+     * @property {function} callMethod
+     */
     enplug.transport = {
 
         callId: 0,
@@ -75,43 +87,74 @@
         /**
          * Makes an API call against the Enplug dashboard parent window.
          *
-         * @param {Object} methodCall The API call config.
-         * @param {string} methodCall.name
-         * @param {*} methodCall.params The data to be sent as parameters to the API.
-         * @param {boolean} methodCall.transient For API calls that don't expect a response.
-         * @param {boolean} methodCall.persistent For API calls that expect multiple responses.
-         * @param {function} methodCall.successCallback
-         * @param {function} methodCall.errorCallback
+         * @param {Object} options - The API call config.
+         * @param {string} options.name
+         * @param {*} options.params - The data to be sent as parameters to the API.
+         * @param {boolean} options.transient - For API calls that don't expect a response.
+         * @param {boolean} options.persistent - For API calls that expect multiple responses.
+         * @param {function} options.successCallback
+         * @param {function} options.errorCallback
          */
-        callMethod: function (methodCall) {
-            if (methodCall.name) {
-                methodCall.callId = this.callId++;
-                methodCall.transient = !!methodCall.transient;
-                methodCall.persistent = !!methodCall.persistent;
+        send: function (options) {
+            if (options.name) {
+                options.callId = this.callId++;
+                options.transient = !!options.transient;
+                options.persistent = !!options.persistent;
 
-                if (methodCall.successCallback && typeof methodCall.successCallback !== 'function') {
-                    throw new Error('');
+                if (options.transient) {
+
+                    // Transient method calls won't receive callbacks, so notify
+                    // developer if they provided one
+                    if (typeof options.errorCallback === 'function') {
+                        throw new Error('');
+                    }
+
+                    if (typeof options.successCallback === 'function') {
+                        throw new Error('');
+                    }
                 } else {
-                    methodCall.successCallback = methodCall.successCallback || noop;
+
+                    // Validate and assign defaults for callback methods
+                    if (options.successCallback && typeof options.successCallback !== 'function') {
+                        throw new Error('');
+                    } else {
+                        options.successCallback = options.successCallback || noop;
+                    }
+
+                    if (options.errorCallback && typeof options.errorCallback !== 'function') {
+                        throw new Error('');
+                    } else {
+                        options.errorCallback = options.errorCallback || noop;
+                    }
+
+                    // Push this non-transient method call into the pending stack, so that
+                    // we can get it when a response is received
+                    this.pendingCalls[options.callId] = options;
                 }
 
-                if (methodCall.errorCallback && typeof methodCall.errorCallback !== 'function') {
-                    throw new Error('');
-                } else {
-                    methodCall.errorCallback = methodCall.errorCallback || noop;
-                }
-
-                if (!methodCall.transient) {
-                    this.pendingCalls[methodCall.callId] = methodCall;
-                }
-
-                sendMessage(methodCall);
+                sendToParent(options);
             } else {
                 throw new Error('');
             }
+        },
+
+        /**
+         *
+         * @param context
+         * @param prefix
+         * @returns {Object}
+         */
+        factory: function (context, prefix) {
+            context.method = function (options) {
+                options.name = prefix + '.' + options.name;
+                enplug.transport.send(options);
+                return options.callId;
+            };
+
+            return context;
         }
     };
 
     // Receive parent window response messages
-    window.addEventListener('message', receiveMessage, false);
+    window.addEventListener('message', receiveFromParent, false);
 }(window));

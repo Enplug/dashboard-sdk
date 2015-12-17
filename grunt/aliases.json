@@ -1,10 +1,7 @@
 {
     "build": [
         "clean:build",
-        "copy:sdk",
-        "concat:modules",
-        "concat:components",
-        "uglify:build"
+        "concat"
     ],
     "version": [
         "build",
@@ -23,5 +20,5 @@
     "test": [
         "karma:unit",
         "coveralls"
-    ],
+    ]
 }
