@@ -12,6 +12,7 @@ bower_components/*
 vendor/*
 tmp/*
 */tmp/*
+coverage
 
 # IntelliJ
 .idea/*
