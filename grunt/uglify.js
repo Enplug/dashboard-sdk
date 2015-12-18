@@ -4,7 +4,7 @@ module.exports = {
     },
     build: {
         files: {
-            'dist/angular-enplug.min.js': 'dist/angular-enplug.js'
+            'dist/sdk.min.js': 'dist/sdk.js'
         }
     }
 };

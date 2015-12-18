@@ -6,7 +6,7 @@
     "Alex Ross <alex@enplug.com>"
   ],
   "description": "AngularJS Enplug SDK dashboard component",
-  "main": "dist/angular-enplug.js",
+  "main": "dist/sdk.min.js",
   "keywords": [
     "enplug"
   ],
