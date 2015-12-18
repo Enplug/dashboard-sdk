@@ -14,7 +14,7 @@ module.exports = {
         preprocessors: {
             'dist/sdk.js': 'coverage'
         },
-        reporters: ['coverage'],
+        reporters: ['coverage', 'progress'],
         coverageReporter: {
             type: 'lcov',
             dir: 'coverage/',
