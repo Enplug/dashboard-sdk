@@ -1,7 +1,8 @@
 {
     "build": [
         "clean:build",
-        "concat"
+        "concat",
+        "uglify"
     ],
     "version": [
         "build",
