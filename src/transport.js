@@ -27,81 +27,74 @@
         }
     }
 
-    // Validate and assign defaults for callback methods
+    /**
+     * Validate and assign defaults for callback methods.
+     * @param options
+     */
     function validateCallbacks(options) {
         if (options.successCallback && typeof options.successCallback !== 'function') {
-            throw new Error('');
+            throw new Error(tag + 'Success callback must be a function.');
         } else {
             options.successCallback = options.successCallback || noop;
         }
 
         if (options.errorCallback && typeof options.errorCallback !== 'function') {
-            throw new Error('');
+            throw new Error(tag + 'Error callback must be a function.');
         } else {
             options.errorCallback = options.errorCallback || noop;
         }
     }
 
-    // Posts message to parent window
-    function sendToParent(methodCall) {
-        debug('Calling method:', methodCall);
-        try {
-            var json = JSON.stringify(methodCall);
-            window.parent.postMessage(json, targetOrigin);
-        } catch (e) {
-            window.console.error('Enplug SDK error:', e);
-        }
-    }
-
-    // Receives responses from parent window
-    function receiveFromParent(event) {
+    /**
+     * Verifies that a message is intended for the transport.
+     * @param event
+     * @returns {boolean}
+     */
+    function parseResponse(event) {
         if (isValidJson(event.data)) {
             var response = window.JSON.parse(event.data);
 
             // Check for success key to ignore messages being sent
             if (response.namespace === namespace && typeof response.success === 'boolean') {
-                var methodCall = enplug.transport.pendingCalls[response.callId];
-                if (methodCall) {
-                    if (!methodCall.persistent) {
-                        delete enplug.transport.pendingCalls[response.callId];
-                    }
-
-                    debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
-                        call: methodCall,
-                        response: response
-                    });
-
-                    var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;
-                    cb(response.data);
-
-                    return true;
-                }
-            } else {
-
-                // Ignore messages posted by this window
-                if (response.namespace !== namespace) {
-                    debug('Did not recognize window message response format:', event);
-                }
+                return response;
             }
-        } else {
-            debug('Did not recognize non-JSON window message:', event);
+
+            // Don't log for message posted by this same window
+            if (response.namespace !== namespace) {
+                debug('Did not recognize window message response format:', event);
+            }
+
+            return false;
         }
+
+        debug('Did not recognize non-JSON window message:', event);
+        return false;
     }
 
     /**
-     * enplug.transport is used to communicate with the dashboard parent window
-     *
-     * @typedef {Object} enplug.transport
-     * @property {number} callId
-     * @property {boolean} debug
-     * @property {Object} pendingCalls
-     * @property {function} callMethod
+     * Transport is used to communicate with the dashboard parent window.
+     * @param window
+     * @constructor
      */
-    enplug.transport = {
+    enplug.Transport = function (window) {
 
-        callId: 0,
-        debug: false,
-        pendingCalls: {},
+        /**
+         * Incremented before being assigned, so call IDs start with 1
+         * @type {number}
+         */
+        this.callId = 0;
+
+        /**
+         *
+         * @type {{}}
+         */
+        this.pendingCalls = {};
+
+        /**
+         *
+         * @type {string}
+         */
+        this.tag = tag;
 
         /**
          * Makes an API call against the Enplug dashboard parent window.
@@ -114,11 +107,14 @@
          * @param {function} options.successCallback
          * @param {function} options.errorCallback
          */
-        send: function (options) {
+        this.send = function (options) {
             if (options.name) {
-                options.callId = this.callId++;
+                options.callId = ++this.callId;
                 options.transient = !!options.transient;
                 options.persistent = !!options.persistent;
+
+                validateCallbacks(options);
+                debug('Calling method:', options);
 
                 if (!options.transient) {
 
@@ -127,10 +123,43 @@
                     this.pendingCalls[options.callId] = options;
                 }
 
-                sendToParent(options);
+                try {
+                    var json = JSON.stringify(options);
+                    window.parent.postMessage(json, targetOrigin);
+                } catch (e) {
+                    window.console.error(tag + 'Error:', e);
+                }
+
                 return options.callId;
             } else {
-                throw new Error('');
+                throw new Error(tag + 'All transport method calls must have a name.');
+            }
+        };
+
+        /**
+         * Receives response messages from parent window/dashboard.
+         * @param event
+         * @returns {boolean}
+         */
+        this.receive = function (event) {
+            var response = parseResponse(event);
+            if (response) {
+                var methodCall = this.pendingCalls[response.callId];
+                if (methodCall) {
+                    if (!methodCall.persistent) {
+                        delete this.pendingCalls[response.callId];
+                    }
+
+                    debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
+                        call: methodCall,
+                        response: response
+                    });
+
+                    var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;
+                    cb(response.data);
+
+                    return true;
+                }
             }
         },
 
@@ -139,9 +168,8 @@
          * @param context
          * @param prefix
          */
-        factory: function (context, prefix) {
+        this.factory = function (context, prefix) {
             context.method = function (options) {
-                validateCallbacks(options);
 
                 // Add implementation-specific method prefix (dashboard or app)
                 options.name = prefix + '.' + options.name;
@@ -151,9 +179,11 @@
             };
 
             return context;
-        }
+        };
+
+        // Receive parent window response messages
+        window.addEventListener('message', this.receive, false);
     };
 
-    // Receive parent window response messages
-    window.addEventListener('message', receiveFromParent, false);
+    enplug.transport = new enplug.Transport(window);
 }(window));
