@@ -1,7 +1,7 @@
 (function (enplug) {
     'use strict';
 
-    var methodPrefix = 'account';
+    var methodPrefix = 'app';
 
     /**
      * @class

@@ -20,7 +20,7 @@ describe('accountApis', function () {
 
     });
 
-    it('should prefix method calls with "account"', function () {
+    it('should prefix method calls with "app"', function () {
         spyOn(enplug.transport, 'send');
         callMethods(function () {
             expect(enplug.transport.send).toHaveBeenCalled();

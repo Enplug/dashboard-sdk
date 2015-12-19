@@ -7,10 +7,17 @@
      */
     function Sender(prefix) {
         this.prefix = prefix;
+        this.novalidate = false;
     }
 
     Sender.prototype = {
 
+        /**
+         * Validates data before being sent to dashboard. Supports this.novalidate for tests.
+         * @param data
+         * @param expectedType
+         * @param errorMessage
+         */
         validate: function (data, expectedType, errorMessage) {
             if (!this.novalidate) {
                 if (!data || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
