@@ -7,7 +7,7 @@
 
     function isValidJson(json) {
         try {
-            var o = window.JSON.parse(window.JSON.stringify(window.JSON.parse(json)));
+            var o = JSON.parse(JSON.stringify(JSON.parse(json)));
             if (o && typeof o === 'object' && o !== null) {
                 return true;
             }
@@ -76,7 +76,7 @@
          */
         function parseResponse(event) {
             if (isValidJson(event.data)) {
-                var response = window.JSON.parse(event.data);
+                var response = JSON.parse(event.data);
 
                 // Check for success key to ignore messages being sent
                 if (response.namespace === namespace && typeof response.success === 'boolean') {

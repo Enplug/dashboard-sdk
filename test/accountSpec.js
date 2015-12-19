@@ -1,7 +1,6 @@
 describe('accountApis', function () {
 
-    var account,
-        transport = enplug.transport;
+    var account;
 
     beforeEach(function () {
         account = new enplug.classes.AccountSender();
@@ -26,9 +25,9 @@ describe('accountApis', function () {
     });
 
     it('should prefix method calls with "app"', function () {
-        spyOn(transport, 'send').and.callThrough();
+        spyOn(account.transport, 'send').and.callThrough();
         callMethods(function (callId) {
-            var name = transport.pendingCalls[callId],
+            var name = account.transport.pendingCalls[callId].name,
                 count = (name.match(/app/g) || []).length;
             expect(count).toBe(1);
         });

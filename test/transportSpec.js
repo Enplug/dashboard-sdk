@@ -1,13 +1,13 @@
 describe('transport', function () {
     'use strict';
 
-    var transport, window;
+    var transport, window, namespace = 'Enplug';
 
     beforeEach(function () {
         enplug.debug = false;
         window = jasmine.createSpyObj('window', ['addEventListener']);
         window.parent = jasmine.createSpyObj('parent', ['postMessage']);
-        transport = new enplug.classes.Transport(window);
+        transport = new enplug.classes.Transport(window, namespace);
     });
 
     function mockCall(options) {
@@ -29,7 +29,7 @@ describe('transport', function () {
         var event = {
             data: {
                 success: true,
-                namespace: 'Enplug'
+                namespace: namespace
             }
         };
 
@@ -175,6 +175,27 @@ describe('transport', function () {
     });
 
     it('should correctly respond to namespaced events', function () {
+        var namespace1 = 'test1',
+            namespace2 = 'test2',
+            transport1 = new enplug.classes.Transport(window, namespace1),
+            transport2 = new enplug.classes.Transport(window, namespace2),
+            call1 = mockCall(),
+            call2 = mockCall();
+        var callId1 = transport1.send(call1),
+            callId2 = transport2.send(call2);
+        var response1 = mockResponse({ callId: callId1, namespace: namespace1 }),
+            response2 = mockResponse({ callId: callId2, namespace: namespace2 });
 
+        // first transport
+        expect(transport1.receive(response2)).toEqual(false);
+        expect(transport1.pendingCalls[callId1]).toBe(call1);
+        expect(transport1.receive(response1)).toEqual(true);
+        expect(transport1.pendingCalls[callId1]).toBeUndefined();
+
+        // second transport
+        expect(transport2.receive(response1)).toEqual(false);
+        expect(transport2.pendingCalls[callId2]).toBe(call2);
+        expect(transport2.receive(response2)).toEqual(true);
+        expect(transport2.pendingCalls[callId2]).toBeUndefined();
     });
 });
