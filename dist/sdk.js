@@ -1,11 +1,9 @@
 (function (window) {
     'use strict';
 
-    var enplug = window.enplug || (window.enplug = { debug: false, classes: {} }),
-        namespace = 'Enplug',
+    var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} }),
         targetOrigin = '*', // this is set to * to support various developer localhosts
-        tag = '[Enplug SDK] ',
-        noop = function () {};  // Placeholder for when a callback isn't provided
+        tag = '[Enplug SDK] ';
 
     function isValidJson(json) {
         try {
@@ -35,48 +33,23 @@
         if (options.successCallback && typeof options.successCallback !== 'function') {
             throw new Error(tag + 'Success callback must be a function.');
         } else {
-            options.successCallback = options.successCallback || noop;
+            options.successCallback = options.successCallback || enplug.noop;
         }
 
         if (options.errorCallback && typeof options.errorCallback !== 'function') {
             throw new Error(tag + 'Error callback must be a function.');
         } else {
-            options.errorCallback = options.errorCallback || noop;
+            options.errorCallback = options.errorCallback || enplug.noop;
         }
     }
 
     /**
-     * Verifies that a message is intended for the transport.
-     * @param event
-     * @returns {boolean}
-     */
-    function parseResponse(event) {
-        if (isValidJson(event.data)) {
-            var response = window.JSON.parse(event.data);
-
-            // Check for success key to ignore messages being sent
-            if (response.namespace === namespace && typeof response.success === 'boolean') {
-                return response;
-            }
-
-            // Don't log for message posted by this same window
-            if (response.namespace !== namespace) {
-                debug('Did not recognize window message response format:', event);
-            }
-
-            return false;
-        }
-
-        debug('Did not recognize non-JSON window message:', event);
-        return false;
-    }
-
-    /**
-     * Transport is used to communicate with the dashboard parent window.
+     * Transports are used to communicate with the dashboard parent window.
      * @param window
+     * @param namespace
      * @constructor
      */
-    function Transport(window) {
+    enplug.classes.Transport = function (window, namespace) {
 
         /**
          * Incremented before being assigned, so call IDs start with 1
@@ -97,10 +70,30 @@
         this.tag = tag;
 
         /**
-         *
-         * @type {string}
+         * Verifies that a message is intended for the transport.
+         * @param event
+         * @returns {boolean}
          */
-        this.namespace = namespace;
+        function parseResponse(event) {
+            if (isValidJson(event.data)) {
+                var response = window.JSON.parse(event.data);
+
+                // Check for success key to ignore messages being sent
+                if (response.namespace === namespace && typeof response.success === 'boolean') {
+                    return response;
+                }
+
+                // Don't log for message posted by this same window
+                if (!response.namespace) {
+                    debug('Did not recognize window message response format:', event);
+                }
+
+                return false;
+            }
+
+            debug('Did not recognize non-JSON window message:', event);
+            return false;
+        }
 
         /**
          * Makes an API call against the Enplug dashboard parent window.
@@ -116,6 +109,7 @@
         this.send = function (options) {
             if (options.name) {
                 options.callId = ++this.callId;
+                options.namespace = namespace;
                 options.transient = !!options.transient;
                 options.persistent = !!options.persistent;
 
@@ -173,13 +167,10 @@
 
         // Receive parent window response messages
         window.addEventListener('message', this.receive, false);
-    }
-
-    enplug.classes.Transport = Transport;
-    enplug.transport = new Transport(window);
+    };
 }(window));
 
-(function (enplug) {
+(function (window, enplug) {
     'use strict';
 
     /**
@@ -189,6 +180,7 @@
     function Sender(prefix) {
         this.prefix = prefix;
         this.novalidate = false;
+        this.transport = new enplug.classes.Transport(window, prefix);
     }
 
     Sender.prototype = {
@@ -213,9 +205,7 @@
 
                 // Add implementation-specific method prefix (dashboard or app)
                 options.name = this.prefix + '.' + options.name;
-                options.namespace = enplug.transport.namespace;
-
-                return enplug.transport.send(options);
+                return this.transport.send(options);
             }  else {
                 throw new Error('');
             }
@@ -223,7 +213,7 @@
     };
 
     enplug.classes.Sender = Sender;
-}(window.enplug));
+}(window, window.enplug));
 
 (function (enplug) {
     'use strict';
@@ -406,15 +396,35 @@
 (function (angular, enplug) {
     'use strict';
 
-    function alias(original) {
-        var service = {};
-        for (var property in original) {
-            if (original.hasOwnProperty(property)) {
-                service[property] = original[property];
-            }
-        }
+    /**
+     * Modifies transport.send to return promises.
+     * @param q
+     * @param original
+     * @returns {Function}
+     */
+    function decorateSend(q, original) {
+        return function (options) {
 
-        return service;
+            // Store originals
+            var defer = q.defer(),
+                onSuccess = options.successCallback,
+                onError = options.errorCallback;
+
+            options.successCallback = function (result) {
+                defer.resolve(result);
+                onSuccess(result);
+            };
+
+            options.errorCallback = function (result) {
+                defer.reject(result);
+                onError(result);
+            };
+
+            // Call the original transport method
+            // but use our promise as the return value
+            original.call(enplug.transport, options);
+            return defer.promise;
+        }
     }
 
     /**
@@ -425,43 +435,16 @@
 
         var module = angular.module('enplug.sdk', []);
 
-        // Modify the transport.send function to return a promise
-        // which will be resolved/rejected by the callbacks
-        module.config(function () {
-            var q = angular.injector(['ng']).get('$q');
-
-            // Override the send method to intercept callbacks
-            var send = enplug.transport.send;
-            enplug.transport.send = function (options) {
-
-                // Store originals
-                var defer = q.defer(),
-                    onSuccess = options.successCallback,
-                    onError = options.errorCallback;
-
-                options.successCallback = function (result) {
-                    defer.resolve(result);
-                    onSuccess(result);
-                };
-
-                options.errorCallback = function (result) {
-                    defer.reject(result);
-                    onError(result);
-                };
-
-                // Call the original transport method
-                // but use our promise as the return value
-                send.call(enplug.transport, options);
-                return defer.promise;
-            };
+        module.factory('$enplugDashboard', function ($q) {
+            var sender = new enplug.classes.DashboardSender();
+            sender.transport.send = decorateSend($q, sender.transport.send);
+            return sender;
         });
 
-        module.factory('$enplugDashboard', function () {
-            return alias(enplug.dashboard);
-        });
-
-        module.factory('$enplugAccount', function () {
-            return alias(enplug.account);
+        module.factory('$enplugAccount', function ($q) {
+            var sender = new enplug.classes.AccountSender();
+            sender.transport.send = decorateSend($q, sender.transport.send);
+            return sender;
         });
     }
 }(window.angular, window.enplug));

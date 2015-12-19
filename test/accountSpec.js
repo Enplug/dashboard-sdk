@@ -1,6 +1,7 @@
 describe('accountApis', function () {
 
-    var account;
+    var account,
+        transport = enplug.transport;
 
     beforeEach(function () {
         account = new enplug.classes.AccountSender();
@@ -10,8 +11,8 @@ describe('accountApis', function () {
         account.novalidate = true;
         for (var property in account) {
             if (account.hasOwnProperty(property) && typeof account[property] === 'function') {
-                account[property]();
-                callback();
+                var callId = account[property]();
+                callback(callId);
             }
         }
     }
@@ -20,15 +21,17 @@ describe('accountApis', function () {
 
     });
 
-    it('should prefix method calls with "app"', function () {
-        spyOn(enplug.transport, 'send');
-        callMethods(function () {
-            expect(enplug.transport.send).toHaveBeenCalled();
-        });
-    });
-
     it('should return incrementing call IDs for all method calls', function () {
 
+    });
+
+    it('should prefix method calls with "app"', function () {
+        spyOn(transport, 'send').and.callThrough();
+        callMethods(function (callId) {
+            var name = transport.pendingCalls[callId],
+                count = (name.match(/app/g) || []).length;
+            expect(count).toBe(1);
+        });
     });
 
     // Validation

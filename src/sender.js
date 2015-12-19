@@ -1,4 +1,4 @@
-(function (enplug) {
+(function (window, enplug) {
     'use strict';
 
     /**
@@ -8,6 +8,7 @@
     function Sender(prefix) {
         this.prefix = prefix;
         this.novalidate = false;
+        this.transport = new enplug.classes.Transport(window, prefix);
     }
 
     Sender.prototype = {
@@ -32,9 +33,7 @@
 
                 // Add implementation-specific method prefix (dashboard or app)
                 options.name = this.prefix + '.' + options.name;
-                options.namespace = enplug.transport.namespace;
-
-                return enplug.transport.send(options);
+                return this.transport.send(options);
             }  else {
                 throw new Error('');
             }
@@ -42,4 +41,4 @@
     };
 
     enplug.classes.Sender = Sender;
-}(window.enplug));
+}(window, window.enplug));

@@ -173,4 +173,8 @@ describe('transport', function () {
         transport.send(call);
         expect(console.log).toHaveBeenCalledWith(transport.tag + 'Calling method:', call);
     });
+
+    it('should correctly respond to namespaced events', function () {
+
+    });
 });
