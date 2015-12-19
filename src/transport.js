@@ -68,6 +68,11 @@
         this.tag = tag;
 
         /**
+         * @type {string}
+         */
+        this.namespace = namespace;
+
+        /**
          * Verifies that a message is intended for the transport.
          * @param event
          * @returns {boolean}

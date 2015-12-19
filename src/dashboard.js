@@ -23,11 +23,11 @@
             return this.method({
                 name: 'click',
                 transient: true // don't wait for a response
-            })
+            });
         };
 
         this.setHeaderTitle = function (title, onSuccess, onError) {
-            this.validate(title, 'string', '');
+            this.validate(title, 'string', 'Header title must be a string.');
             return this.method({
                 name: 'set.title',
                 params: title,
@@ -37,19 +37,25 @@
         };
 
         this.setHeaderButtons = function (buttons, onSuccess, onError) {
-            this.validate(buttons, 'object', '');
+            this.validate(buttons, 'object', 'Header buttons must be an object (single) or array (multiple).');
 
             // Reset any buttons we may have stored
             currentButtons = [];
 
             // Allow single button or multiple
             buttons = Array.isArray(buttons) ? buttons : [buttons];
-            buttons.forEach(function (button) {
 
-                // The button ID is used to identify which button was clicked in this service
-                button.id = 'button-' + (Math.round(Math.random() * (10000 - 1) + 1));
-                currentButtons[button.id] = button;
-            });
+            for (var i = 0; i < buttons.length; i++) {
+                var button = buttons[i];
+                this.validate(button, 'object', 'Header buttons must be objects.');
+                if (button) {
+                    this.validate(button.action, 'function', 'Header buttons must have an action (function).');
+
+                    // The button ID is used to identify which button was clicked in this service
+                    button.id = 'button-' + (Math.round(Math.random() * (10000 - 1) + 1));
+                    currentButtons[button.id] = button;
+                }
+            }
 
             return this.method({
                 name: 'set.buttons',
@@ -58,7 +64,11 @@
                 successCallback: function (clicked) {
                     if (clicked) {
                         var button = currentButtons[clicked.id];
-                        button.action();
+                        if (button) {
+                            button.action();
+                        } else {
+                            console.warn('Unrecognized button click:', clicked);
+                        }
                     }
 
                     if (typeof onSuccess === 'function') {
@@ -70,7 +80,7 @@
         };
 
         this.pageLoading = function (bool, onSuccess, onError) {
-            this.validate(bool, 'boolean', '');
+            this.validate(bool, 'boolean', 'Page loading status must be a boolean.');
             return this.method({
                 name: 'page.loading',
                 params: bool,
@@ -105,7 +115,7 @@
         };
 
         this.loadingIndicator = function (message, onSuccess, onError) {
-            this.validate(message, 'object', '');
+            this.validate(message, 'string', 'Loading indicator requires a loading message (string)');
             return this.method({
                 name: 'indicator.loading',
                 params: message,
@@ -115,7 +125,7 @@
         };
 
         this.successIndicator = function (message, onSuccess, onError) {
-            this.validate(message, 'string', '');
+            this.validate(message, 'string', 'Success indicator requires a success message (string)');
             return this.method({
                 name: 'indicator.success',
                 params: message,
@@ -125,7 +135,7 @@
         };
 
         this.errorIndicator = function (message, onSuccess, onError) {
-            this.validate(message, 'string', '');
+            this.validate(message, 'string', 'Error indicator requires an error message (string)');
             return this.method({
                 name: 'indicator.error',
                 params: message,
@@ -147,7 +157,13 @@
          * @returns {number} callId
          */
         this.openConfirm = function (options, onSuccess, onError) {
-            this.validate(options, 'object', '');
+            this.validate(options, 'object', 'Confirm box requires options to be set (object).');
+
+            if (options) {
+                this.validate(options.title, 'string', 'Confirm box requires options.title to be set (string).');
+                this.validate(options.text, 'string', 'Confirm box requires options.text to be set (string).');
+            }
+
             return this.method({
                 name: 'confirm',
                 params: options,
@@ -187,17 +203,18 @@
                 errorCallback: onError
             });
         };
+
+        // Broadcast clicks up to parent window so that we can
+        // react to clicks for things like closing nav dropdowns
+        var self = this;
+        document.addEventListener('click', function () {
+            self.click();
+            return true;
+        }, false);
     }
 
     DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);
 
     enplug.classes.DashboardSender = DashboardSender;
     enplug.dashboard = new DashboardSender();
-
-    // Broadcast clicks up to parent window so that we can
-    // react to clicks for things like closing nav dropdowns
-    document.addEventListener('click', function () {
-        enplug.dashboard.click();
-        return true;
-    }, false);
 }(window.enplug, document));

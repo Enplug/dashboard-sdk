@@ -1,4 +1,4 @@
-describe('accountApis', function () {
+describe('AccountSender', function () {
 
     var account;
 
@@ -15,20 +15,6 @@ describe('accountApis', function () {
             }
         }
     }
-
-    it('should support disabling validation for tests', function () {
-        account.novalidate = true;
-        expect(function () {
-            account.getInstances();
-        }).not.toThrow();
-    });
-
-    it('should return incrementing call IDs for all method calls, starting with 1', function () {
-        var last = 0;
-        callMethods(function (callId) {
-            expect(callId).toEqual(++last);
-        });
-    });
 
     it('should prefix method calls with "app"', function () {
         spyOn(account.transport, 'send').and.callThrough();
