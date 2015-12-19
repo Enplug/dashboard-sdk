@@ -22,7 +22,7 @@
         validate: function (data, expectedType, errorMessage) {
             if (!this.novalidate) {
                 if (!data || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
-                    throw new Error(errorMessage);
+                    throw new Error(this.transport.tag + errorMessage);
                 }
             }
         },

@@ -29,7 +29,7 @@
         };
 
         this.getInstances = function (accountId, onSuccess, onError) {
-            this.validate(accountId, 'string', '');
+            this.validate(accountId, 'string', 'Missing account ID (string).');
             return this.method({
                 name: 'getInstances',
                 params: accountId,
@@ -55,8 +55,8 @@
         };
 
         this.createAsset = function (name, value, onSuccess, onError) {
-            this.validate(name, 'string', '');
-            this.validate(value, 'object', '');
+            this.validate(name, 'string', 'You must provide a name (string) when creating an asset.');
+            this.validate(value, 'object', 'You must provide a value (object) when creating an asset.');
             return this.method({
                 name: 'createAsset',
                 params: [name, value],
@@ -66,7 +66,7 @@
         };
 
         this.createAssetFromDefault = function (defaultAssetId, onSuccess, onError) {
-            this.validate(defaultAssetId, 'string', '');
+            this.validate(defaultAssetId, 'string', 'Missing default asset ID (string).');
             return this.method({
                 name: 'createAssetFromDefault',
                 params: defaultAssetId,
@@ -76,8 +76,8 @@
         };
 
         this.updateAsset = function (id, value, onSuccess, onError) {
-            this.validate(id, 'string', '');
-            this.validate(value, 'object', '');
+            this.validate(id, 'string', 'You must provide the ID (string) of an asset to update.');
+            this.validate(value, 'object', 'You must provide the new value (object) of an asset to update.');
             return this.method({
                 name: 'updateAsset',
                 params: [id, value],
@@ -87,7 +87,7 @@
         };
 
         this.bulkCreateAssets = function (assets, onSuccess, onError) {
-            this.validate(assets, 'array', '');
+            this.validate(assets, 'array', 'You must provide an array of assets to bulk create.');
             return this.method({
                 name: 'bulkCreateAssets',
                 params: assets,
@@ -97,7 +97,7 @@
         };
 
         this.bulkUpdateAssets = function (assets, onSuccess, onError) {
-            this.validate(assets, 'array', '');
+            this.validate(assets, 'array', 'You must provide an array of assets to bulk update.');
             return this.method({
                 name: 'bulkUpdateAssets',
                 params: assets,
@@ -107,7 +107,7 @@
         };
 
         this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
-            this.validate(assetIds, 'array', '');
+            this.validate(assetIds, 'array', 'You must provide an array of asset IDs to bulk remove.');
             return this.method({
                 name: 'bulkRemoveAssets',
                 params: assetIds,
@@ -117,7 +117,7 @@
         };
 
         this.removeAsset = function (id, onSuccess, onError) {
-            this.validate(id, 'string', '');
+            this.validate(id, 'string', 'You must provide the ID (string) of the asset to remove.');
             return this.method({
                 name: 'removeAsset',
                 params: [id],
@@ -135,7 +135,7 @@
         };
 
         this.createTheme = function (newTheme, onSuccess, onError) {
-            this.validate(newTheme, 'object', '');
+            this.validate(newTheme, 'object', 'You must provide the new theme (object) to create.');
             return this.method({
                 name: 'createTheme',
                 params: newTheme,
@@ -145,7 +145,7 @@
         };
 
         this.removeTheme = function (themeId, onSuccess, onError) {
-            this.validate(themeId, 'string', '');
+            this.validate(themeId, 'string', 'You must provide the ID (string) of the theme to remove.');
             return this.method({
                 name: 'removeTheme',
                 params: themeId,
@@ -155,7 +155,7 @@
         };
 
         this.activateTheme = function (themeId, onSuccess, onError) {
-            this.validate(themeId, 'string', '');
+            this.validate(themeId, 'string', 'You must provide the ID (string) of the theme to activate.');
             return this.method({
                 name: 'activateTheme',
                 params: themeId,
