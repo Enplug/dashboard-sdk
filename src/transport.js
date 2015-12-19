@@ -127,7 +127,7 @@
                     var json = JSON.stringify(options);
                     window.parent.postMessage(json, targetOrigin);
                 } catch (e) {
-                    window.console.error(tag + 'Error:', e);
+                    console.error(tag + 'Error:', e);
                 }
 
                 return options.callId;
@@ -139,7 +139,7 @@
         /**
          * Receives response messages from parent window/dashboard.
          * @param event
-         * @returns {boolean}
+         * @returns {boolean} - true if successfully processed, otherwise false.
          */
         this.receive = function (event) {
             var response = parseResponse(event);
@@ -161,7 +161,9 @@
                     return true;
                 }
             }
-        },
+
+            return false;
+        };
 
         /**
          *

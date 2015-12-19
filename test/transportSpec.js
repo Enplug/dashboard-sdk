@@ -3,10 +3,10 @@ describe('transport', function () {
 
     var transport, window;
 
-    // TODO: mock iframe? mock window.parent? mock API responses?
-
     beforeEach(function () {
-        window = jasmine.createSpyObj('window', ['parent.postMessage', 'addEventListener']);
+        enplug.debug = false;
+        window = jasmine.createSpyObj('window', ['addEventListener']);
+        window.parent = jasmine.createSpyObj('parent', ['postMessage']);
         transport = new enplug.Transport(window);
     });
 
@@ -25,7 +25,7 @@ describe('transport', function () {
         return call;
     }
 
-    function mockResponse(options) {
+    function mockResponse(options, raw) {
         var event = {
             data: {
                 success: true,
@@ -39,7 +39,10 @@ describe('transport', function () {
             }
         }
 
-        event.data = JSON.stringify(event.data);
+        if (!raw) {
+            event.data = JSON.stringify(event.data);
+        }
+
         return event;
     }
 
@@ -90,13 +93,10 @@ describe('transport', function () {
         }).toThrow(error);
     });
 
-    it('should add and remove non-transient API calls to and from the pending calls stack', function () {
+    it('should add non-transient API calls to the pending calls stack', function () {
         var call = mockCall();
         transport.send(call);
         expect(transport.pendingCalls[call.callId]).toBe(call);
-        var response = mockResponse({ callId: call.callId });
-        transport.receive(response);
-        expect(transport.pendingCalls[call.callId]).toBeUndefined();
     });
 
     it('should not add transient method calls to the pending calls stack', function () {
@@ -105,43 +105,72 @@ describe('transport', function () {
         expect(transport.pendingCalls[call.callId]).toBeUndefined();
     });
 
-    it('should encode messages as JSON', function () {
-
+    it('should post messages to the parent window', function () {
+        var call = mockCall();
+        transport.send(call);
+        expect(window.parent.postMessage).toHaveBeenCalled();
     });
 
-    it('should post messages', function () {
-
+    it('should encode messages as JSON', function () {
+        var call = mockCall();
+        transport.send(call);
+        expect(window.parent.postMessage).toHaveBeenCalledWith(JSON.stringify(call), '*');
     });
 
     it('should ignore non-JSON messages', function () {
-
+        var response = mockResponse(null, true);
+        expect(transport.receive(response)).toEqual(false);
     });
 
     it('should ignore JSON messages without a call ID', function () {
-
+        var response = mockResponse({ callId: null });
+        expect(transport.receive(response)).toEqual(false);
     });
 
     it('should not ignore valid API responses', function () {
-
+        var call = mockCall();
+        var callId = transport.send(call);
+        var response = mockResponse({ callId: callId });
+        expect(transport.receive(response)).toEqual(true);
     });
 
     it('should not delete persistent method calls from the pending calls stack', function () {
-
+        var call = mockCall({ persistent: true });
+        var callId = transport.send(call);
+        var response = mockResponse({ callId: callId });
+        transport.receive(response);
+        expect(transport.pendingCalls[callId]).toEqual(call);
     });
 
     it('should delete non-persistent method calls from the pending stack after receiving', function () {
-
+        var call = mockCall();
+        transport.send(call);
+        var response = mockResponse({ callId: call.callId });
+        transport.receive(response);
+        expect(transport.pendingCalls[call.callId]).toBeUndefined();
     });
 
-    it('should call the success callback for successful SDK calls', function () {
-
+    it('should call the success callback with response data for successful SDK calls', function () {
+        var call = mockCall({ successCallback: jasmine.createSpy('callback') });
+        transport.send(call);
+        var response = mockResponse({ callId: call.callId, data: 'test' });
+        transport.receive(response);
+        expect(call.successCallback).toHaveBeenCalledWith(JSON.parse(response.data).data);
     });
 
     it('should call the error callback for failed SDK calls', function () {
-
+        var call = mockCall({ errorCallback: jasmine.createSpy('callback') });
+        transport.send(call);
+        var response = mockResponse({ callId: call.callId, success: false, data: 'test' });
+        transport.receive(response);
+        expect(call.errorCallback).toHaveBeenCalledWith(JSON.parse(response.data).data);
     });
 
     it('should log to console when debug mode is enabled', function () {
-
+        enplug.debug = true;
+        spyOn(console, 'log');
+        var call = mockCall();
+        transport.send(call);
+        expect(console.log).toHaveBeenCalledWith(transport.tag + 'Calling method:', call);
     });
 });
