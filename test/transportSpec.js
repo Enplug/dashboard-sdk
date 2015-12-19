@@ -7,7 +7,7 @@ describe('transport', function () {
         enplug.debug = false;
         window = jasmine.createSpyObj('window', ['addEventListener']);
         window.parent = jasmine.createSpyObj('parent', ['postMessage']);
-        transport = new enplug.Transport(window);
+        transport = new enplug.classes.Transport(window);
     });
 
     function mockCall(options) {

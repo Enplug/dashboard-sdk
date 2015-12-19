@@ -7,7 +7,7 @@ describe('accountApis', function () {
     });
 
     function callMethods(callback) {
-        account.shouldValidate = false;
+        account.novalidate = true;
         for (var property in account) {
             if (account.hasOwnProperty(property) && typeof account[property] === 'function') {
                 account[property]();
