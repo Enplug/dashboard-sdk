@@ -11,9 +11,7 @@
             if (o && typeof o === 'object' && o !== null) {
                 return true;
             }
-        } catch (e) {
-            return false;
-        }
+        } catch (e) {}
 
         return false;
     }

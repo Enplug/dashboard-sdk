@@ -11,9 +11,7 @@
             if (o && typeof o === 'object' && o !== null) {
                 return true;
             }
-        } catch (e) {
-            return false;
-        }
+        } catch (e) {}
 
         return false;
     }
@@ -178,6 +176,10 @@
      * @class
      */
     function Sender(prefix) {
+        if (!prefix) {
+            throw new Error(''); // Transports can't work without a prefix
+        }
+
         this.prefix = prefix;
         this.novalidate = false;
         this.transport = new enplug.classes.Transport(window, prefix);

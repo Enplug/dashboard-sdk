@@ -6,6 +6,10 @@
      * @class
      */
     function Sender(prefix) {
+        if (!prefix) {
+            throw new Error(''); // Transports can't work without a prefix
+        }
+
         this.prefix = prefix;
         this.novalidate = false;
         this.transport = new enplug.classes.Transport(window, prefix);
