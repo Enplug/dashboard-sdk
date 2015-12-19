@@ -1,46 +1,43 @@
 (function (enplug, document) {
     'use strict';
 
-    var methodPrefix = 'dashboard', // namespace for SDK calls
-
-        // The buttons most recently registered with the dashboard header.
-        // kept here so that we can respond to click events
-        currentButtons = [],
-
-        // Keeps track of whether the dashboard is loading mode so clients can check.
-        isLoading = true;
-
-    function validate(data, expectedType, errorMessage) {
-        if (!data || typeof data !== expectedType) {
-            throw new Error(errorMessage);
-        }
-    }
+    var methodPrefix = 'dashboard'; // namespace for SDK calls
 
     /**
-     * API for using UI componenets from the Enplug dashboard.
-     * @typedef enplug.dashboard
+     * @class
+     * @extends Sender
      */
-    enplug.dashboard = enplug.transport.factory({
+    function DashboardSender() {
 
-        click: function () {
+        // The buttons most recently registered with the dashboard header.
+        // remembered locally so that we can respond to click events
+        var currentButtons = [],
+
+            // Keeps track of whether the dashboard is loading mode so clients can check.
+            isLoading = true;
+
+        // Call parent constructor
+        enplug.classes.Sender.call(this, methodPrefix);
+
+        this.click = function () {
             return this.method({
                 name: 'click',
                 transient: true // don't wait for a response
             })
-        },
+        };
 
-        setHeaderTitle: function (title, onSuccess, onError) {
-            validate(title, 'string', '');
+        this.setHeaderTitle = function (title, onSuccess, onError) {
+            this.validate(title, 'string', '');
             return this.method({
                 name: 'set.title',
                 params: title,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        setHeaderButtons: function (buttons, onSuccess, onError) {
-            validate(buttons, 'object', '');
+        this.setHeaderButtons = function (buttons, onSuccess, onError) {
+            this.validate(buttons, 'object', '');
 
             // Reset any buttons we may have stored
             currentButtons = [];
@@ -70,10 +67,10 @@
                 },
                 errorCallback: onError
             });
-        },
+        };
 
-        pageLoading: function (bool, onSuccess, onError) {
-            validate(bool, 'boolean', '');
+        this.pageLoading = function (bool, onSuccess, onError) {
+            this.validate(bool, 'boolean', '');
             return this.method({
                 name: 'page.loading',
                 params: bool,
@@ -85,57 +82,57 @@
                 },
                 errorCallback: onError
             });
-        },
+        };
 
-        isLoading: function () {
+        this.isLoading = function () {
             return isLoading;
-        },
+        };
 
-        pageError: function (onSuccess, onError) {
+        this.pageError = function (onSuccess, onError) {
             return this.method({
                 name: 'page.error',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        pageNotFound: function (onSuccess, onError) {
+        this.pageNotFound = function (onSuccess, onError) {
             return this.method({
                 name: 'page.notFound',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        loadingIndicator: function (message, onSuccess, onError) {
-            validate(message, 'object', '');
+        this.loadingIndicator = function (message, onSuccess, onError) {
+            this.validate(message, 'object', '');
             return this.method({
                 name: 'indicator.loading',
                 params: message,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        successIndicator: function (message, onSuccess, onError) {
-            validate(message, 'string', '');
+        this.successIndicator = function (message, onSuccess, onError) {
+            this.validate(message, 'string', '');
             return this.method({
                 name: 'indicator.success',
                 params: message,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        errorIndicator: function (message, onSuccess, onError) {
-            validate(message, 'string', '');
+        this.errorIndicator = function (message, onSuccess, onError) {
+            this.validate(message, 'string', '');
             return this.method({
                 name: 'indicator.error',
                 params: message,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
         /**
          * Opens a confirm window with Yes/No buttons and configurable messages.
@@ -149,15 +146,15 @@
          * @param {function} onError
          * @returns {number} callId
          */
-        openConfirm: function (options, onSuccess, onError) {
-            validate(options, 'object', '');
+        this.openConfirm = function (options, onSuccess, onError) {
+            this.validate(options, 'object', '');
             return this.method({
                 name: 'confirm',
                 params: options,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
         /**
          * Opens a confirm window asking the user to confirm their unsaved changes.
@@ -166,13 +163,13 @@
          * @param onError
          * @returns {*}
          */
-        confirmUnsavedChanges: function (onSuccess, onError) {
+        this.confirmUnsavedChanges = function (onSuccess, onError) {
             return this.method({
                 name: 'unsavedChanges',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
         /**
          * Uses Filepicker upload interface and Enplug encoding service, returns uploaded object
@@ -182,15 +179,20 @@
          * @param {function} onError
          * @returns {number} callId
          */
-        upload: function (options, onSuccess, onError) {
+        this.upload = function (options, onSuccess, onError) {
             return this.method({
                 name: 'upload',
                 params: options,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        }
-    }, methodPrefix);
+        };
+    }
+
+    DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);
+
+    enplug.classes.DashboardSender = DashboardSender;
+    enplug.dashboard = new DashboardSender();
 
     // Broadcast clicks up to parent window so that we can
     // react to clicks for things like closing nav dropdowns

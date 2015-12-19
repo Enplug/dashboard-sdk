@@ -1,7 +1,7 @@
 (function (window) {
     'use strict';
 
-    var enplug = window.enplug || (window.enplug = { debug: false }),
+    var enplug = window.enplug || (window.enplug = { debug: false, classes: {} }),
         namespace = 'Enplug',
         targetOrigin = '*', // this is set to * to support various developer localhosts
         tag = '[Enplug SDK] ',
@@ -76,7 +76,7 @@
      * @param window
      * @constructor
      */
-    enplug.Transport = function (window) {
+    function Transport(window) {
 
         /**
          * Incremented before being assigned, so call IDs start with 1
@@ -95,6 +95,12 @@
          * @type {string}
          */
         this.tag = tag;
+
+        /**
+         *
+         * @type {string}
+         */
+        this.namespace = namespace;
 
         /**
          * Makes an API call against the Enplug dashboard parent window.
@@ -165,201 +171,229 @@
             return false;
         };
 
-        /**
-         *
-         * @param context
-         * @param prefix
-         */
-        this.factory = function (context, prefix) {
-            context.method = function (options) {
-
-                // Add implementation-specific method prefix (dashboard or app)
-                options.name = prefix + '.' + options.name;
-                options.namespace = namespace;
-
-                return enplug.transport.send(options);
-            };
-
-            return context;
-        };
-
         // Receive parent window response messages
         window.addEventListener('message', this.receive, false);
+    }
+
+    enplug.classes.Transport = Transport;
+    enplug.transport = new Transport(window);
+}(window));
+
+(function (enplug) {
+    'use strict';
+
+    /**
+     * @param prefix
+     * @class
+     */
+    function Sender(prefix) {
+        this.prefix = prefix;
+    }
+
+    Sender.prototype = {
+
+        validate: function (data, expectedType, errorMessage) {
+            if (this.shouldValidate) {
+                if (!data || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
+                    throw new Error(errorMessage);
+                }
+            }
+        },
+
+        method: function (options) {
+
+            if (typeof options === 'object') {
+
+                // Add implementation-specific method prefix (dashboard or app)
+                options.name = this.prefix + '.' + options.name;
+                options.namespace = enplug.transport.namespace;
+
+                return enplug.transport.send(options);
+            }  else {
+                throw new Error('');
+            }
+        }
     };
 
-    enplug.transport = new enplug.Transport(window);
-}(window));
+    enplug.classes.Sender = Sender;
+}(window.enplug));
 
 (function (enplug) {
     'use strict';
 
     var methodPrefix = 'account';
 
-    function validate(data, expectedType, errorMessage) {
-        if (!data || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
-            throw new Error(errorMessage);
-        }
-    }
+    /**
+     * @class
+     * @extends Sender
+     */
+    function AccountSender() {
 
-    enplug.account = enplug.transport.factory({
+        // Call parent constructor
+        enplug.classes.Sender.call(this, methodPrefix);
 
-        getAccount: function (onSuccess, onError) {
+        this.getAccount = function (onSuccess, onError) {
             return this.method({
                 name: 'getAccount',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        getDisplayGroup: function (onSuccess, onError) {
+        this.getDisplayGroup = function (onSuccess, onError) {
             return this.method({
                 name: 'getDisplay',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        getInstances: function (accountId, onSuccess, onError) {
-            validate(accountId, 'string', '');
+        this.getInstances = function (accountId, onSuccess, onError) {
+            this.validate(accountId, 'string', '');
             return this.method({
                 name: 'getInstances',
                 params: accountId,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        getAssets: function (onSuccess, onError) {
+        this.getAssets = function (onSuccess, onError) {
             return this.method({
                 name: 'getAssets',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        getDefaultAssets: function (onSuccess, onError) {
+        this.getDefaultAssets = function (onSuccess, onError) {
             return this.method({
                 name: 'getDefaultAssets',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        createAsset: function (name, value, onSuccess, onError) {
-            validate(name, 'string', '');
-            validate(value, 'object', '');
+        this.createAsset = function (name, value, onSuccess, onError) {
+            this.validate(name, 'string', '');
+            this.validate(value, 'object', '');
             return this.method({
                 name: 'createAsset',
                 params: [name, value],
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        createAssetFromDefault: function (defaultAssetId, onSuccess, onError) {
-            validate(defaultAssetId, 'string', '');
+        this.createAssetFromDefault = function (defaultAssetId, onSuccess, onError) {
+            this.validate(defaultAssetId, 'string', '');
             return this.method({
                 name: 'createAssetFromDefault',
                 params: defaultAssetId,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        updateAsset: function (id, value, onSuccess, onError) {
-            validate(id, 'string', '');
-            validate(value, 'object', '');
+        this.updateAsset = function (id, value, onSuccess, onError) {
+            this.validate(id, 'string', '');
+            this.validate(value, 'object', '');
             return this.method({
                 name: 'updateAsset',
                 params: [id, value],
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        bulkCreateAssets: function (assets, onSuccess, onError) {
-            validate(assets, 'array', '');
+        this.bulkCreateAssets = function (assets, onSuccess, onError) {
+            this.validate(assets, 'array', '');
             return this.method({
                 name: 'bulkCreateAssets',
                 params: assets,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        bulkUpdateAssets: function (assets, onSuccess, onError) {
-            validate(assets, 'array', '');
+        this.bulkUpdateAssets = function (assets, onSuccess, onError) {
+            this.validate(assets, 'array', '');
             return this.method({
                 name: 'bulkUpdateAssets',
                 params: assets,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        bulkRemoveAssets: function (assetIds, onSuccess, onError) {
-            validate(assetIds, 'array', '');
+        this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
+            this.validate(assetIds, 'array', '');
             return this.method({
                 name: 'bulkRemoveAssets',
                 params: assetIds,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        removeAsset: function (id, onSuccess, onError) {
-            validate(id, 'string', '');
+        this.removeAsset = function (id, onSuccess, onError) {
+            this.validate(id, 'string', '');
             return this.method({
                 name: 'removeAsset',
                 params: [id],
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        getThemes: function (onSuccess, onError) {
+        this.getThemes = function (onSuccess, onError) {
             return this.method({
                 name: 'getThemes',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        createTheme: function (newTheme, onSuccess, onError) {
-            validate(newTheme, 'object', '');
+        this.createTheme = function (newTheme, onSuccess, onError) {
+            this.validate(newTheme, 'object', '');
             return this.method({
                 name: 'createTheme',
                 params: newTheme,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        removeTheme: function (themeId, onSuccess, onError) {
-            validate(themeId, 'string', '');
+        this.removeTheme = function (themeId, onSuccess, onError) {
+            this.validate(themeId, 'string', '');
             return this.method({
                 name: 'removeTheme',
                 params: themeId,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        activateTheme: function (themeId, onSuccess, onError) {
-            validate(themeId, 'string', '');
+        this.activateTheme = function (themeId, onSuccess, onError) {
+            this.validate(themeId, 'string', '');
             return this.method({
                 name: 'activateTheme',
                 params: themeId,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        }
-    }, methodPrefix);
+        };
 
-    /**
-     * @deprecated
-     */
-    enplug.account.getDisplay = enplug.account.getDisplayGroup;
+        /**
+         * @deprecated
+         */
+        this.getDisplay = this.getDisplayGroup;
+    }
+
+    AccountSender.prototype = Object.create(enplug.classes.Sender.prototype);
+
+    enplug.classes.AccountSender = AccountSender;
+    enplug.account = new AccountSender();
 }(window.enplug));
 
 (function (angular, enplug) {
@@ -428,46 +462,43 @@
 (function (enplug, document) {
     'use strict';
 
-    var methodPrefix = 'dashboard', // namespace for SDK calls
-
-        // The buttons most recently registered with the dashboard header.
-        // kept here so that we can respond to click events
-        currentButtons = [],
-
-        // Keeps track of whether the dashboard is loading mode so clients can check.
-        isLoading = true;
-
-    function validate(data, expectedType, errorMessage) {
-        if (!data || typeof data !== expectedType) {
-            throw new Error(errorMessage);
-        }
-    }
+    var methodPrefix = 'dashboard'; // namespace for SDK calls
 
     /**
-     * API for using UI componenets from the Enplug dashboard.
-     * @typedef enplug.dashboard
+     * @class
+     * @extends Sender
      */
-    enplug.dashboard = enplug.transport.factory({
+    function DashboardSender() {
 
-        click: function () {
+        // The buttons most recently registered with the dashboard header.
+        // remembered locally so that we can respond to click events
+        var currentButtons = [],
+
+            // Keeps track of whether the dashboard is loading mode so clients can check.
+            isLoading = true;
+
+        // Call parent constructor
+        enplug.classes.Sender.call(this, methodPrefix);
+
+        this.click = function () {
             return this.method({
                 name: 'click',
                 transient: true // don't wait for a response
             })
-        },
+        };
 
-        setHeaderTitle: function (title, onSuccess, onError) {
-            validate(title, 'string', '');
+        this.setHeaderTitle = function (title, onSuccess, onError) {
+            this.validate(title, 'string', '');
             return this.method({
                 name: 'set.title',
                 params: title,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        setHeaderButtons: function (buttons, onSuccess, onError) {
-            validate(buttons, 'object', '');
+        this.setHeaderButtons = function (buttons, onSuccess, onError) {
+            this.validate(buttons, 'object', '');
 
             // Reset any buttons we may have stored
             currentButtons = [];
@@ -497,10 +528,10 @@
                 },
                 errorCallback: onError
             });
-        },
+        };
 
-        pageLoading: function (bool, onSuccess, onError) {
-            validate(bool, 'boolean', '');
+        this.pageLoading = function (bool, onSuccess, onError) {
+            this.validate(bool, 'boolean', '');
             return this.method({
                 name: 'page.loading',
                 params: bool,
@@ -512,57 +543,57 @@
                 },
                 errorCallback: onError
             });
-        },
+        };
 
-        isLoading: function () {
+        this.isLoading = function () {
             return isLoading;
-        },
+        };
 
-        pageError: function (onSuccess, onError) {
+        this.pageError = function (onSuccess, onError) {
             return this.method({
                 name: 'page.error',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        pageNotFound: function (onSuccess, onError) {
+        this.pageNotFound = function (onSuccess, onError) {
             return this.method({
                 name: 'page.notFound',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        loadingIndicator: function (message, onSuccess, onError) {
-            validate(message, 'object', '');
+        this.loadingIndicator = function (message, onSuccess, onError) {
+            this.validate(message, 'object', '');
             return this.method({
                 name: 'indicator.loading',
                 params: message,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        successIndicator: function (message, onSuccess, onError) {
-            validate(message, 'string', '');
+        this.successIndicator = function (message, onSuccess, onError) {
+            this.validate(message, 'string', '');
             return this.method({
                 name: 'indicator.success',
                 params: message,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
-        errorIndicator: function (message, onSuccess, onError) {
-            validate(message, 'string', '');
+        this.errorIndicator = function (message, onSuccess, onError) {
+            this.validate(message, 'string', '');
             return this.method({
                 name: 'indicator.error',
                 params: message,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
         /**
          * Opens a confirm window with Yes/No buttons and configurable messages.
@@ -576,15 +607,15 @@
          * @param {function} onError
          * @returns {number} callId
          */
-        openConfirm: function (options, onSuccess, onError) {
-            validate(options, 'object', '');
+        this.openConfirm = function (options, onSuccess, onError) {
+            this.validate(options, 'object', '');
             return this.method({
                 name: 'confirm',
                 params: options,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
         /**
          * Opens a confirm window asking the user to confirm their unsaved changes.
@@ -593,13 +624,13 @@
          * @param onError
          * @returns {*}
          */
-        confirmUnsavedChanges: function (onSuccess, onError) {
+        this.confirmUnsavedChanges = function (onSuccess, onError) {
             return this.method({
                 name: 'unsavedChanges',
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        },
+        };
 
         /**
          * Uses Filepicker upload interface and Enplug encoding service, returns uploaded object
@@ -609,15 +640,20 @@
          * @param {function} onError
          * @returns {number} callId
          */
-        upload: function (options, onSuccess, onError) {
+        this.upload = function (options, onSuccess, onError) {
             return this.method({
                 name: 'upload',
                 params: options,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
-        }
-    }, methodPrefix);
+        };
+    }
+
+    DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);
+
+    enplug.classes.DashboardSender = DashboardSender;
+    enplug.dashboard = new DashboardSender();
 
     // Broadcast clicks up to parent window so that we can
     // react to clicks for things like closing nav dropdowns

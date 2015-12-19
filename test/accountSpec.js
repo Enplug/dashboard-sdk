@@ -1,7 +1,30 @@
 describe('accountApis', function () {
 
-    it('should prefix method calls with "account"', function () {
+    var account;
 
+    beforeEach(function () {
+        account = new enplug.classes.AccountSender();
+    });
+
+    function callMethods(callback) {
+        account.shouldValidate = false;
+        for (var property in account) {
+            if (account.hasOwnProperty(property) && typeof account[property] === 'function') {
+                account[property]();
+                callback();
+            }
+        }
+    }
+
+    it('should support disabling validation for tests', function () {
+
+    });
+
+    it('should prefix method calls with "account"', function () {
+        spyOn(enplug.transport, 'send');
+        callMethods(function () {
+            expect(enplug.transport.send).toHaveBeenCalled();
+        });
     });
 
     it('should return incrementing call IDs for all method calls', function () {

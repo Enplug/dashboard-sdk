@@ -1,7 +1,7 @@
 (function (window) {
     'use strict';
 
-    var enplug = window.enplug || (window.enplug = { debug: false }),
+    var enplug = window.enplug || (window.enplug = { debug: false, classes: {} }),
         namespace = 'Enplug',
         targetOrigin = '*', // this is set to * to support various developer localhosts
         tag = '[Enplug SDK] ',
@@ -76,7 +76,7 @@
      * @param window
      * @constructor
      */
-    enplug.Transport = function (window) {
+    function Transport(window) {
 
         /**
          * Incremented before being assigned, so call IDs start with 1
@@ -95,6 +95,12 @@
          * @type {string}
          */
         this.tag = tag;
+
+        /**
+         *
+         * @type {string}
+         */
+        this.namespace = namespace;
 
         /**
          * Makes an API call against the Enplug dashboard parent window.
@@ -165,27 +171,10 @@
             return false;
         };
 
-        /**
-         *
-         * @param context
-         * @param prefix
-         */
-        this.factory = function (context, prefix) {
-            context.method = function (options) {
-
-                // Add implementation-specific method prefix (dashboard or app)
-                options.name = prefix + '.' + options.name;
-                options.namespace = namespace;
-
-                return enplug.transport.send(options);
-            };
-
-            return context;
-        };
-
         // Receive parent window response messages
         window.addEventListener('message', this.receive, false);
-    };
+    }
 
-    enplug.transport = new enplug.Transport(window);
+    enplug.classes.Transport = Transport;
+    enplug.transport = new Transport(window);
 }(window));
