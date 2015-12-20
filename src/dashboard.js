@@ -84,10 +84,10 @@
             return this.method({
                 name: 'page.loading',
                 params: bool,
-                successCallback: function (data) {
+                successCallback: function () {
                     isLoading = bool;
                     if (typeof onSuccess === 'function') {
-                        onSuccess(data);
+                        onSuccess(isLoading);
                     }
                 },
                 errorCallback: onError

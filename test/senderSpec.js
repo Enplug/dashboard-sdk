@@ -8,15 +8,36 @@ describe('apiSender', function () {
     });
 
     it('should require a prefix', function () {
-
+        var error = new Error('Senders must specify a method prefix.');
+        expect(function () {
+            sender = new enplug.classes.Sender();
+        }).toThrow(error);
     });
 
     it('should validate built in JS types', function () {
+        expect(function () {
+            sender.validate('test', 'number');
+        }).toThrow();
 
+        expect(function () {
+            sender.validate(1, 'string');
+        }).toThrow();
+
+        expect(function () {
+            sender.validate(true, 'object');
+        }).toThrow();
+    });
+
+    it('should not allow null', function () {
+        expect(function () {
+            sender.validate(null, 'object');
+        }).toThrow();
     });
 
     it('should validate array data', function () {
-
+        expect(function () {
+            sender.validate({}, 'array');
+        }).toThrow();
     });
 
     it('should support disabling validation for tests', function () {
@@ -35,18 +56,25 @@ describe('apiSender', function () {
     });
 
     it('should validate method call options before sending', function () {
-
+        var error = new Error('Transport options must be an object.');
+        expect(function () {
+            sender.method();
+        }).toThrow(error);
     });
 
     it('should allow empty strings', function () {
-
+        expect(function () {
+            sender.validate('', 'string');
+        }).not.toThrow();
     });
 
     it('should allow false', function () {
-
+        expect(function () {
+            sender.validate(false, 'boolean');
+        }).not.toThrow();
     });
 
     it('should implement a cleanup function for removing event listeners', function () {
-
+        expect(typeof sender.cleanup).toBe('function');
     });
 });

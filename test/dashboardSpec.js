@@ -60,6 +60,13 @@ describe('DashboardSender', function () {
         expect(dashboard.isLoading()).toBe(true);
     });
 
+    it('should respond to callbacks with loading status when setting page loading status', function () {
+        var callback = jasmine.createSpy('callback'),
+            callId = dashboard.pageLoading(false, callback);
+        dashboard.transport.handleEvent(mockResponse({ callId: callId, namespace: dashboard.transport.namespace }));
+        expect(callback).toHaveBeenCalledWith(false);
+    });
+
     it('should call the correct button when clicked', function () {
         var button = jasmine.createSpyObj('button', ['action']);
         var callId = dashboard.setHeaderButtons(button);
@@ -75,6 +82,16 @@ describe('DashboardSender', function () {
         dashboard.transport.handleEvent(response);
         dashboard.transport.handleEvent(response);
         expect(button.action.calls.count()).toEqual(3);
+    });
+
+    it('should respond to callbacks when setting buttons', function () {
+        var button = jasmine.createSpyObj('button', ['action']),
+            callback = jasmine.createSpy('callback'),
+            callId = dashboard.setHeaderButtons(button, callback),
+            data = { id: button.id };
+        dashboard.transport.handleEvent(mockResponse({ callId: callId, namespace: dashboard.transport.namespace, data: data }));
+        expect(button.action).toHaveBeenCalled();
+        expect(callback).toHaveBeenCalledWith(data);
     });
 
     // Validation

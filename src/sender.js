@@ -7,7 +7,7 @@
      */
     function Sender(prefix) {
         if (!prefix) {
-            throw new Error(''); // Transports can't work without a prefix
+            throw new Error('Senders must specify a method prefix.'); // Transports can't work without a prefix/namespace
         }
 
         this.prefix = prefix;
@@ -44,7 +44,7 @@
                 options.name = this.prefix + '.' + options.name;
                 return this.transport.send(options);
             }  else {
-                throw new Error('');
+                throw new Error('Transport options must be an object.');
             }
         },
 
