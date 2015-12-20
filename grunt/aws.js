@@ -1,3 +1,5 @@
 module.exports = function (grunt) {
-    return grunt.file.readJSON('grunt/aws.private.json');
+    try {
+        return grunt.file.readJSON('grunt/aws.private.json');
+    } catch (e) {}
 };
