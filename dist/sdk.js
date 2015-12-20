@@ -5,31 +5,6 @@
         targetOrigin = '*', // this is set to * to support various developer localhosts
         tag = '[Enplug SDK] ';
 
-    function debug(message) {
-        if (enplug.debug) {
-            arguments[0] = tag + arguments[0];
-            console.log.apply(console, arguments);
-        }
-    }
-
-    /**
-     * Validate and assign defaults for callback methods.
-     * @param options
-     */
-    function validateCallbacks(options) {
-        if (options.successCallback && typeof options.successCallback !== 'function') {
-            throw new Error(tag + 'Success callback must be a function.');
-        } else {
-            options.successCallback = options.successCallback || enplug.noop;
-        }
-
-        if (options.errorCallback && typeof options.errorCallback !== 'function') {
-            throw new Error(tag + 'Error callback must be a function.');
-        } else {
-            options.errorCallback = options.errorCallback || enplug.noop;
-        }
-    }
-
     /**
      * Transports are used to communicate with the dashboard parent window.
      * @param window
@@ -60,6 +35,31 @@
          * @type {string}
          */
         this.namespace = namespace;
+
+        function debug(message) {
+            if (enplug.debug) {
+                arguments[0] = tag + arguments[0];
+                console.log.apply(console, arguments);
+            }
+        }
+
+        /**
+         * Validate and assign defaults for callback methods.
+         * @param options
+         */
+        function validateCallbacks(options) {
+            if (options.successCallback && typeof options.successCallback !== 'function') {
+                throw new Error(tag + 'Success callback must be a function.');
+            } else {
+                options.successCallback = options.successCallback || enplug.noop;
+            }
+
+            if (options.errorCallback && typeof options.errorCallback !== 'function') {
+                throw new Error(tag + 'Error callback must be a function.');
+            } else {
+                options.errorCallback = options.errorCallback || enplug.noop;
+            }
+        }
 
         /**
          * Verifies that a message is intended for the transport.

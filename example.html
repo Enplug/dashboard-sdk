@@ -11,22 +11,8 @@
 
         <script>
             enplug.debug = true;
-        //    enplug.account.getAssets();
-
             angular.module('example', ['enplug.sdk']).run(function ($enplugDashboard) {
-                $enplugDashboard.pageLoading(false).then(function (data) {
-                    console.warn('hit:', data);
-                });
 
-                console.log(enplug.dashboard.transport.pendingCalls);
-
-                var data = JSON.stringify({
-                    success: true,
-                    callId: enplug.dashboard.transport.pendingCalls[1].callId,
-                    namespace: enplug.dashboard.transport.namespace,
-                    data: 'test'
-                });
-                window.postMessage(data, '*');
             });
         </script>
     </head>
