@@ -5,17 +5,6 @@
         targetOrigin = '*', // this is set to * to support various developer localhosts
         tag = '[Enplug SDK] ';
 
-    function isValidJson(json) {
-        try {
-            var o = JSON.parse(JSON.stringify(JSON.parse(json)));
-            if (o && typeof o === 'object' && o !== null) {
-                return true;
-            }
-        } catch (e) {}
-
-        return false;
-    }
-
     function debug(message) {
         if (enplug.debug) {
             arguments[0] = tag + arguments[0];
@@ -78,7 +67,7 @@
          * @returns {boolean}
          */
         function parseResponse(event) {
-            if (isValidJson(event.data)) {
+            try {
                 var response = JSON.parse(event.data);
 
                 // Check for success key to ignore messages being sent
@@ -86,15 +75,9 @@
                     return response;
                 }
 
-                // Don't log for message posted by this same window
-                if (!response.namespace) {
-                    debug('Did not recognize window message response format:', event);
-                }
-
                 return false;
-            }
+            } catch (e) {}
 
-            debug('Did not recognize non-JSON window message:', event);
             return false;
         }
 
@@ -144,31 +127,40 @@
          * @param event
          * @returns {boolean} - true if successfully processed, otherwise false.
          */
-        this.receive = function (event) {
-            var response = parseResponse(event);
-            if (response) {
-                var methodCall = this.pendingCalls[response.callId];
-                if (methodCall) {
-                    if (!methodCall.persistent) {
-                        delete this.pendingCalls[response.callId];
+        this.handleEvent = function (event) {
+            if (event.type === 'message') {
+                var response = parseResponse(event);
+                if (response) {
+                    var methodCall = this.pendingCalls[response.callId];
+                    if (methodCall) {
+                        if (!methodCall.persistent) {
+                            delete this.pendingCalls[response.callId];
+                        }
+
+                        debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
+                            call: methodCall,
+                            response: response
+                        });
+
+                        var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;
+                        cb(response.data);
+
+                        return true;
                     }
-
-                    debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
-                        call: methodCall,
-                        response: response
-                    });
-
-                    var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;
-                    cb(response.data);
-
-                    return true;
                 }
-            }
 
-            return false;
+                return false;
+            }
+        };
+
+        /**
+         *
+         */
+        this.cleanup = function () {
+            window.removeEventListener('message', this, false);
         };
 
         // Receive parent window response messages
-        window.addEventListener('message', this.receive, false);
+        window.addEventListener('message', this, false);
     };
 }(window));

@@ -5,17 +5,6 @@
         targetOrigin = '*', // this is set to * to support various developer localhosts
         tag = '[Enplug SDK] ';
 
-    function isValidJson(json) {
-        try {
-            var o = JSON.parse(JSON.stringify(JSON.parse(json)));
-            if (o && typeof o === 'object' && o !== null) {
-                return true;
-            }
-        } catch (e) {}
-
-        return false;
-    }
-
     function debug(message) {
         if (enplug.debug) {
             arguments[0] = tag + arguments[0];
@@ -78,7 +67,7 @@
          * @returns {boolean}
          */
         function parseResponse(event) {
-            if (isValidJson(event.data)) {
+            try {
                 var response = JSON.parse(event.data);
 
                 // Check for success key to ignore messages being sent
@@ -86,15 +75,9 @@
                     return response;
                 }
 
-                // Don't log for message posted by this same window
-                if (!response.namespace) {
-                    debug('Did not recognize window message response format:', event);
-                }
-
                 return false;
-            }
+            } catch (e) {}
 
-            debug('Did not recognize non-JSON window message:', event);
             return false;
         }
 
@@ -144,32 +127,41 @@
          * @param event
          * @returns {boolean} - true if successfully processed, otherwise false.
          */
-        this.receive = function (event) {
-            var response = parseResponse(event);
-            if (response) {
-                var methodCall = this.pendingCalls[response.callId];
-                if (methodCall) {
-                    if (!methodCall.persistent) {
-                        delete this.pendingCalls[response.callId];
+        this.handleEvent = function (event) {
+            if (event.type === 'message') {
+                var response = parseResponse(event);
+                if (response) {
+                    var methodCall = this.pendingCalls[response.callId];
+                    if (methodCall) {
+                        if (!methodCall.persistent) {
+                            delete this.pendingCalls[response.callId];
+                        }
+
+                        debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
+                            call: methodCall,
+                            response: response
+                        });
+
+                        var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;
+                        cb(response.data);
+
+                        return true;
                     }
-
-                    debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
-                        call: methodCall,
-                        response: response
-                    });
-
-                    var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;
-                    cb(response.data);
-
-                    return true;
                 }
-            }
 
-            return false;
+                return false;
+            }
+        };
+
+        /**
+         *
+         */
+        this.cleanup = function () {
+            window.removeEventListener('message', this, false);
         };
 
         // Receive parent window response messages
-        window.addEventListener('message', this.receive, false);
+        window.addEventListener('message', this, false);
     };
 }(window));
 
@@ -206,6 +198,11 @@
             }
         },
 
+        /**
+         *
+         * @param options
+         * @returns {*}
+         */
         method: function (options) {
 
             if (typeof options === 'object') {
@@ -216,6 +213,13 @@
             }  else {
                 throw new Error('');
             }
+        },
+
+        /**
+         *
+         */
+        cleanup: function () {
+            this.transport.cleanup();
         }
     };
 
@@ -406,30 +410,35 @@
     /**
      * Modifies transport.send to return promises.
      * @param q
-     * @param original
-     * @returns {Function}
+     * @param scope
+     * @param transport
      */
-    function decorateSend(q, original) {
-        return function (options) {
+    function decorateSend(q, scope, transport) {
+        var original = transport.send;
+        transport.send = function (options) {
 
             // Store originals
             var defer = q.defer(),
-                onSuccess = options.successCallback,
-                onError = options.errorCallback;
+                onSuccess = options.successCallback || angular.noop,
+                onError = options.errorCallback || angular.noop;
 
             options.successCallback = function (result) {
-                defer.resolve(result);
-                onSuccess(result);
+                scope.$apply(function () {
+                    defer.resolve(result);
+                    onSuccess(result);
+                });
             };
 
             options.errorCallback = function (result) {
-                defer.reject(result);
-                onError(result);
+                scope.$apply(function () {
+                    defer.reject(result);
+                    onError(result);
+                });
             };
 
             // Call the original transport method
             // but use our promise as the return value
-            original.call(enplug.transport, options);
+            original.call(transport, options);
             return defer.promise;
         }
     }
@@ -442,15 +451,19 @@
 
         var module = angular.module('enplug.sdk', []);
 
-        module.factory('$enplugDashboard', function ($q) {
+        module.factory('$enplugDashboard', function ($q, $rootScope) {
             var sender = new enplug.classes.DashboardSender();
-            sender.transport.send = decorateSend($q, sender.transport.send);
+            enplug.dashboard.cleanup();
+            enplug.dashboard = sender;
+            decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
 
-        module.factory('$enplugAccount', function ($q) {
+        module.factory('$enplugAccount', function ($q, $rootScope) {
             var sender = new enplug.classes.AccountSender();
-            sender.transport.send = decorateSend($q, sender.transport.send);
+            enplug.account.cleanup();
+            enplug.account = sender;
+            decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
     }
@@ -662,13 +675,23 @@
             });
         };
 
+        /**
+         *
+         */
+        this.cleanup = function () {
+            document.removeEventListener('click', listenToClicks, false);
+            enplug.classes.Sender.prototype.cleanup.call(this);
+        };
+
         // Broadcast clicks up to parent window so that we can
         // react to clicks for things like closing nav dropdowns
         var self = this;
-        document.addEventListener('click', function () {
+        function listenToClicks() {
             self.click();
             return true;
-        }, false);
+        }
+
+        document.addEventListener('click', listenToClicks, false);
     }
 
     DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);

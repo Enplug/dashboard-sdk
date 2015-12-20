@@ -31,6 +31,11 @@
             }
         },
 
+        /**
+         *
+         * @param options
+         * @returns {*}
+         */
         method: function (options) {
 
             if (typeof options === 'object') {
@@ -41,6 +46,13 @@
             }  else {
                 throw new Error('');
             }
+        },
+
+        /**
+         *
+         */
+        cleanup: function () {
+            this.transport.cleanup();
         }
     };
 

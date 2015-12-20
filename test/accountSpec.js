@@ -6,6 +6,10 @@ describe('AccountSender', function () {
         account = new enplug.classes.AccountSender();
     });
 
+    afterEach(function () {
+        account.transport.cleanup();
+    });
+
     function callMethods(callback) {
         account.novalidate = true;
         for (var property in account) {

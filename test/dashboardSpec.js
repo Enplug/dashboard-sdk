@@ -6,6 +6,10 @@ describe('DashboardSender', function () {
         dashboard = new enplug.classes.DashboardSender();
     });
 
+    afterEach(function () {
+        dashboard.cleanup();
+    });
+
     function callMethods(callback) {
         dashboard.novalidate = true;
         for (var property in dashboard) {
@@ -36,21 +40,30 @@ describe('DashboardSender', function () {
         expect(dashboard.click).toHaveBeenCalled();
     });
 
+    it('should deregister a handler for document clicks', function () {
+        spyOn(dashboard, 'click');
+        dashboard.cleanup();
+        var event = document.createEvent('HTMLEvents');
+        event.initEvent('click', true, true);
+        window.document.dispatchEvent(event);
+        expect(dashboard.click).not.toHaveBeenCalled();
+    });
+
     it('should track page loading status', function () {
         var callId;
         expect(dashboard.isLoading()).toBe(true);
         callId = dashboard.pageLoading(false);
-        dashboard.transport.receive(mockResponse({ callId: callId, namespace: dashboard.transport.namespace }));
+        dashboard.transport.handleEvent(mockResponse({ callId: callId, namespace: dashboard.transport.namespace }));
         expect(dashboard.isLoading()).toBe(false);
         callId = dashboard.pageLoading(true);
-        dashboard.transport.receive(mockResponse({ callId: callId, namespace: dashboard.transport.namespace }));
+        dashboard.transport.handleEvent(mockResponse({ callId: callId, namespace: dashboard.transport.namespace }));
         expect(dashboard.isLoading()).toBe(true);
     });
 
     it('should call the correct button when clicked', function () {
         var button = jasmine.createSpyObj('button', ['action']);
         var callId = dashboard.setHeaderButtons(button);
-        dashboard.transport.receive(mockResponse({ callId: callId, namespace: dashboard.transport.namespace, data: { id: button.id } }));
+        dashboard.transport.handleEvent(mockResponse({ callId: callId, namespace: dashboard.transport.namespace, data: { id: button.id } }));
         expect(button.action).toHaveBeenCalled();
     });
 
@@ -58,9 +71,9 @@ describe('DashboardSender', function () {
         var button = jasmine.createSpyObj('button', ['action']);
         var callId = dashboard.setHeaderButtons(button);
         var response = mockResponse({ callId: callId, namespace: dashboard.transport.namespace, data: { id: button.id } });
-        dashboard.transport.receive(response);
-        dashboard.transport.receive(response);
-        dashboard.transport.receive(response);
+        dashboard.transport.handleEvent(response);
+        dashboard.transport.handleEvent(response);
+        dashboard.transport.handleEvent(response);
         expect(button.action.calls.count()).toEqual(3);
     });
 

@@ -4,10 +4,13 @@ describe('transport', function () {
     var transport, window, namespace = 'Enplug';
 
     beforeEach(function () {
-        enplug.debug = false;
-        window = jasmine.createSpyObj('window', ['addEventListener']);
+        window = jasmine.createSpyObj('window', ['addEventListener', 'removeEventListener']);
         window.parent = jasmine.createSpyObj('parent', ['postMessage']);
         transport = new enplug.classes.Transport(window, namespace);
+    });
+
+    afterEach(function () {
+        transport.cleanup();
     });
 
     function mockCall(options) {
@@ -98,26 +101,26 @@ describe('transport', function () {
 
     it('should ignore non-JSON messages', function () {
         var response = mockResponse(null, true);
-        expect(transport.receive(response)).toEqual(false);
+        expect(transport.handleEvent(response)).toEqual(false);
     });
 
     it('should ignore JSON messages without a call ID', function () {
         var response = mockResponse({ callId: null, namespace: namespace });
-        expect(transport.receive(response)).toEqual(false);
+        expect(transport.handleEvent(response)).toEqual(false);
     });
 
     it('should not ignore valid API responses', function () {
         var call = mockCall();
         var callId = transport.send(call);
         var response = mockResponse({ callId: callId, namespace: namespace });
-        expect(transport.receive(response)).toEqual(true);
+        expect(transport.handleEvent(response)).toEqual(true);
     });
 
     it('should not delete persistent method calls from the pending calls stack', function () {
         var call = mockCall({ persistent: true });
         var callId = transport.send(call);
         var response = mockResponse({ callId: callId, namespace: namespace });
-        transport.receive(response);
+        transport.handleEvent(response);
         expect(transport.pendingCalls[callId]).toEqual(call);
     });
 
@@ -125,7 +128,7 @@ describe('transport', function () {
         var call = mockCall();
         transport.send(call);
         var response = mockResponse({ callId: call.callId, namespace: namespace });
-        transport.receive(response);
+        transport.handleEvent(response);
         expect(transport.pendingCalls[call.callId]).toBeUndefined();
     });
 
@@ -133,7 +136,7 @@ describe('transport', function () {
         var call = mockCall({ successCallback: jasmine.createSpy('callback') });
         transport.send(call);
         var response = mockResponse({ callId: call.callId, data: 'test', namespace: namespace });
-        transport.receive(response);
+        transport.handleEvent(response);
         expect(call.successCallback).toHaveBeenCalledWith(JSON.parse(response.data).data);
     });
 
@@ -141,7 +144,7 @@ describe('transport', function () {
         var call = mockCall({ errorCallback: jasmine.createSpy('callback') });
         transport.send(call);
         var response = mockResponse({ callId: call.callId, success: false, data: 'test', namespace: namespace });
-        transport.receive(response);
+        transport.handleEvent(response);
         expect(call.errorCallback).toHaveBeenCalledWith(JSON.parse(response.data).data);
     });
 
@@ -166,19 +169,24 @@ describe('transport', function () {
             response2 = mockResponse({ callId: callId2, namespace: namespace2 });
 
         // first transport
-        expect(transport1.receive(response2)).toEqual(false);
+        expect(transport1.handleEvent(response2)).toEqual(false);
         expect(transport1.pendingCalls[callId1]).toBe(call1);
-        expect(transport1.receive(response1)).toEqual(true);
+        expect(transport1.handleEvent(response1)).toEqual(true);
         expect(transport1.pendingCalls[callId1]).toBeUndefined();
 
         // second transport
-        expect(transport2.receive(response1)).toEqual(false);
+        expect(transport2.handleEvent(response1)).toEqual(false);
         expect(transport2.pendingCalls[callId2]).toBe(call2);
-        expect(transport2.receive(response2)).toEqual(true);
+        expect(transport2.handleEvent(response2)).toEqual(true);
         expect(transport2.pendingCalls[callId2]).toBeUndefined();
     });
 
     it('should publish its namespace', function () {
         expect(transport.namespace).toBe(namespace);
+    });
+
+    it('should be able to remove event listener', function () {
+        transport.cleanup();
+        expect(window.removeEventListener).toHaveBeenCalled();
     });
 });

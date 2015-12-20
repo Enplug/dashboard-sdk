@@ -4,30 +4,35 @@
     /**
      * Modifies transport.send to return promises.
      * @param q
-     * @param original
-     * @returns {Function}
+     * @param scope
+     * @param transport
      */
-    function decorateSend(q, original) {
-        return function (options) {
+    function decorateSend(q, scope, transport) {
+        var original = transport.send;
+        transport.send = function (options) {
 
             // Store originals
             var defer = q.defer(),
-                onSuccess = options.successCallback,
-                onError = options.errorCallback;
+                onSuccess = options.successCallback || angular.noop,
+                onError = options.errorCallback || angular.noop;
 
             options.successCallback = function (result) {
-                defer.resolve(result);
-                onSuccess(result);
+                scope.$apply(function () {
+                    defer.resolve(result);
+                    onSuccess(result);
+                });
             };
 
             options.errorCallback = function (result) {
-                defer.reject(result);
-                onError(result);
+                scope.$apply(function () {
+                    defer.reject(result);
+                    onError(result);
+                });
             };
 
             // Call the original transport method
             // but use our promise as the return value
-            original.call(enplug.transport, options);
+            original.call(transport, options);
             return defer.promise;
         }
     }
@@ -40,15 +45,19 @@
 
         var module = angular.module('enplug.sdk', []);
 
-        module.factory('$enplugDashboard', function ($q) {
+        module.factory('$enplugDashboard', function ($q, $rootScope) {
             var sender = new enplug.classes.DashboardSender();
-            sender.transport.send = decorateSend($q, sender.transport.send);
+            enplug.dashboard.cleanup();
+            enplug.dashboard = sender;
+            decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
 
-        module.factory('$enplugAccount', function ($q) {
+        module.factory('$enplugAccount', function ($q, $rootScope) {
             var sender = new enplug.classes.AccountSender();
-            sender.transport.send = decorateSend($q, sender.transport.send);
+            enplug.account.cleanup();
+            enplug.account = sender;
+            decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
     }

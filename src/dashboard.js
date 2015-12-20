@@ -204,13 +204,23 @@
             });
         };
 
+        /**
+         *
+         */
+        this.cleanup = function () {
+            document.removeEventListener('click', listenToClicks, false);
+            enplug.classes.Sender.prototype.cleanup.call(this);
+        };
+
         // Broadcast clicks up to parent window so that we can
         // react to clicks for things like closing nav dropdowns
         var self = this;
-        document.addEventListener('click', function () {
+        function listenToClicks() {
             self.click();
             return true;
-        }, false);
+        }
+
+        document.addEventListener('click', listenToClicks, false);
     }
 
     DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);

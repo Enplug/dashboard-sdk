@@ -4,6 +4,7 @@
         // Returns an object mocking a response from the dashboard parent window
         window.mockResponse = function (options, raw) {
             var event = {
+                type: 'message',
                 data: {
                     success: true
                 }
@@ -21,5 +22,9 @@
 
             return event;
         }
+    });
+
+    afterEach(function () {
+        enplug.debug = false;
     });
 }());

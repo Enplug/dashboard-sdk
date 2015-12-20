@@ -45,4 +45,8 @@ describe('apiSender', function () {
     it('should allow false', function () {
 
     });
+
+    it('should implement a cleanup function for removing event listeners', function () {
+
+    });
 });
