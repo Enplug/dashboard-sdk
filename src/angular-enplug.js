@@ -3,9 +3,9 @@
 
     /**
      * Modifies transport.send to return promises.
-     * @param q
-     * @param scope
-     * @param transport
+     * @param {Object} q
+     * @param {Object} scope
+     * @param {Object} transport
      */
     function decorateSend(q, scope, transport) {
         var original = transport.send;
@@ -38,8 +38,11 @@
     }
 
     /**
-     * Sets up enplug.sdk module and associated services
+     * Automatically creates up enplug.sdk module and associated services
      * if angular is loaded on the page.
+     *
+     * The services $enplugDashboard and $enplugAccount are synchronized
+     * with the global variables enplug.dashboard and enplug.account.
      */
     if (angular) {
 
