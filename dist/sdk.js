@@ -696,12 +696,18 @@
      */
     function DashboardSender() {
 
-        // The buttons most recently registered with the dashboard header.
-        // remembered locally so that we can respond to click events
-        var currentButtons = [],
+        /**
+         * The buttons most recently registered with the dashboard header.
+         * Stored locally so that we can respond to click events
+         * @type {{ id:string, action:function, text:string, class:string }[]}
+         */
+        var currentButtons = [];
 
-            // Keeps track of whether the dashboard is loading mode so clients can check.
-            isLoading = true;
+        /**
+         * Keeps track of whether the dashboard is loading mode so clients can check.
+         * @type {boolean}
+         */
+        var isLoading = true;
 
         // Call parent constructor with namespace
         enplug.classes.Sender.call(this, 'dashboard');
