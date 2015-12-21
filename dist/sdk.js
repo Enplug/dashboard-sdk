@@ -640,7 +640,7 @@
     }
 
     /**
-     * Creates a new {@link Sender} as an AngularJS service.
+     * Creates a new {@link Sender} to be used as an AngularJS service.
      *
      * @param {string} type - Sender type to create.
      */
@@ -667,16 +667,12 @@
 
         module.factory('$enplugDashboard', function ($q, $rootScope) {
             var sender = createSender('dashboard');
-
-            // Return promises from SDK methods
             decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
 
         module.factory('$enplugAccount', function ($q, $rootScope) {
             var sender = createSender('account');
-
-            // Return promises from SDK methods
             decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
