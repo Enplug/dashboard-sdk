@@ -477,7 +477,7 @@
          * Provide an array of asset IDs to be removed for the current instance,
          * or an array of objects each with an AppInstanceId and AssetId.
          *
-         * @param {Array<string>|{ AppInstanceId:string, AssetId:string }[]} assetIds
+         * @param {string[]|{ AppInstanceId:string, AssetId:string }[]} assetIds
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
