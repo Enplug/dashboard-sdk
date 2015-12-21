@@ -604,6 +604,7 @@
 
     /**
      * Modifies transport.send to return promises.
+     *
      * @param {Object} q
      * @param {Object} scope
      * @param {Object} transport
@@ -639,6 +640,21 @@
     }
 
     /**
+     * Creates a new {@link Sender} as an AngularJS service.
+     *
+     * @param {string} type - Sender type to create.
+     */
+    function createSender(type) {
+        var className = type.charAt(0).toUpperCase() + type.slice(1) + 'Sender',
+            sender = new enplug.classes[className]();
+
+        // Remove event listeners for existing sender and reassign
+        enplug[type].cleanup();
+        enplug[type] = sender;
+        return sender;
+    }
+
+    /**
      * Automatically creates up enplug.sdk module and associated services
      * if angular is loaded on the page.
      *
@@ -650,17 +666,17 @@
         var module = angular.module('enplug.sdk', []);
 
         module.factory('$enplugDashboard', function ($q, $rootScope) {
-            var sender = new enplug.classes.DashboardSender();
-            enplug.dashboard.cleanup();
-            enplug.dashboard = sender;
+            var sender = createSender('dashboard');
+
+            // Return promises from SDK methods
             decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
 
         module.factory('$enplugAccount', function ($q, $rootScope) {
-            var sender = new enplug.classes.AccountSender();
-            enplug.account.cleanup();
-            enplug.account = sender;
+            var sender = createSender('account');
+
+            // Return promises from SDK methods
             decorateSend($q, $rootScope, sender.transport);
             return sender;
         });
