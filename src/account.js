@@ -324,8 +324,10 @@
         this.getDisplay = this.getDisplayGroup;
     }
 
+    // Inherit
     AccountSender.prototype = Object.create(enplug.classes.Sender.prototype);
 
+    // Export
     enplug.classes.AccountSender = AccountSender;
     enplug.account = new AccountSender();
 }(window.enplug));

@@ -52,7 +52,7 @@ describe('transport', function () {
     });
 
     it('should validate method call names', function () {
-        var error = new Error(transport.tag + 'All transport method calls must have a name.');
+        var error = new Error(transport.TAG + 'All transport method calls must have a name.');
         expect(function () {
             var call = mockCall({ name: null });
             transport.send(call);
@@ -60,7 +60,7 @@ describe('transport', function () {
     });
 
     it ('should validate method call success callback type', function () {
-        var error = new Error(transport.tag + 'Success callback must be a function.');
+        var error = new Error(transport.TAG + 'Success callback must be a function.');
         expect(function () {
             var call = mockCall({ successCallback: 'test' });
             transport.send(call);
@@ -68,7 +68,7 @@ describe('transport', function () {
     });
 
     it('should validate method call error callback type', function () {
-        var error = new Error(transport.tag + 'Error callback must be a function.');
+        var error = new Error(transport.TAG + 'Error callback must be a function.');
         expect(function () {
             var call = mockCall({ errorCallback: 'test' });
             transport.send(call);
@@ -153,7 +153,7 @@ describe('transport', function () {
         spyOn(console, 'log');
         var call = mockCall();
         transport.send(call);
-        expect(console.log).toHaveBeenCalledWith(transport.tag + 'Calling method:', call);
+        expect(console.log).toHaveBeenCalledWith(transport.TAG + 'Calling method:', call);
     });
 
     it('should correctly respond to namespaced events', function () {

@@ -2,39 +2,59 @@
     'use strict';
 
     /**
-     * @param prefix
+     * Base class for sending messages using a transport to the parent window (dashboard).
+     *
+     * @param {string} prefix - The namespace for the sender's transport.
      * @class
      */
     function Sender(prefix) {
         if (!prefix) {
-            throw new Error('Senders must specify a method prefix.'); // Transports can't work without a prefix/namespace
+
+            // Transports can't work without a prefix/namespace
+            throw new Error(enplug.classes.Transport.prototype.TAG + 'Senders must specify a method prefix.');
         }
 
+        /**
+         * Transport namespace.
+         * @type {string}
+         */
         this.prefix = prefix;
+
+        /**
+         * Disables validation of method params. Used for testing.
+         * @type {boolean}
+         */
         this.novalidate = false;
+
+        /**
+         * Sends and receives messages to/from the parent window.
+         * @type {Transport}
+         */
         this.transport = new enplug.classes.Transport(window, prefix);
     }
 
     Sender.prototype = {
 
         /**
-         * Validates data before being sent to dashboard. Supports this.novalidate for tests.
-         * @param data
-         * @param expectedType
-         * @param errorMessage
+         * Validates data types before being sent to dashboard. Disabled with this.novalidate=true (for tests).
+         *
+         * @param {*} data - The value to be validated.
+         * @param {string} expectedType - Valid output from typeof, or 'array'.
+         * @param {string} errorMessage
          */
         validate: function (data, expectedType, errorMessage) {
             if (!this.novalidate) {
                 if (data === null || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
-                    throw new Error(this.transport.tag + errorMessage);
+                    throw new Error(this.transport.TAG + errorMessage);
                 }
             }
         },
 
         /**
+         * Factory for all SDK method calls.
          *
-         * @param options
-         * @returns {*}
+         * @param {MethodCall} options
+         * @returns {number} callId
          */
         method: function (options) {
 
@@ -49,12 +69,13 @@
         },
 
         /**
-         *
+         * Removes this sender's transport event listeners to prevent memory leaks.
          */
         cleanup: function () {
             this.transport.cleanup();
         }
     };
 
+    // Export
     enplug.classes.Sender = Sender;
 }(window, window.enplug));

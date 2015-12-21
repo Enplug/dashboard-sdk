@@ -3,15 +3,29 @@
 
     var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} }),
         targetOrigin = '*', // this is set to * to support various developer localhosts
-        tag = '[Enplug SDK] ';
+        TAG = '[Enplug SDK] ';
 
     /**
      * Transports are used to communicate with the dashboard parent window.
+     *
      * @param window
-     * @param namespace
+     * @param {string} namespace - Determines which events a transport responds to.
      * @constructor
+     * @implements EventListener
      */
-    enplug.classes.Transport = function (window, namespace) {
+    function Transport(window, namespace) {
+
+        /**
+         * A single call sent by a sender through a transport to the parent dashboard.
+         * @typedef {Object} MethodCall
+         * @property {string} name
+         * @property {number} callId - An identifier assigned by transport.send(). Can be used to lookup in pending calls.
+         * @property {*} params - The data to be sent as parameters to the API.
+         * @property {boolean} transient - For API calls that don't expect a response.
+         * @property {boolean} persistent - For API calls that expect multiple responses.
+         * @property {function} successCallback
+         * @property {function} errorCallback
+         */
 
         /**
          * Incremented before being assigned, so call IDs start with 1
@@ -20,42 +34,41 @@
         this.callId = 0;
 
         /**
-         *
-         * @type {{}}
+         * Stores the method call.
+         * @type {Object.<number, MethodCall>}
          */
         this.pendingCalls = {};
 
         /**
-         *
-         * @type {string}
-         */
-        this.tag = tag;
-
-        /**
+         * The namespace for events this transport will respond to.
          * @type {string}
          */
         this.namespace = namespace;
 
+        /**
+         * Logs messages to console when enplug.debug is enabled. Adds tag to messages.
+         * @param message
+         */
         function debug(message) {
             if (enplug.debug) {
-                arguments[0] = tag + arguments[0];
+                arguments[0] = TAG + arguments[0];
                 console.log.apply(console, arguments);
             }
         }
 
         /**
          * Validate and assign defaults for callback methods.
-         * @param options
+         * @param {MethodCall} options
          */
         function validateCallbacks(options) {
             if (options.successCallback && typeof options.successCallback !== 'function') {
-                throw new Error(tag + 'Success callback must be a function.');
+                throw new Error(TAG + 'Success callback must be a function.');
             } else {
                 options.successCallback = options.successCallback || enplug.noop;
             }
 
             if (options.errorCallback && typeof options.errorCallback !== 'function') {
-                throw new Error(tag + 'Error callback must be a function.');
+                throw new Error(TAG + 'Error callback must be a function.');
             } else {
                 options.errorCallback = options.errorCallback || enplug.noop;
             }
@@ -63,8 +76,8 @@
 
         /**
          * Verifies that a message is intended for the transport.
-         * @param event
-         * @returns {boolean}
+         * @param {MessageEvent} event
+         * @returns {boolean} - Whether the message was successfully parsed.
          */
         function parseResponse(event) {
             try {
@@ -84,13 +97,8 @@
         /**
          * Makes an API call against the Enplug dashboard parent window.
          *
-         * @param {Object} options - The API call config.
-         * @param {string} options.name
-         * @param {*} options.params - The data to be sent as parameters to the API.
-         * @param {boolean} options.transient - For API calls that don't expect a response.
-         * @param {boolean} options.persistent - For API calls that expect multiple responses.
-         * @param {function} options.successCallback
-         * @param {function} options.errorCallback
+         * @param {MethodCall} options - The API call config.
+         * @returns {number} callId
          */
         this.send = function (options) {
             if (options.name) {
@@ -113,18 +121,19 @@
                     var json = JSON.stringify(options);
                     window.parent.postMessage(json, targetOrigin);
                 } catch (e) {
-                    console.error(tag + 'Error:', e);
+                    console.error(TAG + 'Error:', e);
                 }
 
                 return options.callId;
             } else {
-                throw new Error(tag + 'All transport method calls must have a name.');
+                throw new Error(TAG + 'All transport method calls must have a name.');
             }
         };
 
         /**
          * Receives response messages from parent window/dashboard.
-         * @param event
+         *
+         * @param {MessageEvent} event
          * @returns {boolean} - true if successfully processed, otherwise false.
          */
         this.handleEvent = function (event) {
@@ -154,7 +163,7 @@
         };
 
         /**
-         *
+         * Removes event listeners to prevent memory leaks.
          */
         this.cleanup = function () {
             window.removeEventListener('message', this, false);
@@ -162,46 +171,75 @@
 
         // Receive parent window response messages
         window.addEventListener('message', this, false);
-    };
+    }
+
+    /**
+     * The tag is used in debug log statements.
+     * @type {string}
+     */
+    Transport.prototype.TAG = TAG;
+
+    // Export
+    enplug.classes.Transport = Transport;
 }(window));
 
 (function (window, enplug) {
     'use strict';
 
     /**
-     * @param prefix
+     * Base class for sending messages using a transport to the parent window (dashboard).
+     *
+     * @param {string} prefix - The namespace for the sender's transport.
      * @class
      */
     function Sender(prefix) {
         if (!prefix) {
-            throw new Error('Senders must specify a method prefix.'); // Transports can't work without a prefix/namespace
+
+            // Transports can't work without a prefix/namespace
+            throw new Error(enplug.classes.Transport.prototype.TAG + 'Senders must specify a method prefix.');
         }
 
+        /**
+         * Transport namespace.
+         * @type {string}
+         */
         this.prefix = prefix;
+
+        /**
+         * Disables validation of method params. Used for testing.
+         * @type {boolean}
+         */
         this.novalidate = false;
+
+        /**
+         * Sends and receives messages to/from the parent window.
+         * @type {Transport}
+         */
         this.transport = new enplug.classes.Transport(window, prefix);
     }
 
     Sender.prototype = {
 
         /**
-         * Validates data before being sent to dashboard. Supports this.novalidate for tests.
-         * @param data
-         * @param expectedType
-         * @param errorMessage
+         * Validates data types before being sent to dashboard. Disabled with this.novalidate=true (for tests).
+         *
+         * @param {*} data - The value to be validated.
+         * @param {string} expectedType - Valid output from typeof, or 'array'.
+         * @param {string} errorMessage
          */
         validate: function (data, expectedType, errorMessage) {
             if (!this.novalidate) {
                 if (data === null || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
-                    throw new Error(this.transport.tag + errorMessage);
+                    throw new Error(this.transport.TAG + errorMessage);
                 }
             }
         },
 
         /**
+         * Factory for all SDK method calls.
          *
-         * @param options
-         * @returns {*}
+         * @param {MethodCall} options
+         * @returns {number} callId
          */
         method: function (options) {
 
@@ -216,13 +254,14 @@
         },
 
         /**
-         *
+         * Removes this sender's transport event listeners to prevent memory leaks.
          */
         cleanup: function () {
             this.transport.cleanup();
         }
     };
 
+    // Export
     enplug.classes.Sender = Sender;
 }(window, window.enplug));
 
@@ -552,8 +591,10 @@
         this.getDisplay = this.getDisplayGroup;
     }
 
+    // Inherit
     AccountSender.prototype = Object.create(enplug.classes.Sender.prototype);
 
+    // Export
     enplug.classes.AccountSender = AccountSender;
     enplug.account = new AccountSender();
 }(window.enplug));
@@ -958,8 +999,10 @@
         document.addEventListener('click', listenToClicks, false);
     }
 
+    // Inherit
     DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);
 
+    // Export
     enplug.classes.DashboardSender = DashboardSender;
     enplug.dashboard = new DashboardSender();
 }(window.enplug, document));

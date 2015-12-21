@@ -8,7 +8,7 @@ describe('apiSender', function () {
     });
 
     it('should require a prefix', function () {
-        var error = new Error('Senders must specify a method prefix.');
+        var error = new Error(enplug.classes.Transport.prototype.TAG + 'Senders must specify a method prefix.');
         expect(function () {
             sender = new enplug.classes.Sender();
         }).toThrow(error);

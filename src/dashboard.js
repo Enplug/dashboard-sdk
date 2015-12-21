@@ -330,8 +330,10 @@
         document.addEventListener('click', listenToClicks, false);
     }
 
+    // Inherit
     DashboardSender.prototype = Object.create(enplug.classes.Sender.prototype);
 
+    // Export
     enplug.classes.DashboardSender = DashboardSender;
     enplug.dashboard = new DashboardSender();
 }(window.enplug, document));
