@@ -18,5 +18,10 @@ The official Enplug JavaScript SDK for the dashboard/control interface of apps b
 
 ## Debug
 
+Set `enplug.debug` to true for the SDK to log most actions to debug. You'll see messages like:
+```
+[Enplug SDK] Calling method: [MethodCall object]
+```
+
 ## License
 This SDK is distributed under the MIT License, see [LICENSE](https://github.com/Enplug/dashboard-sdk/blob/master/LICENSE) for more information.
