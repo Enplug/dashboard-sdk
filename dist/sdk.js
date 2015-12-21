@@ -696,6 +696,9 @@
      */
     function DashboardSender() {
 
+        // Call parent constructor with namespace
+        enplug.classes.Sender.call(this, 'dashboard');
+
         /**
          * The buttons most recently registered with the dashboard header.
          * Stored locally so that we can respond to click events
@@ -708,9 +711,6 @@
          * @type {boolean}
          */
         var isLoading = true;
-
-        // Call parent constructor with namespace
-        enplug.classes.Sender.call(this, 'dashboard');
 
         /**
          * Sets the last part of the title bar breadcrumb.
