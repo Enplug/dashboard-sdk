@@ -18,7 +18,7 @@ The official Enplug JavaScript SDK for the dashboard/control interface of apps b
 
 ## Debug
 
-Set `enplug.debug` to true for the SDK to log most actions to debug. You'll see messages like:
+Set `enplug.debug = true;` for the SDK to log most actions to debug. You'll see messages like:
 ```
 [Enplug SDK] Calling method: [MethodCall object]
 ```
