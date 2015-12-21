@@ -2,9 +2,9 @@
     'use strict';
 
     /**
-     * Base class for sending messages using a transport to the parent window (dashboard).
+     * Base class for sending messages using a {@link Transport} to the parent window (dashboard).
      *
-     * @param {string} prefix - The namespace for the sender's transport.
+     * @param {string} prefix - The namespace for the sender's {@link Transport}.
      * @class
      */
     function Sender(prefix) {
@@ -15,7 +15,7 @@
         }
 
         /**
-         * Transport namespace.
+         * {@link Transport} namespace.
          * @type {string}
          */
         this.prefix = prefix;
@@ -69,7 +69,7 @@
         },
 
         /**
-         * Removes this sender's transport event listeners to prevent memory leaks.
+         * Removes this sender's {@link Transport} event listeners to prevent memory leaks.
          */
         cleanup: function () {
             this.transport.cleanup();

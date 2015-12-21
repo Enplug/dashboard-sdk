@@ -16,7 +16,7 @@
     function Transport(window, namespace) {
 
         /**
-         * A single call sent by a sender through a transport to the parent dashboard.
+         * A single call sent by a {@link Sender} through a transport to the parent dashboard.
          * @typedef {Object} MethodCall
          * @property {string} name
          * @property {number} callId - An identifier assigned by transport.send(). Can be used to lookup in pending calls.
