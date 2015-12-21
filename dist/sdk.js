@@ -229,8 +229,6 @@
 (function (enplug) {
     'use strict';
 
-    var methodPrefix = 'app';
-
     /**
      * Communicates with the parent dashboard to load and modify a user's
      * account settings, app definition, and current app instance.
@@ -240,15 +238,17 @@
      */
     function AccountSender() {
 
-        // Call parent constructor
-        enplug.classes.Sender.call(this, methodPrefix);
+        // Call parent constructor with namespace
+        enplug.classes.Sender.call(this, 'app');
 
         /**
          * Loads all information for the current user. App instance ID,
          * account type, token, account ID, venue ID, and environment.
          *
+         * Data is passed as the first param to the success callback.
+         *
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.getAccount = function (onSuccess, onError) {
@@ -263,8 +263,10 @@
          * Loads information for the currently selected display group.
          * Language, orientation and time zone.
          *
+         * Data is passed as the first param to the success callback.
+         *
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.getDisplayGroup = function (onSuccess, onError) {
@@ -279,9 +281,11 @@
          * Loads an array of app instances including assets that are available for the
          * current app on a chain account.
          *
+         * Data is passed as the first param to the success callback.
+         *
          * @param {string} accountId
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.getInstances = function (accountId, onSuccess, onError) {
@@ -297,8 +301,10 @@
         /**
          * Loads an array of assets for the current app instance.
          *
+         * Data is passed as the first param to the success callback.
+         *
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.getAssets = function (onSuccess, onError) {
@@ -312,8 +318,10 @@
         /**
          * Loads an array of default assets for the current instance's app definition.
          *
+         * Data is passed as the first param to the success callback.
+         *
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.getDefaultAssets = function (onSuccess, onError) {
@@ -329,8 +337,8 @@
          *
          * @param {string} name
          * @param {object} value
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.createAsset = function (name, value, onSuccess, onError) {
@@ -348,8 +356,8 @@
          * Creates an asset under the current app instance from a default asset definition.
          *
          * @param {string} defaultAssetId
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.createAssetFromDefault = function (defaultAssetId, onSuccess, onError) {
@@ -365,10 +373,10 @@
         /**
          * Updates an asset under the current app instance.
          *
-         * @param {string} id
-         * @param {object} value
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {string} id - the Asset ID
+         * @param {object} value - the new Asset Value
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.updateAsset = function (id, value, onSuccess, onError) {
@@ -388,9 +396,9 @@
          * If an asset object doesn't provide an AppInstanceId,
          * it will default to the current app instance.
          *
-         * @param {Array<Object>} assets
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {{ AppInstanceId:string, AssetName:string, Value:Object }[]} assets
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.bulkCreateAssets = function (assets, onSuccess, onError) {
@@ -409,9 +417,9 @@
          * If an asset object doesn't provide an AppInstanceId,
          * it will default to the current app instance.
          *
-         * @param {Array<Object>} assets
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {{ AppInstanceId:string, AssetId:string, Value:Object }[]} assets
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.bulkUpdateAssets = function (assets, onSuccess, onError) {
@@ -430,9 +438,9 @@
          * Provide an array of asset IDs to be removed for the current instance,
          * or an array of objects each with an AppInstanceId and AssetId.
          *
-         * @param {Array<string>|Array<Object>} assetIds
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {Array<string>|{ AppInstanceId:string, AssetId:string }[]} assetIds
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
@@ -448,9 +456,9 @@
         /**
          * Removes an asset for the current app instance.
          *
-         * @param {string} id
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {string} id - The ID of the asset to remove.
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.removeAsset = function (id, onSuccess, onError) {
@@ -466,8 +474,10 @@
         /**
          * Loads available themes for the current app instance app definition.
          *
+         * Data is passed as the first param to the success callback.
+         *
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.getThemes = function (onSuccess, onError) {
@@ -485,8 +495,8 @@
          * @param {object} newTheme
          * @param {string} newTheme.Name
          * @param {Array} newTheme.Assets
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.createTheme = function (newTheme, onSuccess, onError) {
@@ -504,8 +514,8 @@
          * the current app instance app definition. Cannot remove default themes.
          *
          * @param {string} themeId
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.removeTheme = function (themeId, onSuccess, onError) {
@@ -522,8 +532,8 @@
          * Activates a theme for the current app instance.
          *
          * @param {string} themeId
-         * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.activateTheme = function (themeId, onSuccess, onError) {
@@ -619,9 +629,15 @@
 (function (enplug, document) {
     'use strict';
 
-    var methodPrefix = 'dashboard'; // namespace for SDK calls
-
     /**
+     * Controls the parent dashboard application. Exposes convenient UI controls to developers:
+     *
+     * - Page status: loading, error, 404.
+     * - Loading indicator (with loading, success and error states)
+     * - Confirm box with custom text
+     * - Confirm unsaved changes box
+     * - Change the page header title and buttons
+     *
      * @class
      * @extends Sender
      */
@@ -634,16 +650,20 @@
             // Keeps track of whether the dashboard is loading mode so clients can check.
             isLoading = true;
 
-        // Call parent constructor
-        enplug.classes.Sender.call(this, methodPrefix);
+        // Call parent constructor with namespace
+        enplug.classes.Sender.call(this, 'dashboard');
 
-        this.click = function () {
-            return this.method({
-                name: 'click',
-                transient: true // don't wait for a response
-            });
-        };
-
+        /**
+         * Sets the last part of the title bar breadcrumb.
+         * Set an empty title '' to clear the title.
+         *
+         * The home/default page for an app should have no title set.
+         *
+         * @param {string} title
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.setHeaderTitle = function (title, onSuccess, onError) {
             this.validate(title, 'string', 'Header title must be a string.');
             return this.method({
@@ -654,6 +674,17 @@
             });
         };
 
+        /**
+         * Sets the primary action buttons for a page in the titlebar.
+         *
+         * Accepts either a single button object, or an array of buttons.
+         * Each button must have a button.action callback.
+         *
+         * @param {{ text:string, class:string, action:function }[]} buttons
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.setHeaderButtons = function (buttons, onSuccess, onError) {
             this.validate(buttons, 'object', 'Header buttons must be an object (single) or array (multiple).');
 
@@ -697,6 +728,18 @@
             });
         };
 
+        /**
+         * Controls the loading state for the entire page. Every application starts off in
+         * loading state, and must set pageLoading(false) to notify the dashboard that it
+         * has successfully loaded.
+         *
+         * Use .isLoading() to synchronously check current loading state.
+         *
+         * @param {boolean} bool
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.pageLoading = function (bool, onSuccess, onError) {
             this.validate(bool, 'boolean', 'Page loading status must be a boolean.');
             return this.method({
@@ -712,10 +755,25 @@
             });
         };
 
+        /**
+         * Synchronously returns the current loading state.
+         *
+         * Updated asynchronously when this sender receives an acknowledgement
+         * of successful SDK call from the dashboard.
+         *
+         * @returns {boolean} - Current loading state
+         */
         this.isLoading = function () {
             return isLoading;
         };
 
+        /**
+         * Puts the page into error state.
+         *
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.pageError = function (onSuccess, onError) {
             return this.method({
                 name: 'page.error',
@@ -724,6 +782,13 @@
             });
         };
 
+        /**
+         * Puts the page into 404 state.
+         *
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.pageNotFound = function (onSuccess, onError) {
             return this.method({
                 name: 'page.notFound',
@@ -732,6 +797,17 @@
             });
         };
 
+        /**
+         * Turns on the progress indicator, typically used during asynchronous actions.
+         *
+         * Note that the progress indicator will continue until a call is made to the
+         * errorIndicator or successIndicator APIs.
+         *
+         * @param {string} message
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.loadingIndicator = function (message, onSuccess, onError) {
             this.validate(message, 'string', 'Loading indicator requires a loading message (string)');
             return this.method({
@@ -742,6 +818,16 @@
             });
         };
 
+        /**
+         * Shows the success indicator.
+         *
+         * Should only be used after a call has been made to .loadingIndicator().
+         *
+         * @param {string} message
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.successIndicator = function (message, onSuccess, onError) {
             this.validate(message, 'string', 'Success indicator requires a success message (string)');
             return this.method({
@@ -752,6 +838,16 @@
             });
         };
 
+        /**
+         * Shows the error indicator.
+         *
+         * Should only be used after a call has been made to .loadingIndicator().
+         *
+         * @param {string} message
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
         this.errorIndicator = function (message, onSuccess, onError) {
             this.validate(message, 'string', 'Error indicator requires an error message (string)');
             return this.method({
@@ -764,14 +860,16 @@
 
         /**
          * Opens a confirm window with Yes/No buttons and configurable messages.
+         * If the user clicks the Confirm button, the success callback is called.
+         * Otherwise the error callback is called.
          *
          * @param {Object} options
          * @param {string} options.title
          * @param {string} options.text
-         * @param {string} options.cancelText
-         * @param {string} options.confirmText
+         * @param {string} [options.cancelText=Cancel]
+         * @param {string} [options.confirmText=Confirm]
          * @param {function} onSuccess
-         * @param {function} onError
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.openConfirm = function (options, onSuccess, onError) {
@@ -793,9 +891,12 @@
         /**
          * Opens a confirm window asking the user to confirm their unsaved changes.
          *
-         * @param onSuccess
-         * @param onError
-         * @returns {*}
+         * If the user clicks the confirm button, the success callback is called.
+         * Otherwise the error callback is called.
+         *
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
          */
         this.confirmUnsavedChanges = function (onSuccess, onError) {
             return this.method({
@@ -823,11 +924,27 @@
         };
 
         /**
-         *
+         * Removes event listeners to prevent memory leaks.
          */
         this.cleanup = function () {
             document.removeEventListener('click', listenToClicks, false);
             enplug.classes.Sender.prototype.cleanup.call(this);
+        };
+
+        /**
+         * Notifies the parent dashboard of a click in the child iFrame. Used to close
+         * dropdown windows etc which were opened in parent window and are unable to
+         * respond to click events in child iFrame.
+         *
+         * Event handler is automatically bound when a DashboardSender is created.
+         *
+         * @returns {string} callId
+         */
+        this.click = function () {
+            return this.method({
+                name: 'click',
+                transient: true // don't wait for a response
+            });
         };
 
         // Broadcast clicks up to parent window so that we can
