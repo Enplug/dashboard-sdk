@@ -6,7 +6,7 @@ module.exports = {
             'src/transport.js',
             'src/sender.js',
             'src/*.js',
-            'src/angular-enplug.js'
+            'src/angular-plugin.js'
         ],
         dest: 'dist/sdk.js'
     }
