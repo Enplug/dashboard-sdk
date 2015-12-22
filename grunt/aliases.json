@@ -6,7 +6,6 @@
         "uglify"
     ],
     "version": [
-        "build",
         "prompt:version",
         "bump"
     ],
