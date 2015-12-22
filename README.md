@@ -20,7 +20,7 @@ The official Enplug JavaScript SDK for the dashboard/control interface of apps b
 
 ## Installing
 
-- **CDN:** `<script src="http://cdn.enplug.net/libs/dashboard-sdk/x.x.x/sdk.min.js"></script>` 
+- **CDN:** `<script src="http://cdn.enplug.net/libs/dashboard-sdk/3.0.0/sdk.min.js"></script>` 
 - **Bower:** `bower install enplug-dashboard-sdk --save-dev`
 - **NPM:** `bower install enplug-dashboard-sdk --save-dev`
 

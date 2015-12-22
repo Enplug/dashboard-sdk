@@ -7,17 +7,20 @@
     ],
     "version": [
         "build",
-        "checkbranch:!master",
-        "checkrepo:version",
         "prompt:version",
         "bump"
     ],
-    "release": [
-        "checkbranch:master",
-        "checkrepo:release",
+    "push": [
         "gittag:release",
         "gitpush:release",
-        "s3:release"
+        "s3:release",
+        "npm-publish"
+    ],
+    "release": [
+        "build",
+        "test",
+        "version",
+        "push"
     ],
     "test": [
         "karma:unit",
