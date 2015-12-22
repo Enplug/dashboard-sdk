@@ -1,9 +1,7 @@
 (function (window) {
     'use strict';
 
-    var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} }),
-        targetOrigin = '*', // this is set to * to support various developer localhosts
-        TAG = '[Enplug SDK] ';
+    var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} });
 
     /**
      * Transports are used to communicate with the dashboard parent window.
@@ -15,6 +13,18 @@
      * @implements EventListener
      */
     function Transport(window, namespace) {
+
+        /**
+         * Set to * to support various developer localhosts
+         * @type {string}
+         */
+        var targetOrigin = '*';
+
+        /**
+         * Used in debug log statements.
+         * @type {string}
+         */
+        var TAG = '[Enplug SDK] ';
 
         /**
          * A single call sent by a {@link Sender} through a transport to the parent dashboard.
