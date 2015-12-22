@@ -1013,14 +1013,12 @@
      * @param {string} senderType - Sender type to create.
      */
     function createService(senderType) {
-        console.log(senderType);
         return (function (type) {
-            console.log(type);
+
+            // Angular service constructor
             return function ($q, $rootScope) {
-                console.log('Type:', type);
-                var className = type.charAt(0).toUpperCase() + type.slice(1) + 'Sender';
-                console.warn('classname', className);
-                var sender = new enplug.classes[className]();
+                var className = type.charAt(0).toUpperCase() + type.slice(1) + 'Sender',
+                    sender = new enplug.classes[className]();
 
                 // Remove event listeners for existing sender and reassign
                 enplug[type].cleanup();
@@ -1047,10 +1045,5 @@
 
         module.factory('$enplugDashboard', ['$q', '$rootScope', createService('dashboard')]);
         module.factory('$enplugAccount', ['$q', '$rootScope', createService('account')]);
-
-        module.run(['$enplugAccount', '$enplugDashboard', function ($enplugAccount, $enplugDashboard) {
-            console.log($enplugAccount, $enplugDashboard);
-        },
-        ]);
     }
 }(window.angular, window.enplug));
