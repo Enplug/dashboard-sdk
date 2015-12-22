@@ -97,9 +97,9 @@ enplug.account.getAccount(function (data) {
 });
 ```
 
-### enplug.account
+## enplug.account
 
-#### `.getAccount(onSuccess, onError)`
+### `.getAccount(onSuccess, onError)`
 Loads all information for the current user.
 
 **Callback receives:**
@@ -112,7 +112,7 @@ Loads all information for the current user.
 }
 ```
 
-#### `.getDisplayGroup(onSuccess, onError)`
+### `.getDisplayGroup(onSuccess, onError)`
 Loads information for the currently selected display group.
 
 **Callback receives:**
@@ -124,38 +124,38 @@ Loads information for the currently selected display group.
 }
 ```
 
-#### `.getInstances(accountId, onSuccess, onError)`
+### `.getInstances(accountId, onSuccess, onError)`
 Loads an array of app instances including assets that are available for the current app on a chain account.
 
-#### `.getAssets(onSuccess, onError)`
+### `.getAssets(onSuccess, onError)`
 Loads an array of assets for the current app instance.
 
-#### `.createAsset(assetName, assetValue, onSuccess, onError)`
+### `.createAsset(assetName, assetValue, onSuccess, onError)`
 Creates an asset under the current app instance.
 
-#### `.updateAsset(assetId, assetValue, onSuccess, onError)`
+### `.updateAsset(assetId, assetValue, onSuccess, onError)`
 Updates an asset under the current app instance.
 
-#### `.removeAsset(assetId, onSuccess, onError)`
+### `.removeAsset(assetId, onSuccess, onError)`
 Removes an asset under the current app instance.
 
-#### `.bulkCreateAssets(assets, onSuccess, onError)`
+### `.bulkCreateAssets(assets, onSuccess, onError)`
 Creates one or more assets under the current app instance.
 
-#### `.bulkUpdateAssets(assets, onSuccess, onError)`
+### `.bulkUpdateAssets(assets, onSuccess, onError)`
 Updates one or more assets under the current app instance.
 
-#### `.bulkRemoveAssets(assets, onSuccess, onError)`
+### `.bulkRemoveAssets(assets, onSuccess, onError)`
 Removes one or more assets.
 
-### enplug.dashboard
+## enplug.dashboard
 
 All `enplug.dashboard` methods also accept success and error callbacks which acknowledge when a certain UI control has been triggered, but they aren't usually needed so they're left out of the documentation except in cases where they're used.
 
-#### `.setHeaderTitle(title)`
+### `.setHeaderTitle(title)`
 Sets the last part of the title bar breadcrumb. Set an empty title '' to clear the title.
 
-#### `.setHeaderButtons(buttons|button)`
+### `.setHeaderButtons(buttons|button)`
 Sets the primary action buttons for a page in the titlebar. Accepts either a single button object, or an array of buttons. Each button must have a button.action callback.
 **button:**
 ```js
@@ -167,34 +167,34 @@ Sets the primary action buttons for a page in the titlebar. Accepts either a sin
 }
 ```
 
-#### `.pageLoading(boolean)`
+### `.pageLoading(boolean)`
 Controls the loading state for the entire page. Every application starts off in loading state, and must set pageLoading(false) to notify the dashboard that it has successfully loaded.
 
 Use `enplug.dashboard.isLoading()` to synchronously check current loading state.
 
-#### `.isLoading()`
+### `.isLoading()`
 Synchronously returns the current loading state. 
 
 **Note:** The loading state is updated asynchronously when this sender receives an acknowledgement of successful SDK call from the dashboard after using `.pageLoading(bool);`
 
-#### `.pageError()`
+### `.pageError()`
 Puts the page into error state.
 
-#### `.pageNotFound()`
+### `.pageNotFound()`
 Puts the page into 404 state.
 
-#### `.loadingIndicator(message)`
+### `.loadingIndicator(message)`
 Turns on the progress indicator, typically used during asynchronous actions.
 
 Note that the progress indicator will continue until a call is made to the errorIndicator or successIndicator APIs.
 
-#### `.successIndicator(message)`
+### `.successIndicator(message)`
 Shows the success indicator. Should only be used after a call has been made to .loadingIndicator().
 
-#### `.errorIndicator(message)`
+### `.errorIndicator(message)`
 Shows the error indicator. Should only be used after a call has been made to .loadingIndicator().
 
-#### `.openConfirm(options, onSuccess, onError)`
+### `.openConfirm(options, onSuccess, onError)`
 Opens a confirm window with Yes/No buttons and configurable messages. If the user clicks the Confirm button, the success callback is called. Otherwise the error callback is called.
 
 **Available options:**
@@ -208,10 +208,10 @@ Opens a confirm window with Yes/No buttons and configurable messages. If the use
 }
 ```
 
-#### `.confirmUnsavedChanges(onSuccess, onError)`
+### `.confirmUnsavedChanges(onSuccess, onError)`
 Opens a confirm window asking the user to confirm their unsaved changes. If the user clicks the confirm button, the success callback is called. Otherwise the error callback is called.
 
-#### `.upload(options, onSuccess, onError)`
+### `.upload(options, onSuccess, onError)`
 Opens an upload interface for the user to select a file to upload. The options parameter is currently unused. The success callback receives the newly uploaded and encoded file wrapped in an array:
 ```js
 [{
