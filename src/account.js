@@ -27,7 +27,7 @@
             return this.method({
                 name: 'getAccount',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -45,7 +45,7 @@
             return this.method({
                 name: 'getDisplay',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -66,7 +66,7 @@
                 name: 'getInstances',
                 params: accountId,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -83,7 +83,7 @@
             return this.method({
                 name: 'getAssets',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -100,7 +100,7 @@
             return this.method({
                 name: 'getDefaultAssets',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -120,7 +120,7 @@
                 name: 'createAsset',
                 params: [name, value],
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -138,7 +138,7 @@
                 name: 'createAssetFromDefault',
                 params: defaultAssetId,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -158,7 +158,7 @@
                 name: 'updateAsset',
                 params: [id, value],
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -179,7 +179,7 @@
                 name: 'bulkCreateAssets',
                 params: assets,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -200,7 +200,7 @@
                 name: 'bulkUpdateAssets',
                 params: assets,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -221,7 +221,7 @@
                 name: 'bulkRemoveAssets',
                 params: assetIds,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -239,7 +239,7 @@
                 name: 'removeAsset',
                 params: [id],
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -256,7 +256,7 @@
             return this.method({
                 name: 'getThemes',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -277,7 +277,7 @@
                 name: 'createTheme',
                 params: newTheme,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -296,7 +296,7 @@
                 name: 'removeTheme',
                 params: themeId,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -314,7 +314,7 @@
                 name: 'activateTheme',
                 params: themeId,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 

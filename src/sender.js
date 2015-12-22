@@ -73,7 +73,7 @@
          */
         cleanup: function () {
             this.transport.cleanup();
-        }
+        },
     };
 
     // Export

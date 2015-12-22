@@ -6,8 +6,8 @@ module.exports = {
             'src/transport.js',
             'src/sender.js',
             'src/*.js',
-            'src/angular-plugin.js'
+            'src/angular-plugin.js',
         ],
-        dest: 'dist/sdk.js'
-    }
+        dest: 'dist/sdk.js',
+    },
 };

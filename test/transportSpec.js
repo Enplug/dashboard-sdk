@@ -59,7 +59,7 @@ describe('transport', function () {
         }).toThrow(error);
     });
 
-    it ('should validate method call success callback type', function () {
+    it('should validate method call success callback type', function () {
         var error = new Error(transport.TAG + 'Success callback must be a function.');
         expect(function () {
             var call = mockCall({ successCallback: 'test' });

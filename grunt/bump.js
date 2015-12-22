@@ -7,6 +7,6 @@ module.exports = {
         commitMessage: 'Release v%VERSION%',
         commitFiles: ['package.json', 'bower.json'],
         createTag: false,
-        push: false
-    }
+        push: false,
+    },
 };

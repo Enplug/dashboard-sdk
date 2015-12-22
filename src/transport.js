@@ -159,7 +159,7 @@
 
                         debug('Calling method ' + (response.success ? 'success' : 'error') + ' callback:', {
                             call: methodCall,
-                            response: response
+                            response: response,
                         });
 
                         var cb = response.success ? methodCall.successCallback : methodCall.errorCallback;

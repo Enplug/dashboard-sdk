@@ -1,14 +1,14 @@
 module.exports = {
     options: {
-        livereload: true
+        livereload: true,
     },
 
     js: {
         files: ['src/**'],
-        tasks: ['build']
+        tasks: ['build'],
     },
 
     html: {
-        files: ['example.html']
-    }
+        files: ['example.html'],
+    },
 };

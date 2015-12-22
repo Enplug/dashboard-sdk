@@ -35,7 +35,7 @@
             // but use our promise as the return value
             original.call(transport, options);
             return defer.promise;
-        }
+        };
     }
 
     /**
@@ -68,12 +68,12 @@
             var sender = createSender('dashboard');
             decorateSend($q, $rootScope, sender.transport);
             return sender;
-        }]);
+        },]);
 
         module.factory('$enplugAccount', ['$q', '$rootScope', function ($q, $rootScope) {
             var sender = createSender('account');
             decorateSend($q, $rootScope, sender.transport);
             return sender;
-        }]);
+        },]);
     }
 }(window.angular, window.enplug));

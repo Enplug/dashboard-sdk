@@ -48,7 +48,7 @@
                 name: 'set.title',
                 params: title,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -102,7 +102,8 @@
                         onSuccess(clicked);
                     }
                 },
-                errorCallback: onError
+
+                errorCallback: onError,
             });
         };
 
@@ -129,7 +130,8 @@
                         onSuccess(isLoading);
                     }
                 },
-                errorCallback: onError
+
+                errorCallback: onError,
             });
         };
 
@@ -156,7 +158,7 @@
             return this.method({
                 name: 'page.error',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -171,7 +173,7 @@
             return this.method({
                 name: 'page.notFound',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -192,7 +194,7 @@
                 name: 'indicator.loading',
                 params: message,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -212,7 +214,7 @@
                 name: 'indicator.success',
                 params: message,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -232,7 +234,7 @@
                 name: 'indicator.error',
                 params: message,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -263,7 +265,7 @@
                 name: 'confirm',
                 params: options,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -281,7 +283,7 @@
             return this.method({
                 name: 'unsavedChanges',
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -298,7 +300,7 @@
                 name: 'upload',
                 params: options,
                 successCallback: onSuccess,
-                errorCallback: onError
+                errorCallback: onError,
             });
         };
 
@@ -322,15 +324,15 @@
         this.click = function () {
             return this.method({
                 name: 'click',
-                transient: true // don't wait for a response
+                transient: true, // don't wait for a response
             });
         };
 
         // Broadcast clicks up to parent window so that we can
         // react to clicks for things like closing nav dropdowns
-        var self = this;
+        var _this = this;
         function listenToClicks() {
-            self.click();
+            _this.click();
             return true;
         }
 

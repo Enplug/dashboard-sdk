@@ -12,7 +12,7 @@ module.exports = {
     unit: {
         singleRun: true,
         preprocessors: {
-            'dist/sdk.js': 'coverage'
+            'dist/sdk.js': 'coverage',
         },
         reporters: ['coverage', 'progress'],
         coverageReporter: {

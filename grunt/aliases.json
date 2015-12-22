@@ -1,5 +1,6 @@
 {
     "build": [
+        "jscs",
         "clean:build",
         "concat",
         "uglify"

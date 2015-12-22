@@ -6,8 +6,8 @@
             var event = {
                 type: 'message',
                 data: {
-                    success: true
-                }
+                    success: true,
+                },
             };
 
             for (var property in options) {
@@ -21,7 +21,7 @@
             }
 
             return event;
-        }
+        };
     });
 
     afterEach(function () {
