@@ -1,6 +1,6 @@
 {
   "name": "enplug-dashboard-sdk",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Enplug/dashboard-sdk.git",
