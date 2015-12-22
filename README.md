@@ -124,11 +124,18 @@ Loads information for the currently selected display group.
 }
 ```
 
-### `.getInstances(accountId, onSuccess, onError)`
-Loads an array of app instances including assets that are available for the current app on a chain account.  
-
 ### `.getAssets(onSuccess, onError)`
 Loads an array of assets for the current app instance.
+
+**Callback receives:**
+```js
+[{
+  Created: 'string', // WCF date
+  Id: 'string', // Asset ID
+  Name: 'string', // Asset Name
+  Value: {} // Value object provided when created
+}]
+```
 
 ### `.createAsset(assetName, assetValue, onSuccess, onError)`
 Creates an asset under the current app instance.
@@ -181,6 +188,9 @@ or, to remove multiple assets for the current app instance, provide an array of 
 ```js
 ['id1', 'id2', 'id3']
 ```
+
+### `.getInstances(accountId, onSuccess, onError)`
+Loads an array of app instances including assets that are available for the current app on a chain account. 
 
 ## enplug.dashboard
 
