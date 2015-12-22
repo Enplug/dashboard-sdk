@@ -6,6 +6,6 @@ module.exports = {
     ],
     options: {
         config: '.jscsrc',
-        fix: true,
+        fix: false,
     },
 };

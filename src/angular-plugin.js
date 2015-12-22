@@ -41,16 +41,25 @@
     /**
      * Creates a new {@link Sender} to be used as an AngularJS service.
      *
-     * @param {string} type - Sender type to create.
+     * @param {string} senderType - Sender type to create.
      */
-    function createSender(type) {
-        var className = type.charAt(0).toUpperCase() + type.slice(1) + 'Sender',
-            sender = new enplug.classes[className]();
+    function createService(senderType) {
+        return (function (type) {
 
-        // Remove event listeners for existing sender and reassign
-        enplug[type].cleanup();
-        enplug[type] = sender;
-        return sender;
+            // Angular service constructor
+            return function ($q, $rootScope) {
+                var className = type.charAt(0).toUpperCase() + type.slice(1) + 'Sender',
+                    sender = new enplug.classes[className]();
+
+                // Remove event listeners for existing sender and reassign
+                enplug[type].cleanup();
+                enplug[type] = sender;
+
+                // Return promises
+                decorateSend($q, $rootScope, sender.transport);
+                return sender;
+            };
+        }(senderType));
     }
 
     /**
@@ -65,16 +74,7 @@
 
         var module = angular.module('enplug.sdk', []);
 
-        module.factory('$enplugDashboard', ['$q', '$rootScope', function ($q, $rootScope) {
-            var sender = createSender('dashboard');
-            decorateSend($q, $rootScope, sender.transport);
-            return sender;
-        }, ]);
-
-        module.factory('$enplugAccount', ['$q', '$rootScope', function ($q, $rootScope) {
-            var sender = createSender('account');
-            decorateSend($q, $rootScope, sender.transport);
-            return sender;
-        }, ]);
+        module.factory('$enplugDashboard', ['$q', '$rootScope', createService('dashboard')]);
+        module.factory('$enplugAccount', ['$q', '$rootScope', createService('account')]);
     }
 }(window.angular, window.enplug));
