@@ -5,25 +5,19 @@
         "concat",
         "uglify"
     ],
+    "test": [
+        "karma:unit",
+        "coveralls"
+    ],
     "version": [
         "build",
         "prompt:version",
         "bump"
     ],
-    "push": [
+    "release": [
         "gittag:release",
         "gitpush:release",
         "s3:release",
         "npm-publish"
-    ],
-    "release": [
-        "build",
-        "test",
-        "version",
-        "push"
-    ],
-    "test": [
-        "karma:unit",
-        "coveralls"
     ]
 }
