@@ -60,6 +60,7 @@
      * The services $enplugDashboard and $enplugAccount are synchronized
      * with the global variables enplug.dashboard and enplug.account.
      */
+
     if (angular) {
 
         var module = angular.module('enplug.sdk', []);

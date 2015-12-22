@@ -174,7 +174,7 @@
          * @returns {number} callId
          */
         this.bulkCreateAssets = function (assets, onSuccess, onError) {
-            this.validate(assets, 'array', 'You must provide an array of assets to bulk create.');
+            this.validate(assets, 'object', 'You must provide an array of assets to bulk create.');
             return this.method({
                 name: 'bulkCreateAssets',
                 params: assets,
@@ -195,7 +195,7 @@
          * @returns {number} callId
          */
         this.bulkUpdateAssets = function (assets, onSuccess, onError) {
-            this.validate(assets, 'array', 'You must provide an array of assets to bulk update.');
+            this.validate(assets, 'object', 'You must provide an array of assets to bulk update.');
             return this.method({
                 name: 'bulkUpdateAssets',
                 params: assets,
@@ -216,7 +216,7 @@
          * @returns {number} callId
          */
         this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
-            this.validate(assetIds, 'array', 'You must provide an array of asset IDs to bulk remove.');
+            this.validate(assetIds, 'object', 'You must provide an array of asset IDs to bulk remove.');
             return this.method({
                 name: 'bulkRemoveAssets',
                 params: assetIds,

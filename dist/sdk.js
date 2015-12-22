@@ -1,7 +1,15 @@
 (function (window) {
     'use strict';
 
-    var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} });
+    window.enplug = {
+        debug: false,
+        classes: {},
+        noop: function () {},
+    };
+}(window));
+
+(function (enplug) {
+    'use strict';
 
     /**
      * Used in debug log statements.
@@ -192,7 +200,7 @@
 
     // Export
     enplug.classes.Transport = Transport;
-}(window));
+}(window.enplug));
 
 (function (window, enplug) {
     'use strict';
@@ -452,7 +460,7 @@
          * @returns {number} callId
          */
         this.bulkCreateAssets = function (assets, onSuccess, onError) {
-            this.validate(assets, 'array', 'You must provide an array of assets to bulk create.');
+            this.validate(assets, 'object', 'You must provide an array of assets to bulk create.');
             return this.method({
                 name: 'bulkCreateAssets',
                 params: assets,
@@ -473,7 +481,7 @@
          * @returns {number} callId
          */
         this.bulkUpdateAssets = function (assets, onSuccess, onError) {
-            this.validate(assets, 'array', 'You must provide an array of assets to bulk update.');
+            this.validate(assets, 'object', 'You must provide an array of assets to bulk update.');
             return this.method({
                 name: 'bulkUpdateAssets',
                 params: assets,
@@ -494,7 +502,7 @@
          * @returns {number} callId
          */
         this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
-            this.validate(assetIds, 'array', 'You must provide an array of asset IDs to bulk remove.');
+            this.validate(assetIds, 'object', 'You must provide an array of asset IDs to bulk remove.');
             return this.method({
                 name: 'bulkRemoveAssets',
                 params: assetIds,
@@ -672,6 +680,7 @@
      * The services $enplugDashboard and $enplugAccount are synchronized
      * with the global variables enplug.dashboard and enplug.account.
      */
+
     if (angular) {
 
         var module = angular.module('enplug.sdk', []);

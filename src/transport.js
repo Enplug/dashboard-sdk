@@ -1,7 +1,5 @@
-(function (window) {
+(function (enplug) {
     'use strict';
-
-    var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} });
 
     /**
      * Used in debug log statements.
@@ -192,4 +190,4 @@
 
     // Export
     enplug.classes.Transport = Transport;
-}(window));
+}(window.enplug));
