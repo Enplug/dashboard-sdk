@@ -53,7 +53,7 @@
         /**
          * Factory for all SDK method calls.
          *
-         * @param {MethodCall} options
+         * @param {MethodCall|*} options
          * @returns {number} callId
          */
         method: function (options) {

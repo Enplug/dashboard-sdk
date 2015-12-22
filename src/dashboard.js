@@ -58,7 +58,7 @@
          * Accepts either a single button object, or an array of buttons.
          * Each button must have a button.action callback.
          *
-         * @param {{ text:string, class:string, action:function }[]} buttons
+         * @param {{ text:string, class:string, action:function, disabled:boolean }[]} buttons
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
@@ -246,6 +246,7 @@
          * @param {string} options.text
          * @param {string} [options.cancelText=Cancel]
          * @param {string} [options.confirmText=Confirm]
+         * @param {string} [options.confirmClass=btn-primary]
          * @param {function} onSuccess
          * @param {function} [onError]
          * @returns {number} callId

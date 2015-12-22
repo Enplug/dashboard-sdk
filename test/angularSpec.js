@@ -50,4 +50,24 @@ describe('angularPlugin', function () {
         account.transport.handleEvent(response);
         expect(callback).toHaveBeenCalledWith(data);
     });
+
+    it('should still call success callbacks', function () {
+        var callback = jasmine.createSpy('callback'),
+            data = 'test';
+        account.method({ name: 'test', successCallback: callback });
+        var callId = account.transport.pendingCalls[1].callId, // assume call ID for a single call,
+            response = mockResponse({ callId: callId, data: data, namespace: account.transport.namespace });
+        account.transport.handleEvent(response);
+        expect(callback).toHaveBeenCalledWith(data);
+    });
+
+    it('should still call error callbacks', function () {
+        var callback = jasmine.createSpy('callback'),
+            data = 'test';
+        account.method({ name: 'test', errorCallback: callback });
+        var callId = account.transport.pendingCalls[1].callId, // assume call ID for a single call,
+            response = mockResponse({ success: false, callId: callId, data: data, namespace: account.transport.namespace });
+        account.transport.handleEvent(response);
+        expect(callback).toHaveBeenCalledWith(data);
+    });
 });

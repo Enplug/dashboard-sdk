@@ -4,6 +4,12 @@
     var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} });
 
     /**
+     * Used in debug log statements.
+     * @type {string}
+     */
+    var TAG = '[Enplug SDK] ';
+
+    /**
      * Transports are used to communicate with the dashboard parent window.
      * All calls are asynchronous RPC.
      *
@@ -19,12 +25,6 @@
          * @type {string}
          */
         var targetOrigin = '*';
-
-        /**
-         * Used in debug log statements.
-         * @type {string}
-         */
-        var TAG = '[Enplug SDK] ';
 
         /**
          * A single call sent by a {@link Sender} through a transport to the parent dashboard.

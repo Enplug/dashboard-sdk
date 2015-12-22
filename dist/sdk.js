@@ -4,6 +4,12 @@
     var enplug = window.enplug || (window.enplug = { debug: false, classes: {}, noop: function () {} });
 
     /**
+     * Used in debug log statements.
+     * @type {string}
+     */
+    var TAG = '[Enplug SDK] ';
+
+    /**
      * Transports are used to communicate with the dashboard parent window.
      * All calls are asynchronous RPC.
      *
@@ -19,12 +25,6 @@
          * @type {string}
          */
         var targetOrigin = '*';
-
-        /**
-         * Used in debug log statements.
-         * @type {string}
-         */
-        var TAG = '[Enplug SDK] ';
 
         /**
          * A single call sent by a {@link Sender} through a transport to the parent dashboard.
@@ -249,7 +249,7 @@
         /**
          * Factory for all SDK method calls.
          *
-         * @param {MethodCall} options
+         * @param {MethodCall|*} options
          * @returns {number} callId
          */
         method: function (options) {
@@ -750,7 +750,7 @@
          * Accepts either a single button object, or an array of buttons.
          * Each button must have a button.action callback.
          *
-         * @param {{ text:string, class:string, action:function }[]} buttons
+         * @param {{ text:string, class:string, action:function, disabled:boolean }[]} buttons
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
@@ -938,6 +938,7 @@
          * @param {string} options.text
          * @param {string} [options.cancelText=Cancel]
          * @param {string} [options.confirmText=Confirm]
+         * @param {string} [options.confirmClass=btn-primary]
          * @param {function} onSuccess
          * @param {function} [onError]
          * @returns {number} callId
