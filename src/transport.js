@@ -7,6 +7,7 @@
 
     /**
      * Transports are used to communicate with the dashboard parent window.
+     * All calls are asynchronous RPC.
      *
      * @param window
      * @param {string} namespace - Determines which events a transport responds to.
