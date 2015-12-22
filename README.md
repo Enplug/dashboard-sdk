@@ -133,20 +133,54 @@ Loads an array of assets for the current app instance.
 ##### `.createAsset(assetName, assetValue, onSuccess, onError)`
 Creates an asset under the current app instance.
 
-##### `.updateAsset(assetId, assetValue, onSuccess, onError)`
+##### `.updateAsset(id, value, onSuccess, onError)`
 Updates an asset under the current app instance.
 
-##### `.removeAsset(assetId, onSuccess, onError)`
+- **id:** string ID of the asset to be updated.
+- **value:** object to update the asset's value to
+
+##### `.removeAsset(id, onSuccess, onError)`
 Removes an asset under the current app instance.
 
 ##### `.bulkCreateAssets(assets, onSuccess, onError)`
-Creates one or more assets under the current app instance.
+Creates one or more assets under the current app instance. 
+
+**assets:** array
+```js
+[{
+  AppInstanceId: 'string', // optional, defaults to current app instance
+  AssetName: 'string', // required
+  AssetValue: {} // required
+}]
+```
 
 ##### `.bulkUpdateAssets(assets, onSuccess, onError)`
 Updates one or more assets under the current app instance.
 
+**assets:** array
+```js
+[{
+  AppInstanceId: 'string', // optional, defaults to current app instance
+  AssetId: 'string', // required
+  AssetValue: {} // required
+}]
+```
+
 ##### `.bulkRemoveAssets(assets, onSuccess, onError)`
 Removes one or more assets.
+
+**assets:** array
+```js
+[{
+  AppInstanceId: 'string', // required
+  AssetId: 'string' // required
+}]
+```
+
+or, to remove multiple assets for the current app instance, provide an array of asset ID strings:
+```js
+['id1', 'id2', 'id3']
+```
 
 ## enplug.dashboard
 
