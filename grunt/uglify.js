@@ -1,6 +1,6 @@
 module.exports = {
     options: {
-        mangle: false
+        mangle: true
     },
     build: {
         files: {

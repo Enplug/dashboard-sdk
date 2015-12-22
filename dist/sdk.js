@@ -676,17 +676,17 @@
 
         var module = angular.module('enplug.sdk', []);
 
-        module.factory('$enplugDashboard', function ($q, $rootScope) {
+        module.factory('$enplugDashboard', ['$q', '$rootScope', function ($q, $rootScope) {
             var sender = createSender('dashboard');
             decorateSend($q, $rootScope, sender.transport);
             return sender;
-        });
+        }]);
 
-        module.factory('$enplugAccount', function ($q, $rootScope) {
+        module.factory('$enplugAccount', ['$q', '$rootScope', function ($q, $rootScope) {
             var sender = createSender('account');
             decorateSend($q, $rootScope, sender.transport);
             return sender;
-        });
+        }]);
     }
 }(window.angular, window.enplug));
 
