@@ -26,7 +26,7 @@ The official Enplug JavaScript SDK for the dashboard/control interface of apps b
 
 ## Usage and Getting Started
 
-When you build an Enplug app, you typically need to also provide a web page that facilitates customizing your app. This web page is loaded as an iFrame in the Enplug dashboard (dashboard.enplug.com). In order for your web page to communicate with and control the dashboard, you should use this SDK.
+When you build an Enplug app, you also need to provide a web page that facilitates customizing your app. This web page is loaded as an iFrame in the Enplug dashboard (dashboard.enplug.com). In order for your web page to communicate with and control the dashboard, you should use this SDK.
 
 All SDK methods are asynchronous RPC calls. If you're loading data, the data will be provided via the `onSuccess` callback that every method provides. There is also an `onError` callback for you to handle errors.
 
