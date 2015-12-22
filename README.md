@@ -1,8 +1,8 @@
 # Enplug JavaScript SDK
 
-[![Build Status](https://travis-ci.org/Enplug/dashboard-sdk.svg?branch=2.6)](https://travis-ci.org/Enplug/dashboard-sdk)
-[![Coverage Status](https://coveralls.io/repos/Enplug/dashboard-sdk/badge.svg?branch=2.6&service=github)](https://coveralls.io/github/Enplug/dashboard-sdk?branch=2.6)
-[![Dependencies Status](https://david-dm.org/Enplug/dashboard-sdk.svg)](https://david-dm.org/Enplug/dashboard-sdk.svg)
+[![Build Status](https://travis-ci.org/Enplug/dashboard-sdk.svg?branch=master)](https://travis-ci.org/Enplug/dashboard-sdk)
+[![Coverage Status](https://coveralls.io/repos/Enplug/dashboard-sdk/badge.svg?branch=master&service=github)](https://coveralls.io/github/Enplug/dashboard-sdk?branch=master)
+[![Dependencies Status](https://david-dm.org/Enplug/javascript-sdk.svg)](https://david-dm.org/Enplug/javascript-sdk.svg)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Enplug/dashboard-sdk/blob/master/LICENSE)
 
 The official Enplug JavaScript SDK for the dashboard/control interface of apps built for Enplug displays.

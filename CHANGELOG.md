@@ -2,6 +2,9 @@
 
 Contact <support@enplug.com> with questions.
 
+## 3.0.0
+Dec 21, 2015 - All APIs supported in native JS (`enplug.account` and `enplug.dashbard`) and AngularJS (`$enplugAccount` and `$enplugDashboard`).
+
 ## 2.5.0
 Dec 1, 2015 - Added `dashboard.upload` for uploading and encoding an image.
 
