@@ -99,7 +99,7 @@ enplug.account.getAccount(function (data) {
 
 ## enplug.account
 
-##### `.getAccount(onSuccess, onError)`
+### `.getAccount(onSuccess, onError)`
 Loads all information for the current user.
 
 **Callback receives:**
@@ -112,7 +112,7 @@ Loads all information for the current user.
 }
 ```
 
-##### `.getDisplayGroup(onSuccess, onError)`
+### `.getDisplayGroup(onSuccess, onError)`
 Loads information for the currently selected display group.
 
 **Callback receives:**
@@ -124,25 +124,32 @@ Loads information for the currently selected display group.
 }
 ```
 
-##### `.getInstances(accountId, onSuccess, onError)`
-Loads an array of app instances including assets that are available for the current app on a chain account.  
-
-##### `.getAssets(onSuccess, onError)`
+### `.getAssets(onSuccess, onError)`
 Loads an array of assets for the current app instance.
 
-##### `.createAsset(assetName, assetValue, onSuccess, onError)`
+**Callback receives:**
+```js
+[{
+  Created: 'string', // WCF date
+  Id: 'string', // Asset ID
+  Name: 'string', // Asset Name
+  Value: {} // Value object provided when created
+}]
+```
+
+### `.createAsset(assetName, assetValue, onSuccess, onError)`
 Creates an asset under the current app instance.
 
-##### `.updateAsset(id, value, onSuccess, onError)`
+### `.updateAsset(id, value, onSuccess, onError)`
 Updates an asset under the current app instance.
 
 - **id:** string ID of the asset to be updated.
 - **value:** object to update the asset's value to
 
-##### `.removeAsset(id, onSuccess, onError)`
+### `.removeAsset(id, onSuccess, onError)`
 Removes an asset under the current app instance.
 
-##### `.bulkCreateAssets(assets, onSuccess, onError)`
+### `.bulkCreateAssets(assets, onSuccess, onError)`
 Creates one or more assets under the current app instance. 
 
 **assets:** array
@@ -154,7 +161,7 @@ Creates one or more assets under the current app instance.
 }]
 ```
 
-##### `.bulkUpdateAssets(assets, onSuccess, onError)`
+### `.bulkUpdateAssets(assets, onSuccess, onError)`
 Updates one or more assets under the current app instance.
 
 **assets:** array
@@ -166,7 +173,7 @@ Updates one or more assets under the current app instance.
 }]
 ```
 
-##### `.bulkRemoveAssets(assets, onSuccess, onError)`
+### `.bulkRemoveAssets(assets, onSuccess, onError)`
 Removes one or more assets.
 
 **assets:** array
@@ -182,14 +189,19 @@ or, to remove multiple assets for the current app instance, provide an array of 
 ['id1', 'id2', 'id3']
 ```
 
+### `.getInstances(accountId, onSuccess, onError)`
+Loads an array of app instances including assets that are available for the current app on a chain account. 
+
 ## enplug.dashboard
 
 All `enplug.dashboard` methods also accept success and error callbacks which acknowledge when a certain UI control has been triggered, but they aren't usually needed so they're left out of the documentation except in cases where they're used.
 
-##### `.setHeaderTitle(title)`
+### `.setHeaderTitle(title)`
 Sets the last part of the title bar breadcrumb. Set an empty title '' to clear the title.
 
-##### `.setHeaderButtons(buttons|button)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946451/c4ac0d06-a80f-11e5-970b-5b4d3558ba71.png)
+
+### `.setHeaderButtons(buttons|button)`
 Sets the primary action buttons for a page in the titlebar. Accepts either a single button object, or an array of buttons. Each button must have a button.action callback.
 **button:**
 ```js
@@ -201,34 +213,48 @@ Sets the primary action buttons for a page in the titlebar. Accepts either a sin
 }
 ```
 
-##### `.pageLoading(boolean)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946475/fc3c13a6-a80f-11e5-9edf-f25b182f79ca.png)
+
+### `.pageLoading(boolean)`
 Controls the loading state for the entire page. Every application starts off in loading state, and must set pageLoading(false) to notify the dashboard that it has successfully loaded.
 
 Use `enplug.dashboard.isLoading()` to synchronously check current loading state.
 
-##### `.isLoading()`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946414/5e70c248-a80f-11e5-99c2-b91dfd40c618.png)
+
+### `.isLoading()`
 Synchronously returns the current loading state. 
 
 **Note:** The loading state is updated asynchronously when this sender receives an acknowledgement of successful SDK call from the dashboard after using `.pageLoading(bool);`
 
-##### `.pageError()`
+### `.pageError()`
 Puts the page into error state.
 
-##### `.pageNotFound()`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946353/9bff1494-a80e-11e5-8649-0492bacb8deb.png)  
+
+### `.pageNotFound()`
 Puts the page into 404 state.
 
-##### `.loadingIndicator(message)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946387/1906bb72-a80f-11e5-88ec-d3b5db2c297f.png)
+
+### `.loadingIndicator(message)`
 Turns on the progress indicator, typically used during asynchronous actions.
 
 Note that the progress indicator will continue until a call is made to the errorIndicator or successIndicator APIs.
 
-##### `.successIndicator(message)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946284/cb4cd5a2-a80d-11e5-8920-540db9bd9ecd.png)
+
+### `.successIndicator(message)`
 Shows the success indicator. Should only be used after a call has been made to .loadingIndicator().
 
-##### `.errorIndicator(message)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946299/e9be68a2-a80d-11e5-95a5-15e85a21680c.png)
+
+### `.errorIndicator(message)`
 Shows the error indicator. Should only be used after a call has been made to .loadingIndicator().
 
-##### `.openConfirm(options, onSuccess, onError)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946307/015a823e-a80e-11e5-8ade-610da146e7b3.png)
+
+### `.openConfirm(options, onSuccess, onError)`
 Opens a confirm window with Yes/No buttons and configurable messages. If the user clicks the Confirm button, the success callback is called. Otherwise the error callback is called.
 
 **Available options:**
@@ -242,10 +268,14 @@ Opens a confirm window with Yes/No buttons and configurable messages. If the use
 }
 ```
 
-##### `.confirmUnsavedChanges(onSuccess, onError)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946260/a551c312-a80d-11e5-82b1-cf475e72cb8b.png)
+
+### `.confirmUnsavedChanges(onSuccess, onError)`
 Opens a confirm window asking the user to confirm their unsaved changes. If the user clicks the confirm button, the success callback is called. Otherwise the error callback is called.
 
-##### `.upload(options, onSuccess, onError)`
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946224/4fb86064-a80d-11e5-9aa7-8826e2362595.png)
+
+### `.upload(options, onSuccess, onError)`
 Opens an upload interface for the user to select a file to upload. The options parameter is currently unused. The success callback receives the newly uploaded and encoded file wrapped in an array:
 ```js
 [{
@@ -255,6 +285,8 @@ Opens an upload interface for the user to select a file to upload. The options p
   size: 1000 // the size of the uploaded file in bytes, if available
 }]
 ```
+
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946331/4cd81b54-a80e-11e5-8703-9417f13d278b.png)
 
 ## Contributing
 
