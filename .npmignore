@@ -1,0 +1,28 @@
+# Files
+*.log
+*.private.*
+**/.*
+
+# Folders
+node_modules/
+bower_components/
+test/
+tmp/
+vendor/
+coverage/
+
+# Grunt
+Gruntfile.js
+grunt/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Sublime
+*.sublime-project
+*/*.sublime-project
+**/*.sublime-project
+*.sublime-workspace
+*/*.sublime-workspace
+**/*.sublime-workspace

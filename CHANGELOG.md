@@ -2,6 +2,9 @@
 
 Contact <support@enplug.com> with questions.
 
+## 3.0.2
+May 18, 2016 - Fixed issues with npm package, switched to @enplug scoped package.
+
 ## 3.0.0
 Dec 21, 2015 - All APIs supported in native JS (`enplug.account` and `enplug.dashbard`) and AngularJS (`$enplugAccount` and `$enplugDashboard`).
 
