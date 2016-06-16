@@ -646,8 +646,8 @@
         var currentButtons = [];
 
         /**
-         * The last callback registered with the dashboard titlebar.
-         * @type Function
+         * The last callback registered with the dashboard title bar.
+         * @type {function}
          */
         var currentDisplayCallback = function () {};
 
@@ -660,6 +660,7 @@
         /**
          * Sets the last part of the title bar breadcrumb.
          * Set an empty title '' to clear the title.
+         * Re-setting this value wipes out the old one.
          *
          * The home/default page for an app should have no title set.
          *
@@ -678,10 +679,6 @@
             });
         };
 
-        // todo add enable/disable displays dropdown
-        //      enable displays dropdown (attaches callback)
-        //      disable displays dropdown (clears specific callback?)
-
         /**
          * Sets the current callback for the title bar breadcrumb display selector dropdown.
          * Attaching a callback enables the dropdown, it is disabled by default.
@@ -690,8 +687,8 @@
          * the callback is fired when a display is selected, the callback will get the
          * value 'single' when a single display is fired, or 'all' when the 'All' selection is selected
          *
-         * @param callback {Function} -- the callback to call when the display is changed
-         * @param [onError] {Function}
+         * @param {function} callback -- the callback to call when the display is changed
+         * @param {function} [onError]
          * @returns {number} callId
          */
         this.setDisplaySelectorCallback = function (callback, onError) {
@@ -701,12 +698,11 @@
             currentDisplayCallback = callback;
 
             return this.method({
-                name: 'set.selector',
+                name: 'set.selectorCallback',
                 params: callback,
                 persistent: true,
                 successCallback: function (displayType) {
-                    console.log('setDisplaySelectorCallback successCB fired: %o', arguments);
-                    if (displayType) {
+                    if (displayType && typeof currentDisplayCallback === 'function') {
                         currentDisplayCallback(displayType);
                     }
 
@@ -718,20 +714,20 @@
         };
 
         /**
-         * Disables the display dropdown selector in the page title breadcrumb bar.
-         * @param [onSuccess] {function}
-         * @param [onError] {function}
-         * @returns {number}
+         * Hides or shows the display dropdown selector in the page title breadcrumb bar.
+         * Send true to show the selector, false to hide it.
+         *
+         * @param {boolean} show
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
          */
-        this.disableDisplaySelector = function (onSuccess, onError) {
-
-            // todo set callback to noop?
-            // currentDisplayCallback = function() {};
+        this.setDisplaySelectorVisibility = function (show, onSuccess, onError) {
+            this.validate(show, 'boolean', 'Setting the display selector visibility requires a boolean argument, true to show or false to hide.');
 
             return this.method({
-                name: 'set.selector',
-                params: false,
-                persistent: true,
+                name: 'set.selectorEnabled',
+                params: show,
                 successCallback: onSuccess,
                 errorCallback: onError,
             });

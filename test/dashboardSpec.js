@@ -88,12 +88,37 @@ describe('DashboardSender', function () {
         expect(callback).toHaveBeenCalledWith(data);
     });
 
+    it('should respond to callback when display is changed via the selector', function () {
+        var callback = jasmine.createSpy('callback'),
+            callId = dashboard.setDisplaySelectorCallback(callback),
+            data = 'all';
+        dashboard.transport.handleEvent(mockResponse({ callId: callId, namespace: dashboard.transport.namespace, data: data }));
+        expect(callback).toHaveBeenCalled();
+        expect(callback).toHaveBeenCalledWith(data);
+    });
+
+    // todo setDisplaySelectorVisibility tests
+
     // Validation
 
     it('should validate the header title', function () {
         var error = new Error(dashboard.transport.TAG + 'Header title must be a string.');
         expect(function () {
             dashboard.setHeaderTitle();
+        }).toThrow(error);
+    });
+
+    it('should validate setting the display selector visibility', function () {
+        var error = new Error(dashboard.transport.TAG + 'Setting the display selector visibility requires a boolean argument, true to show or false to hide.');
+        expect(function () {
+            dashboard.setDisplaySelectorVisibility();
+        }).toThrow(error);
+    });
+
+    it('should validate setting the display selector callback', function () {
+        var error = new Error(dashboard.transport.TAG + 'To enable the display selector in the page title you must supply a callback function.');
+        expect(function () {
+            dashboard.setDisplaySelectorCallback();
         }).toThrow(error);
     });
 
