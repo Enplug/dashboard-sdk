@@ -646,6 +646,12 @@
         var currentButtons = [];
 
         /**
+         * The last callback registered with the dashboard title bar.
+         * @type {function}
+         */
+        var currentDisplayCallback = function () {};
+
+        /**
          * Keeps track of whether the dashboard is loading mode so clients can check.
          * @type {boolean}
          */
@@ -654,6 +660,7 @@
         /**
          * Sets the last part of the title bar breadcrumb.
          * Set an empty title '' to clear the title.
+         * Re-setting this value wipes out the old one.
          *
          * The home/default page for an app should have no title set.
          *
@@ -667,6 +674,60 @@
             return this.method({
                 name: 'set.title',
                 params: title,
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Sets the current callback for the title bar breadcrumb display selector dropdown.
+         * Attaching a callback enables the dropdown, it is disabled by default.
+         * The title is reset when the dashboard changes routes.
+         *
+         * the callback is fired when a display is selected, the callback will get the
+         * value 'single' when a single display is fired, or 'all' when the 'All' selection is selected
+         *
+         * @param {function} callback -- the callback to call when the display is changed
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.setDisplaySelectorCallback = function (callback, onError) {
+            this.validate(callback, 'function', 'To enable the display selector in the page title you must supply a callback function.');
+
+            // throw away previous callback
+            currentDisplayCallback = callback;
+
+            return this.method({
+                name: 'set.selectorCallback',
+                params: callback,
+                persistent: true,
+                successCallback: function (displayType) {
+                    if (displayType && typeof currentDisplayCallback === 'function') {
+                        currentDisplayCallback(displayType);
+                    }
+
+                    return displayType;
+                },
+
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Hides or shows the display dropdown selector in the page title breadcrumb bar.
+         * Send true to show the selector, false to hide it.
+         *
+         * @param {boolean} show
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.setDisplaySelectorVisibility = function (show, onSuccess, onError) {
+            this.validate(show, 'boolean', 'Setting the display selector visibility requires a boolean argument, true to show or false to hide.');
+
+            return this.method({
+                name: 'set.selectorEnabled',
+                params: show,
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
