@@ -356,6 +356,10 @@
             });
         };
 
+        /***************
+         * ASSETS
+         ***************/
+
         /**
          * Loads an array of assets for the current app instance.
          *
@@ -368,6 +372,94 @@
         this.getAssets = function (onSuccess, onError) {
             return this.method({
                 name: 'getAssets',
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Creates an asset under the current app instance.
+         *
+         * @param {object|Array<object>} value -- the asset value as an array or single asset object
+         * @param {object|Array<object>} [secureValue] -- optional secure asset array or single object, pass null to omit
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.createAsset = function (value, secureValue, onSuccess, onError) {
+            var params = {};
+
+            this.validate(value, 'object', 'You must provide a value (object or array) when creating an asset.');
+
+            if (!Array.isArray(value)) {
+                params.values = [value];
+            } else {
+                params.values = value;
+            }
+
+            if (secureValue != null) {
+                if (!Array.isArray(secureValue)) {
+                    params.secureValues = [secureValue];
+                } else {
+                    params.secureValues = secureValue;
+                }
+            }
+
+            return this.method({
+                name: 'createAsset',
+                params: params,
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Updates an asset under the current app instance.
+         *
+         * @param {string} id - the Asset ID
+         * @param {object} value - the new Asset Value
+         * @param {object} [secureValue] - the new Asset Secure Value
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.updateAsset = function (id, value, secureValue, onSuccess, onError) {
+            this.validate(id, 'string', 'You must provide the ID (string) of an asset to update.');
+            this.validate(value, 'object', 'You must provide the new value (object) of an asset to update.');
+            return this.method({
+                name: 'updateAsset',
+                params: {
+                    assetId: id,
+                    value: value,
+                    secureValue: secureValue,
+                },
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Removes an asset for the current app instance.
+         *
+         * @param {string|Array<string>} id - The ID of the asset to remove.
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.removeAsset = function (id, onSuccess, onError) {
+            if (Array.isArray(id)) {
+                this.validate(id, 'array', 'You must pass a single ID (string) or Array of asset IDs to be removed.');
+                this.validate(id[0], 'string', 'You must provide at least one Asset ID (string) to be removed.');
+            } else {
+                this.validate(id, 'string', 'You must provide the ID (string) of the asset to remove.');
+                id = [id];
+            }
+
+            return this.method({
+                name: 'removeAsset',
+                params: {
+                    ids: id
+                },
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
@@ -391,26 +483,6 @@
         };
 
         /**
-         * Creates an asset under the current app instance.
-         *
-         * @param {string} name
-         * @param {object} value
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.createAsset = function (name, value, onSuccess, onError) {
-            this.validate(name, 'string', 'You must provide a name (string) when creating an asset.');
-            this.validate(value, 'object', 'You must provide a value (object) when creating an asset.');
-            return this.method({
-                name: 'createAsset',
-                params: [name, value],
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
-        /**
          * Creates an asset under the current app instance from a default asset definition.
          *
          * @param {string} defaultAssetId
@@ -428,25 +500,7 @@
             });
         };
 
-        /**
-         * Updates an asset under the current app instance.
-         *
-         * @param {string} id - the Asset ID
-         * @param {object} value - the new Asset Value
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.updateAsset = function (id, value, onSuccess, onError) {
-            this.validate(id, 'string', 'You must provide the ID (string) of an asset to update.');
-            this.validate(value, 'object', 'You must provide the new value (object) of an asset to update.');
-            return this.method({
-                name: 'updateAsset',
-                params: [id, value],
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
+        // todo remove bulk methods?
 
         /**
          * Creates one or more assets under the current app instance.
@@ -460,6 +514,7 @@
          * @returns {number} callId
          */
         this.bulkCreateAssets = function (assets, onSuccess, onError) {
+            // todo update
             this.validate(assets, 'object', 'You must provide an array of assets to bulk create.');
             return this.method({
                 name: 'bulkCreateAssets',
@@ -481,6 +536,7 @@
          * @returns {number} callId
          */
         this.bulkUpdateAssets = function (assets, onSuccess, onError) {
+            // todo update
             this.validate(assets, 'object', 'You must provide an array of assets to bulk update.');
             return this.method({
                 name: 'bulkUpdateAssets',
@@ -502,6 +558,7 @@
          * @returns {number} callId
          */
         this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
+            // todo update
             this.validate(assetIds, 'object', 'You must provide an array of asset IDs to bulk remove.');
             return this.method({
                 name: 'bulkRemoveAssets',
@@ -511,23 +568,10 @@
             });
         };
 
-        /**
-         * Removes an asset for the current app instance.
-         *
-         * @param {string} id - The ID of the asset to remove.
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.removeAsset = function (id, onSuccess, onError) {
-            this.validate(id, 'string', 'You must provide the ID (string) of the asset to remove.');
-            return this.method({
-                name: 'removeAsset',
-                params: [id],
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
+        // todo end bulk operations
+        /***************
+         * THEMES
+         ***************/
 
         /**
          * Loads available themes for the current app instance app definition.
