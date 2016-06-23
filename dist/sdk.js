@@ -380,29 +380,28 @@
         /**
          * Creates an asset under the current app instance.
          *
-         * @param {object|Array<object>} value -- the asset value as an array or single asset object
-         * @param {object|Array<object>} [secureValue] -- optional secure asset array or single object, pass null to omit
+         * @param {{Value:*, SecureValue:*}[]} asset -- the asset as an array or single asset object
+         * @param {object} [dialogOptions] -- options for the asset deployment dialog
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.createAsset = function (value, secureValue, onSuccess, onError) {
+        this.createAsset = function (assets, dialogOptions, onSuccess, onError) {
             var params = {};
 
-            this.validate(value, 'object', 'You must provide a value (object or array) when creating an asset.');
+            this.validate(assets, 'object', 'You must provide an asset (object or array) when creating an asset.');
 
-            if (!Array.isArray(value)) {
-                params.values = [value];
+            // wrap values in an array
+            if (!Array.isArray(assets)) {
+                params.assets = [assets];
             } else {
-                params.values = value;
+                params.assets = assets;
             }
 
-            if (secureValue != null) {
-                if (!Array.isArray(secureValue)) {
-                    params.secureValues = [secureValue];
-                } else {
-                    params.secureValues = secureValue;
-                }
+            if (dialogOptions == null) {
+                params.dialogOptions = {};
+            } else {
+                params.dialogOptions = dialogOptions;
             }
 
             return this.method({
@@ -419,11 +418,12 @@
          * @param {string} id - the Asset ID
          * @param {object} value - the new Asset Value
          * @param {object} [secureValue] - the new Asset Secure Value
+         * @param {object} [dialogOptions] - options to be passed to the deployment dialog
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.updateAsset = function (id, value, secureValue, onSuccess, onError) {
+        this.updateAsset = function (id, value, secureValue, dialogOptions, onSuccess, onError) {
             this.validate(id, 'string', 'You must provide the ID (string) of an asset to update.');
             this.validate(value, 'object', 'You must provide the new value (object) of an asset to update.');
             return this.method({
@@ -431,7 +431,8 @@
                 params: {
                     assetId: id,
                     value: value,
-                    secureValue: secureValue,
+                    secureValue: secureValue || null,
+                    dialogOptions: dialogOptions || null,
                 },
                 successCallback: onSuccess,
                 errorCallback: onError,
@@ -447,12 +448,12 @@
          * @returns {number} callId
          */
         this.removeAsset = function (id, onSuccess, onError) {
-            if (Array.isArray(id)) {
-                this.validate(id, 'array', 'You must pass a single ID (string) or Array of asset IDs to be removed.');
-                this.validate(id[0], 'string', 'You must provide at least one Asset ID (string) to be removed.');
-            } else {
+            if (!Array.isArray(id)) {
                 this.validate(id, 'string', 'You must provide the ID (string) of the asset to remove.');
                 id = [id];
+            } else {
+                this.validate(id, 'array', 'You must pass a single ID (string) or Array of asset IDs to be removed.');
+                this.validate(id[0], 'string', 'You must provide at least one Asset ID (string) to be removed.');
             }
 
             return this.method({
@@ -499,8 +500,6 @@
                 errorCallback: onError,
             });
         };
-
-        // todo remove bulk methods?
 
         /**
          * Creates one or more assets under the current app instance.
@@ -568,7 +567,6 @@
             });
         };
 
-        // todo end bulk operations
         /***************
          * THEMES
          ***************/
