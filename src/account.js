@@ -137,15 +137,15 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.updateAsset = function (id, value, secureValue, dialogOptions, onSuccess, onError) {
-            this.validate(id, 'string', 'You must provide the ID (string) of an asset to update.');
-            this.validate(value, 'object', 'You must provide the new value (object) of an asset to update.');
+        this.updateAsset = function (asset, dialogOptions, onSuccess, onError) {
+            this.validate(asset, 'object', 'You must provide an asset object to update');
+            this.validate(asset.Id, 'string', 'You must provide the ID (string) on the asset you want to update.');
+            this.validate(asset.Value, 'object', 'You must provide the new value (object) of an asset to update.');
+
             return this.method({
                 name: 'updateAsset',
                 params: {
-                    assetId: id,
-                    value: value,
-                    secureValue: secureValue || null,
+                    asset: asset,
                     dialogOptions: dialogOptions || null,
                 },
                 successCallback: onSuccess,
