@@ -380,7 +380,7 @@
         /**
          * Creates an asset under the current app instance.
          *
-         * @param {{Value:*, SecureValue:*}[]} asset -- the asset as an array or single asset object
+         * @param {{Value:*, SecureValue:*}[]} assets -- the asset as an array or single asset object
          * @param {object} [dialogOptions] -- options for the asset deployment dialog
          * @param {function} [onSuccess]
          * @param {function} [onError]
@@ -415,9 +415,7 @@
         /**
          * Updates an asset under the current app instance.
          *
-         * @param {string} id - the Asset ID
-         * @param {object} value - the new Asset Value
-         * @param {object} [secureValue] - the new Asset Secure Value
+         * @param {string} asset - the asset being updated
          * @param {object} [dialogOptions] - options to be passed to the deployment dialog
          * @param {function} [onSuccess]
          * @param {function} [onError]
