@@ -7,6 +7,9 @@
 
 The official Enplug JavaScript SDK for the dashboard/control interface of apps built for Enplug displays.
 
+# THIS BRANCH IS CURRENTLY A WORK IN PROGRESS #
+# LATEST STABLE IS v3.0.3 PLEASE INSTALL THAT INSTEAD #
+
 ## Table of Contents
 - [Installing](#installing)
 - [Usage](#usage-and-getting-started)
