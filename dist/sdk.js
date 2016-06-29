@@ -467,11 +467,11 @@
          * @param onError
          * @returns {number}
          */
-        this.saveOrder = function (assets, onSuccess, onError) {
+        this.updateAssetOrder = function (assets, onSuccess, onError) {
             this.validate(assets, 'array', 'You must provide an array of assets (or asset ids) in the new order.');
 
             return this.method({
-                name: 'saveOrder',
+                name: 'updateAssetOrder',
                 params: {
                     assets: assets,
                 },
