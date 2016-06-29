@@ -115,8 +115,8 @@ Loads all information for the current user.
 }
 ```
 
-### `.getDisplayGroup(onSuccess, onError)`
-Loads information for the currently selected display group.
+### `.getDisplayGroups(onSuccess, onError)`
+Loads information for the currently selected display group(s).
 
 **Callback receives:**
 ```js
@@ -149,8 +149,8 @@ Updates an asset under the current app instance.
 - **id:** string ID of the asset to be updated.
 - **value:** object to update the asset's value to
 
-### `.removeAsset(id, onSuccess, onError)`
-Removes an asset under the current app instance.
+### `.deleteAsset(id, onSuccess, onError)`
+Deletes an asset under the current app instance.
 
 ### `.bulkCreateAssets(assets, onSuccess, onError)`
 Creates one or more assets under the current app instance. 

@@ -248,7 +248,7 @@
          */
         validate: function (data, expectedType, errorMessage) {
             if (!this.novalidate) {
-                if (data === null || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
+                if (data == null || ((expectedType === 'array') ? !Array.isArray(data) : typeof data !== expectedType)) {
                     throw new Error(this.transport.TAG + errorMessage);
                 }
             }
@@ -318,6 +318,21 @@
         };
 
         /**
+         * Loads all information for the current user.
+         *
+         * @param {function} onSuccess
+         * @param {function} onError
+         * @returns {number}
+         */
+        this.getUser = function (onSuccess, onError) {
+            return this.method({
+                name: 'getUser',
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
          * Loads information for the currently selected display group.
          * Language, orientation and time zone.
          *
@@ -327,9 +342,9 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.getDisplayGroup = function (onSuccess, onError) {
+        this.getDisplayGroups = function (onSuccess, onError) {
             return this.method({
-                name: 'getDisplay',
+                name: 'getDisplays',
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
@@ -389,13 +404,17 @@
         this.createAsset = function (assets, dialogOptions, onSuccess, onError) {
             var params = {};
 
-            this.validate(assets, 'object', 'You must provide an asset (object or array) when creating an asset.');
-
             // wrap values in an array
             if (!Array.isArray(assets)) {
                 params.assets = [assets];
             } else {
                 params.assets = assets;
+            }
+
+            this.validate(params.assets, 'array', 'You must provide an array of assets (object) when creating new assets.');
+            this.validate(params.assets[0], 'object', 'You must provide an array of assets (object) when creating new assets.');
+            if (params.assets[0]) {
+                this.validate(params.assets[0].Value, 'object', 'You must provide a Value (object) when creating an asset.');
             }
 
             if (dialogOptions == null) {
@@ -422,9 +441,11 @@
          * @returns {number} callId
          */
         this.updateAsset = function (asset, dialogOptions, onSuccess, onError) {
-            this.validate(asset, 'object', 'You must provide an asset object to update');
-            this.validate(asset.Id, 'string', 'You must provide the ID (string) on the asset you want to update.');
-            this.validate(asset.Value, 'object', 'You must provide the new value (object) of an asset to update.');
+            this.validate(asset, 'object', 'You must provide an asset object to update.');
+            if (asset) {
+                this.validate(asset.Id, 'string', 'You must provide the ID (string) on the asset you want to update.');
+                this.validate(asset.Value, 'object', 'You must provide the new value (object) of the asset to update.');
+            }
 
             return this.method({
                 name: 'updateAsset',
@@ -438,24 +459,46 @@
         };
 
         /**
-         * Removes an asset for the current app instance.
+         * This is for saving an order of assets if needed for the current app. An array of asset Ids
+         * is all that is needed, but the implementation also accepts an array of asset objects with "Id" string properties.
          *
-         * @param {string|Array<string>} id - The ID of the asset to remove.
+         * @param {string[]|asset[]} assets -- an ordered array of assets or asset ids to be saved.
+         * @param onSuccess
+         * @param onError
+         * @returns {number}
+         */
+        this.saveOrder = function (assets, onSuccess, onError) {
+            this.validate(assets, 'array', 'You must provide an array of assets (or asset ids) in the new order.');
+
+            return this.method({
+                name: 'saveOrder',
+                params: {
+                    assets: assets,
+                },
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Deletes an asset for the current app instance.
+         *
+         * @param {string|Array<string>} id - The ID of the asset to delete.
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.removeAsset = function (id, onSuccess, onError) {
+        this.deleteAsset = function (id, onSuccess, onError) {
             if (!Array.isArray(id)) {
-                this.validate(id, 'string', 'You must provide the ID (string) of the asset to remove.');
+                this.validate(id, 'string', 'You must provide the ID (string) of the asset to delete.');
                 id = [id];
             } else {
-                this.validate(id, 'array', 'You must pass a single ID (string) or Array of asset IDs to be removed.');
-                this.validate(id[0], 'string', 'You must provide at least one Asset ID (string) to be removed.');
+                this.validate(id, 'array', 'You must pass a single ID (string) or Array of asset IDs to be deleted.');
+                this.validate(id[0], 'string', 'You must provide at least one Asset ID (string) to be deleted.');
             }
 
             return this.method({
-                name: 'removeAsset',
+                name: 'deleteAsset',
                 params: {
                     ids: id
                 },
@@ -647,7 +690,9 @@
         /**
          * @deprecated
          */
-        this.getDisplay = this.getDisplayGroup;
+        this.getDisplay = this.getDisplayGroups;
+        this.getDisplays = this.getDisplayGroups;
+        this.getDisplayGroup = this.getDisplayGroups;
     }
 
     // Inherit
@@ -768,6 +813,21 @@
             return this.method({
                 name: 'set.selectorEnabled',
                 params: show,
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Switches to account view aka "All" selection of instance selector
+         *
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.switchToAccountView = function (onSuccess, onError) {
+            return this.method({
+                name: 'switchToAccountView',
                 successCallback: onSuccess,
                 errorCallback: onError,
             });

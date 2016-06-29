@@ -114,6 +114,21 @@
         };
 
         /**
+         * Switches to account view aka "All" selection of instance selector
+         *
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.switchToAccountView = function (onSuccess, onError) {
+            return this.method({
+                name: 'switchToAccountView',
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
          * Sets the primary action buttons for a page in the titlebar.
          *
          * Accepts either a single button object, or an array of buttons.
