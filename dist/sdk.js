@@ -350,27 +350,6 @@
             });
         };
 
-        /**
-         * Loads an array of app instances including assets that are available for the
-         * current app on a chain account.
-         *
-         * Data is passed as the first param to the success callback.
-         *
-         * @param {string} accountId
-         * @param {function} onSuccess
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.getInstances = function (accountId, onSuccess, onError) {
-            this.validate(accountId, 'string', 'Missing account ID (string).');
-            return this.method({
-                name: 'getInstances',
-                params: accountId,
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
         /***************
          * ASSETS
          ***************/
@@ -540,72 +519,6 @@
             return this.method({
                 name: 'createAssetFromDefault',
                 params: defaultAssetId,
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
-        /**
-         * Creates one or more assets under the current app instance.
-         *
-         * If an asset object doesn't provide an AppInstanceId,
-         * it will default to the current app instance.
-         *
-         * @param {{ AppInstanceId:string, AssetName:string, Value:Object }[]} assets
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.bulkCreateAssets = function (assets, onSuccess, onError) {
-            // todo update
-            this.validate(assets, 'object', 'You must provide an array of assets to bulk create.');
-            return this.method({
-                name: 'bulkCreateAssets',
-                params: assets,
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
-        /**
-         * Updates one or more assets under the current app instance.
-         *
-         * If an asset object doesn't provide an AppInstanceId,
-         * it will default to the current app instance.
-         *
-         * @param {{ AppInstanceId:string, AssetId:string, Value:Object }[]} assets
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.bulkUpdateAssets = function (assets, onSuccess, onError) {
-            // todo update
-            this.validate(assets, 'object', 'You must provide an array of assets to bulk update.');
-            return this.method({
-                name: 'bulkUpdateAssets',
-                params: assets,
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
-        /**
-         * Removes one or more assets.
-         *
-         * Provide an array of asset IDs to be removed for the current instance,
-         * or an array of objects each with an AppInstanceId and AssetId.
-         *
-         * @param {string[]|{ AppInstanceId:string, AssetId:string }[]} assetIds
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.bulkRemoveAssets = function (assetIds, onSuccess, onError) {
-            // todo update
-            this.validate(assetIds, 'object', 'You must provide an array of asset IDs to bulk remove.');
-            return this.method({
-                name: 'bulkRemoveAssets',
-                params: assetIds,
                 successCallback: onSuccess,
                 errorCallback: onError,
             });

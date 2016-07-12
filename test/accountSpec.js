@@ -25,13 +25,6 @@ describe('AccountSender', function () {
     });
 
     // Validation
-    it('should validate the account ID when loading instances', function () {
-        var error = new Error(account.transport.TAG + 'Missing account ID (string).');
-        expect(function () {
-            account.getInstances();
-        }).toThrow(error);
-    });
-
     it('should validate the value of new assets in createAsset', function () {
         expect(function () {
             account.createAsset();
@@ -63,27 +56,6 @@ describe('AccountSender', function () {
                 Id: 'test'
             });
         }).toThrow(new Error(account.transport.TAG + 'You must provide the new value (object) of the asset to update.'));
-    });
-
-    it('should validate assets array when bulk creating assets', function () {
-        var error = new Error(account.transport.TAG + 'You must provide an array of assets to bulk create.');
-        expect(function () {
-            account.bulkCreateAssets();
-        }).toThrow(error);
-    });
-
-    it('should validate assets array when bulk updating assets', function () {
-        var error = new Error(account.transport.TAG + 'You must provide an array of assets to bulk update.');
-        expect(function () {
-            account.bulkUpdateAssets();
-        }).toThrow(error);
-    });
-
-    it('should validate asset IDs array when bulk removing assets', function () {
-        var error = new Error(account.transport.TAG + 'You must provide an array of asset IDs to bulk remove.');
-        expect(function () {
-            account.bulkRemoveAssets();
-        }).toThrow(error);
     });
 
     it('should validate asset ID when removing an asset', function () {

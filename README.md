@@ -23,7 +23,7 @@ The official Enplug JavaScript SDK for the dashboard/control interface of apps b
 
 ## Installing
 
-- **CDN:** `<script src="http://cdn.enplug.net/libs/dashboard-sdk/3.0.3/sdk.min.js"></script>` 
+- **CDN:** `<script src="http://cdn.enplug.net/libs/dashboard-sdk/3.0.3/sdk.min.js"></script>`
 - **Bower:** `bower install enplug-dashboard-sdk --save-dev`
 - **NPM:** `npm install @enplug/dashboard-sdk --save`
 
@@ -66,11 +66,11 @@ Then, the `$enplugAccount` and `$enplugDashboard` are available in your app. All
 ```js
 angular.module('myApp').controller('MyController', function ($enplugAccount, $enplugDashboard) {
     'use strict';
-    
+
     $enplugAccount.getAssets().then(function (assets) {
         $scope.assets = assets;
     });
-    
+
     $enplugDashboard.openConfirm({ title: 'A title', text: 'A longer description' }).then(function () {
         // user confirmed
     }, function () {
@@ -152,49 +152,6 @@ Updates an asset under the current app instance.
 ### `.deleteAsset(id, onSuccess, onError)`
 Deletes an asset under the current app instance.
 
-### `.bulkCreateAssets(assets, onSuccess, onError)`
-Creates one or more assets under the current app instance. 
-
-**assets:** array
-```js
-[{
-  AppInstanceId: 'string', // optional, defaults to current app instance
-  AssetName: 'string', // required
-  AssetValue: {} // required
-}]
-```
-
-### `.bulkUpdateAssets(assets, onSuccess, onError)`
-Updates one or more assets under the current app instance.
-
-**assets:** array
-```js
-[{
-  AppInstanceId: 'string', // optional, defaults to current app instance
-  AssetId: 'string', // required
-  AssetValue: {} // required
-}]
-```
-
-### `.bulkRemoveAssets(assets, onSuccess, onError)`
-Removes one or more assets.
-
-**assets:** array
-```js
-[{
-  AppInstanceId: 'string', // required
-  AssetId: 'string' // required
-}]
-```
-
-or, to remove multiple assets for the current app instance, provide an array of asset ID strings:
-```js
-['id1', 'id2', 'id3']
-```
-
-### `.getInstances(accountId, onSuccess, onError)`
-Loads an array of app instances including assets that are available for the current app on a chain account. 
-
 ## enplug.dashboard
 
 All `enplug.dashboard` methods also accept success and error callbacks which acknowledge when a certain UI control has been triggered, but they aren't usually needed so they're left out of the documentation except in cases where they're used.
@@ -226,14 +183,14 @@ Use `enplug.dashboard.isLoading()` to synchronously check current loading state.
 ![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946414/5e70c248-a80f-11e5-99c2-b91dfd40c618.png)
 
 ### `.isLoading()`
-Synchronously returns the current loading state. 
+Synchronously returns the current loading state.
 
 **Note:** The loading state is updated asynchronously when this sender receives an acknowledgement of successful SDK call from the dashboard after using `.pageLoading(bool);`
 
 ### `.pageError()`
 Puts the page into error state.
 
-![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946353/9bff1494-a80e-11e5-8649-0492bacb8deb.png)  
+![Screenshot](https://cloud.githubusercontent.com/assets/1857007/11946353/9bff1494-a80e-11e5-8649-0492bacb8deb.png)
 
 ### `.pageNotFound()`
 Puts the page into 404 state.
