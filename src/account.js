@@ -220,24 +220,6 @@
             });
         };
 
-        /**
-         * Creates an asset under the current app instance from a default asset definition.
-         *
-         * @param {string} defaultAssetId
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.createAssetFromDefault = function (defaultAssetId, onSuccess, onError) {
-            this.validate(defaultAssetId, 'string', 'Missing default asset ID (string).');
-            return this.method({
-                name: 'createAssetFromDefault',
-                params: defaultAssetId,
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
         /***************
          * THEMES
          ***************/
@@ -293,24 +275,6 @@
             this.validate(themeId, 'string', 'You must provide the ID (string) of the theme to remove.');
             return this.method({
                 name: 'removeTheme',
-                params: themeId,
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
-        /**
-         * Activates a theme for the current app instance.
-         *
-         * @param {string} themeId
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.activateTheme = function (themeId, onSuccess, onError) {
-            this.validate(themeId, 'string', 'You must provide the ID (string) of the theme to activate.');
-            return this.method({
-                name: 'activateTheme',
                 params: themeId,
                 successCallback: onSuccess,
                 errorCallback: onError,
