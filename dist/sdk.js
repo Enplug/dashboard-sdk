@@ -350,22 +350,6 @@
             });
         };
 
-        /**
-         * Returns the information for the currently selected display group.
-         * If an account is selected returns null.
-         *
-         * @param {function} onSuccess
-         * @param {function} onError
-         * @returns {number} callId
-         */
-        this.getSelectedDisplay = function (onSuccess, onError) {
-            return this.method({
-                name: 'getSelectedDisplay',
-                successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
         /***************
          * ASSETS
          ***************/
