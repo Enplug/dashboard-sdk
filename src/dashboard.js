@@ -82,7 +82,7 @@
                 params: callback,
                 persistent: true,
                 successCallback: function (displayType) {
-                    if (typeof currentDisplayCallback === 'function') {
+                    if (typeof currentDisplayCallback === 'function' && displayType !== undefined) {
                         currentDisplayCallback(displayType);
                     }
 
