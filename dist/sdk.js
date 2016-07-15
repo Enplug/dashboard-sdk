@@ -411,6 +411,27 @@
         };
 
         /**
+         * Saves an asset without showing the deployment dialog.
+         *
+         * @param {object} asset
+         * @param {function} onSuccess
+         * @param {function} onError
+         * @returns {number} callId
+         */
+        this.saveAsset = function (asset, onSuccess, onError) {
+            this.validate(asset, 'object', 'You must provide an asset object to save.');
+
+            return this.method({
+                name: 'saveAsset',
+                params: {
+                    asset: asset
+                },
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
          * Updates an asset under the current app instance.
          *
          * @param {string} asset - the asset being updated
