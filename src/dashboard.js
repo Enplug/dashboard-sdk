@@ -64,8 +64,8 @@
          * Attaching a callback enables the dropdown, it is disabled by default.
          * The title is reset when the dashboard changes routes.
          *
-         * the callback is fired when a display is selected, the callback will get the
-         * value 'single' when a single display is fired, or 'all' when the 'All' selection is selected
+         * the callback is fired when a display is selected, the callback will get the ID
+         * value when a single display is fired, or null when the 'All' selection is selected
          *
          * @param {function} callback -- the callback to call when the display is changed
          * @param {function} [onError]
@@ -82,7 +82,7 @@
                 params: callback,
                 persistent: true,
                 successCallback: function (displayType) {
-                    if (displayType && typeof currentDisplayCallback === 'function') {
+                    if (typeof currentDisplayCallback === 'function' && displayType !== undefined) {
                         currentDisplayCallback(displayType);
                     }
 
@@ -108,6 +108,21 @@
             return this.method({
                 name: 'set.selectorEnabled',
                 params: show,
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Switches to account view aka "All" selection of instance selector
+         *
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.switchToAccountView = function (onSuccess, onError) {
+            return this.method({
+                name: 'switchToAccountView',
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
