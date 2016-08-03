@@ -18,27 +18,21 @@ describe('AccountSender', function () {
                 var callId = account[property](),
                     name = account.transport.pendingCalls[callId].name,
                     count = (name.match(/app/g) || []).length;
+
                 expect(count).toBe(1);
             }
         }
     });
 
     // Validation
-    it('should validate the account ID when loading instances', function () {
-        var error = new Error(account.transport.TAG + 'Missing account ID (string).');
-        expect(function () {
-            account.getInstances();
-        }).toThrow(error);
-    });
-
-    it('should validate the name and value of new assets in createAsset', function () {
+    it('should validate the value of new assets in createAsset', function () {
         expect(function () {
             account.createAsset();
-        }).toThrow(new Error(account.transport.TAG + 'You must provide a name (string) when creating an asset.'));
+        }).toThrow(new Error(account.transport.TAG + 'You must provide an array of assets (object) when creating new assets.'));
 
         expect(function () {
-            account.createAsset('test');
-        }).toThrow(new Error(account.transport.TAG + 'You must provide a value (object) when creating an asset.'));
+            account.createAsset({});
+        }).toThrow(new Error(account.transport.TAG + 'You must provide a Value (object) when creating an asset.'));
     });
 
     it('should validate the asset ID when creating default assets', function () {
@@ -51,38 +45,23 @@ describe('AccountSender', function () {
     it('should validate the asset ID and value when updating assets', function () {
         expect(function () {
             account.updateAsset();
-        }).toThrow(new Error(account.transport.TAG + 'You must provide the ID (string) of an asset to update.'));
+        }).toThrow(new Error(account.transport.TAG + 'You must provide an asset object to update.'));
 
         expect(function () {
-            account.updateAsset('test');
-        }).toThrow(new Error(account.transport.TAG + 'You must provide the new value (object) of an asset to update.'));
-    });
+            account.updateAsset({});
+        }).toThrow(new Error(account.transport.TAG + 'You must provide the ID (string) on the asset you want to update.'));
 
-    it('should validate assets array when bulk creating assets', function () {
-        var error = new Error(account.transport.TAG + 'You must provide an array of assets to bulk create.');
         expect(function () {
-            account.bulkCreateAssets();
-        }).toThrow(error);
-    });
-
-    it('should validate assets array when bulk updating assets', function () {
-        var error = new Error(account.transport.TAG + 'You must provide an array of assets to bulk update.');
-        expect(function () {
-            account.bulkUpdateAssets();
-        }).toThrow(error);
-    });
-
-    it('should validate asset IDs array when bulk removing assets', function () {
-        var error = new Error(account.transport.TAG + 'You must provide an array of asset IDs to bulk remove.');
-        expect(function () {
-            account.bulkRemoveAssets();
-        }).toThrow(error);
+            account.updateAsset({
+                Id: 'test'
+            });
+        }).toThrow(new Error(account.transport.TAG + 'You must provide the new value (object) of the asset to update.'));
     });
 
     it('should validate asset ID when removing an asset', function () {
-        var error = new Error(account.transport.TAG + 'You must provide the ID (string) of the asset to remove.');
+        var error = new Error(account.transport.TAG + 'You must provide the ID (string) of the asset to delete.');
         expect(function () {
-            account.removeAsset();
+            account.deleteAsset();
         }).toThrow(error);
     });
 

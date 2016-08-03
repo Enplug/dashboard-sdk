@@ -2,6 +2,9 @@
 
 Contact <support@enplug.com> with questions.
 
+## 4.0.0
+August 2016 - Implementation of new asset API and removal of old outdated bulk methods.
+
 ## 3.0.2
 May 18, 2016 - Fixed issues with npm package, switched to @enplug scoped package.
 

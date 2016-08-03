@@ -44,7 +44,7 @@
          */
         validate: function (data, expectedType, errorMessage) {
             if (!this.novalidate) {
-                if (data === null || typeof data !== expectedType || (expectedType === 'array' && !Array.isArray(data))) {
+                if (data == null || ((expectedType === 'array') ? !Array.isArray(data) : typeof data !== expectedType)) {
                     throw new Error(this.transport.TAG + errorMessage);
                 }
             }

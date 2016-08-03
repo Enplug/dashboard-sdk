@@ -20,12 +20,24 @@ describe('apiSender', function () {
         }).toThrow();
 
         expect(function () {
+            sender.validate('test', 'string');
+        }).not.toThrow();
+
+        expect(function () {
             sender.validate(1, 'string');
         }).toThrow();
 
         expect(function () {
+            sender.validate(1, 'number');
+        }).not.toThrow();
+
+        expect(function () {
             sender.validate(true, 'object');
         }).toThrow();
+
+        expect(function () {
+            sender.validate(true, 'boolean');
+        }).not.toThrow();
     });
 
     it('should not allow null', function () {
@@ -38,6 +50,10 @@ describe('apiSender', function () {
         expect(function () {
             sender.validate({}, 'array');
         }).toThrow();
+
+        expect(function () {
+            sender.validate([], 'array');
+        }).not.toThrow();
     });
 
     it('should support disabling validation for tests', function () {
