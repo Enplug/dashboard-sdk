@@ -121,10 +121,15 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.switchToView = function (displayGroupId, onSuccess, onError) {
+        this.switchToView = function (displayGroupId, displayGroupName, onSuccess, onError) {
+            var view = {
+                displayGroupId : displayGroupId,
+                displayGroupName : displayGroupName
+            };
+
             return this.method({
                 name: 'switchToView',
-                params: displayGroupId,
+                params: view,
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
