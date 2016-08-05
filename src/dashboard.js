@@ -114,19 +114,22 @@
         };
 
         /**
-         * Switches to account view aka "All" selection of instance selector
+         * Switches to account view aka "All" selection of instance selector or DisplayGroup view
          *
+         * @param {boolean} displayGroupId
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.switchToAccountView = function (onSuccess, onError) {
+        this.switchToView = function (displayGroupId, onSuccess, onError) {
             return this.method({
-                name: 'switchToAccountView',
+                name: 'switchToView',
+                params: displayGroupId,
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
         };
+
 
         /**
          * Sets the primary action buttons for a page in the titlebar.
