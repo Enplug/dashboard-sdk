@@ -380,7 +380,7 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.createAsset = function (assets, dialogOptions, onSuccess, onError) {
+        this.bulkCreateAssets = function (assets, dialogOptions, onSuccess, onError) {
             var params = {};
 
             // wrap values in an array
@@ -403,7 +403,7 @@
             }
 
             return this.method({
-                name: 'createAsset',
+                name: 'bulkCreateAssets',
                 params: params,
                 successCallback: onSuccess,
                 errorCallback: onError,
@@ -412,20 +412,29 @@
 
         /**
          * Saves an asset without showing the deployment dialog.
-         *
+         * @param {{Value:*, SecureValue:*}[]} assets -- the asset as an array or single asset object
+         * @param {object} [dialogOptions] -- options for the asset deployment dialog
          * @param {object} asset
          * @param {function} onSuccess
          * @param {function} onError
          * @returns {number} callId
          */
-        this.saveAsset = function (asset, onSuccess, onError) {
+        this.saveAsset = function (asset, dialogOptions, onSuccess, onError) {
             this.validate(asset, 'object', 'You must provide an asset object to save.');
+
+            var params = {
+                asset : asset
+            };
+
+            if (dialogOptions == null) {
+                params.dialogOptions = {};
+            } else {
+                params.dialogOptions = dialogOptions;
+            }
 
             return this.method({
                 name: 'saveAsset',
-                params: {
-                    asset: asset
-                },
+                params: params,
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
