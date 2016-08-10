@@ -166,37 +166,7 @@
                 name: 'saveAsset',
                 params: params,
                 successCallback: onSuccess,
-                errorCallback: onError,
-            });
-        };
-
-        /**
-         * Updates an asset under the current app instance.
-         *
-         * @param {string} asset - the asset being updated
-         * @param {object} [dialogOptions] - options to be passed to the deployment dialog
-         * @param {function} [onSuccess]
-         * @param {function} [onError]
-         * @returns {number} callId
-         */
-        this.updateAsset = function (asset, dialogOptions, onSuccess, onError) {
-            var firstAsset = Array.isArray(asset) ? asset[0] : asset;
-
-            // validate asset as object or array
-            this.validate(asset, 'object', 'You must provide an asset object to update.');
-
-            // validate properties of at least one asset
-            this.validate(firstAsset.Id, 'string', 'You must provide the ID (string) on the asset you want to update.');
-            this.validate(firstAsset.Value, 'object', 'You must provide the new value (object) of the asset to update.');
-
-            return this.method({
-                name: 'updateAsset',
-                params: {
-                    asset: asset,
-                    dialogOptions: dialogOptions || null,
-                },
-                successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
