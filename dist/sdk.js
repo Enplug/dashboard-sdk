@@ -381,25 +381,15 @@
          * @returns {number} callId
          */
         this.bulkCreateAssets = function (assets, dialogOptions, onSuccess, onError) {
-            var params = {};
-
-            // wrap values in an array
-            if (!Array.isArray(assets)) {
-                params.assets = [assets];
-            } else {
-                params.assets = assets;
-            }
+            var params = {
+                assets : assets,
+                dialogOptions : dialogOptions || {}
+            };
 
             this.validate(params.assets, 'array', 'You must provide an array of assets (object) when creating new assets.');
             this.validate(params.assets[0], 'object', 'You must provide an array of assets (object) when creating new assets.');
             if (params.assets[0]) {
                 this.validate(params.assets[0].Value, 'object', 'You must provide a Value (object) when creating an asset.');
-            }
-
-            if (dialogOptions == null) {
-                params.dialogOptions = {};
-            } else {
-                params.dialogOptions = dialogOptions;
             }
 
             return this.method({
@@ -409,6 +399,37 @@
                 errorCallback: onError,
             });
         };
+
+        /**
+         * Creates an asset under the current app instance.
+         *
+         * @param {{Value:*, SecureValue:*}[]} assets -- the asset as an array or single asset object
+         * @param {object} [dialogOptions] -- options for the asset deployment dialog
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.bulkDeployAssets = function (assets, dialogOptions, onSuccess, onError) {
+            var params = {
+                assets : assets,
+                dialogOptions : dialogOptions || {}
+            };
+
+            this.validate(params.assets, 'array', 'You must provide an array of assets (object) when deploying assets.');
+            this.validate(params.assets[0], 'object', 'You must provide an array of assets (object) when deploying assets.');
+            if (params.assets[0]) {
+                this.validate(params.assets[0].Value, 'object', 'You must provide a Value (object) when deploying an asset.');
+                this.validate(params.assets[0].Id, 'string', 'You must provide the ID (string) on the asset you want to update.');
+            }
+
+            return this.method({
+                name: 'bulkDeployAssets',
+                params: params,
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
 
         /**
          * Saves an asset without showing the deployment dialog.
@@ -423,15 +444,10 @@
             this.validate(asset, 'object', 'You must provide an asset object to save.');
 
             var params = {
-                asset : asset
+                asset : asset,
+                dialogOptions : dialogOptions || {}
             };
-
-            if (dialogOptions == null) {
-                params.dialogOptions = {};
-            } else {
-                params.dialogOptions = dialogOptions;
-            }
-
+            
             return this.method({
                 name: 'saveAsset',
                 params: params,
