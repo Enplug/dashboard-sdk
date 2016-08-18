@@ -333,7 +333,9 @@
         };
 
         /**
-         * Loads information for the currently selected display group.
+         * Loads information for the display groups available in current view.
+         * In the Display Group view it will return currently selected Display Group.
+         * In Account view it will return all DisplayGroups in the account.
          * Language, orientation and time zone.
          *
          * Data is passed as the first param to the success callback.
@@ -345,6 +347,24 @@
         this.getDisplayGroups = function (onSuccess, onError) {
             return this.method({
                 name: 'getDisplays',
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
+         * Loads information for the display groups available in current view.
+         * Language, orientation and time zone.
+         *
+         * Data is passed as the first param to the success callback.
+         *
+         * @param {function} onSuccess
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.getSelectedDisplayId = function (onSuccess, onError) {
+            return this.method({
+                name: 'getSelectedDisplayId',
                 successCallback: onSuccess,
                 errorCallback: onError,
             });

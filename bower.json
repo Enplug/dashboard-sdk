@@ -1,10 +1,7 @@
 {
   "name": "enplug-dashboard-sdk",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "homepage": "https://github.com/Enplug/dashboard-sdk",
-  "authors": [
-    "Alex Ross <alex@enplug.com>"
-  ],
   "description": "AngularJS Enplug SDK dashboard component",
   "main": "dist/sdk.min.js",
   "keywords": [
