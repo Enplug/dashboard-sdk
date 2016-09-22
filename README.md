@@ -96,21 +96,29 @@ enplug.account.getAccount(function (data) {
 
 ## enplug.account
 
-### `.getAccount(onSuccess, onError)`
+### `.getUser(onSuccess, onError)`
 Loads all information for the current user.
 
 **Callback receives:**
 ```js
 {
-  id: 'string', // Current display group ID
-  type: 'string', // User account type
-  appInstanceId: 'string', // ID of current app when turned on
+  id: 'string', // User id in the system
   accountId: 'string' // Current user's account ID
+  type: 'string', // User access type
+  data: {
+      email: 'string', // User email
+      firstName: 'string', // User name
+      accountName: 'string', // User account name
+  },
+  has: {
+      rootAccess: true, // boolean true/false
+      limitedAccess: true, // boolean true/false
+  }
 }
 ```
 
-### `.getDisplayGroups(onSuccess, onError)`
-Loads information for the currently selected display group(s).
+### `.getDisplays(onSuccess, onError)`
+Loads information for the currently selected display group(s). In the account context it will return all Display Groups in the account, in the Display Group context will return only this groups information.
 
 **Callback receives:**
 ```js
@@ -121,6 +129,10 @@ Loads information for the currently selected display group(s).
 }
 ```
 
+### `.getSelectedDisplayId(onSuccess, onError)`
+Returns the currently selected display group Id or null if in the Account view.
+
+
 ### `.getAssets(onSuccess, onError)`
 Loads an array of assets for the current app instance.
 
@@ -129,22 +141,56 @@ Loads an array of assets for the current app instance.
 [{
   Created: 'string', // WCF date
   Id: 'string', // Asset ID
-  Name: 'string', // Asset Name
-  Value: {} // Value object provided when created
+  Value: {}, // Value object provided when created
+  VenueIds: [], // Array of Ids of Display Groups this asset is currently deployed to
+  ThemeId: 'string' // Optional Theme Id if set
 }]
 ```
 
-### `.createAsset(assetName, assetValue, onSuccess, onError)`
-Creates an asset under the current app instance.
+### `.saveAsset(asset, dialogOptions, onSuccess, onError)`
+Creates or updates an asset. If asset.Id is null it will create a new asset, otherwise it will update the existing one.
 
-### `.updateAsset(id, value, onSuccess, onError)`
-Updates an asset under the current app instance.
+- **asset:** object to update the asset's value to
+- **dialogOptions:** DeployDialog options, object specifying one or more options:
 
-- **id:** string ID of the asset to be updated.
-- **value:** object to update the asset's value to
+```js
+{
+  showSchedule: false, // by default
+  initialTab: 'displays', // by default, other option is 'schedule'
+  successMessage: 'Saved config', // Message to show when the save is successful
+  loadingMessage: 'Saving...', // Message to show while the save call is in progress
+  showDeployDialog: true // To force showing the DeployDialog when updating existing asset,
+                         // it will be always shown when saving a new asset irrespective of this option
+}
+```
 
 ### `.deleteAsset(id, onSuccess, onError)`
-Deletes an asset under the current app instance.
+Deletes one or many assets under the current app instance.
+
+- **id:** id of the asset to delete or array of ids
+
+### `.getThemes(onSuccess, onError)`
+Loads an array of assets for the current app instance.
+
+**Callback receives:**
+```js
+[{
+  Created: 'string', // WCF date
+  Id: 'string', // Theme ID
+  Value: {}, // Theme definition
+}]
+```
+
+### `.saveTheme(theme, onSuccess, onError)`
+Creates or updates a theme. If theme.Id is null it will create a new theme, otherwise it will update the existing one.
+To use a theme associate it with an existing Asset by calling saveAsset and setting ThemeId.
+
+- **theme:** object to update the theme's value to
+
+### `.deleteTheme(id, onSuccess, onError)`
+Deletes an existing theme.
+
+- **id:** id of the theme to delete
 
 ## enplug.dashboard
 
