@@ -102,17 +102,17 @@ Loads all information for the current user.
 **Callback receives:**
 ```js
 {
-  id: 'string', // User id in the system
-  accountId: 'string' // Current user's account ID
-  type: 'string', // User access type
+  id: 'string',             // User id in the system
+  accountId: 'string'       // Current user's account ID
+  type: 'string',           // User access type
   data: {
-      email: 'string', // User email
-      firstName: 'string', // User name
-      accountName: 'string', // User account name
+      email: 'string',      // User email
+      firstName: 'string',  // User name
+      accountName: 'string',// User account name
   },
   has: {
-      rootAccess: true, // boolean true/false
-      limitedAccess: true, // boolean true/false
+      rootAccess: true,     // boolean true/false
+      limitedAccess: true,  // boolean true/false
   }
 }
 ```
@@ -123,8 +123,8 @@ Loads information for the currently selected display group(s). In the account co
 **Callback receives:**
 ```js
 {
-  language: 'string', // e.g. English, Russian, French
-  orientation: 'string', // Landscape or Portrait
+  language: 'string',       // e.g. English, Russian, French
+  orientation: 'string',    // Landscape or Portrait
   timezone: 'string',
 }
 ```
@@ -139,11 +139,11 @@ Loads an array of assets for the current app instance.
 **Callback receives:**
 ```js
 [{
-  Created: 'string', // WCF date
-  Id: 'string', // Asset ID
-  Value: {}, // Value object provided when created
-  VenueIds: [], // Array of Ids of Display Groups this asset is currently deployed to
-  ThemeId: 'string' // Optional Theme Id if set
+  Created: 'string',    // WCF date
+  Id: 'string',         // Asset ID
+  Value: {},            // Value object provided when created
+  VenueIds: [],         // Array of Ids of Display Groups this asset is currently deployed to
+  ThemeId: 'string'     // Optional Theme Id if set
 }]
 ```
 
@@ -155,12 +155,12 @@ Creates or updates an asset. If asset.Id is null it will create a new asset, oth
 
 ```js
 {
-  showSchedule: false, // by default
-  initialTab: 'displays', // by default, other option is 'schedule'
-  successMessage: 'Saved config', // Message to show when the save is successful
-  loadingMessage: 'Saving...', // Message to show while the save call is in progress
-  showDeployDialog: true // To force showing the DeployDialog when updating existing asset,
-                         // it will be always shown when saving a new asset irrespective of this option
+  showSchedule: false,              // by default
+  initialTab: 'displays',           // by default, other option is 'schedule'
+  successMessage: 'Saved config',   // Message to show when the save is successful
+  loadingMessage: 'Saving...',      // Message to show while the save call is in progress
+  showDeployDialog: true            // To force showing the DeployDialog when updating existing asset,
+                                    // it will be always shown when saving a new asset irrespective of this option
 }
 ```
 
