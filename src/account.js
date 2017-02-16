@@ -282,6 +282,28 @@
         };
 
         /**
+         * Loads theme by id.
+         *
+         * Data is passed as the first param to the success callback.
+         *
+         * @param {function} [themeId]
+         * @param {function} onSuccess
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.getTheme = function (themeId, onSuccess, onError) {
+            return this.method({
+                name: 'getTheme',
+                params: {
+                    id: themeId
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+
+        /**
          * Creates a new theme under the current app instance app definition.
          * The new theme will be available only under the current user's account.
          *
