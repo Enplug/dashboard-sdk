@@ -547,19 +547,23 @@
          ***************/
 
         /**
-         * Loads available themes for the current app instance app definition.
+         * Loads available themes for the current app or for specified appId.
          *
          * Data is passed as the first param to the success callback.
          *
+         * @param {function} [appId]
          * @param {function} onSuccess
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.getThemes = function (onSuccess, onError) {
+        this.getThemes = function (appId, onSuccess, onError) {
             return this.method({
                 name: 'getThemes',
+                params: {
+                    appId: appId
+                },
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -567,39 +571,71 @@
          * Creates a new theme under the current app instance app definition.
          * The new theme will be available only under the current user's account.
          *
-         * @param {object} newTheme
-         * @param {string} newTheme.Name
-         * @param {Array} newTheme.Assets
+         * @param {object} themeDefinition
+         * @param {object} theme
+         * @param {string} previewUrl
+         * @param {Array} previewAsset
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.createTheme = function (newTheme, onSuccess, onError) {
-            this.validate(newTheme, 'object', 'You must provide the new theme (object) to create.');
+        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, onSuccess, onError) {
+            this.validate(themeDef, 'object', 'You must provide the theme definition (object).');
+            this.validate(previewUrl, 'string', 'You must provide the preview url (string).');
             return this.method({
-                name: 'createTheme',
-                params: newTheme,
+                name: 'editTheme',
+                params: {
+                    themeDefinition: themeDef,
+                    theme: theme,
+                    previewUrl: previewUrl,
+                    previewAsset: previewAsset
+                },
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
         /**
-         * Removes a theme from the current user's account for
-         * the current app instance app definition. Cannot remove default themes.
+         * Creates a new theme under the current app definition.
+         * The new theme will be available to all users in the account.
+         *
+         * @param {object} theme
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.saveTheme = function (theme, onSuccess, onError) {
+            this.validate(theme, 'object', 'You must provide the theme (object) to save.');
+            this.validate(theme.Value, 'object', 'You must provide the theme.Value (object) to save.');
+
+            return this.method({
+                name: 'saveTheme',
+                params: {
+                     theme : theme
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
+         * Deletes a theme from the current user's account for
+         * the current app definition. Cannot remove default themes.
          *
          * @param {string} themeId
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.removeTheme = function (themeId, onSuccess, onError) {
+        this.deleteTheme = function (themeId, onSuccess, onError) {
             this.validate(themeId, 'string', 'You must provide the ID (string) of the theme to remove.');
             return this.method({
-                name: 'removeTheme',
-                params: themeId,
+                name: 'deleteTheme',
+                params: {
+                    themeId: themeId
+                },
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
