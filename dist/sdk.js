@@ -601,7 +601,7 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, onSuccess, onError) {
+        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, fonts, onSuccess, onError) {
             this.validate(themeDef, 'object', 'You must provide the theme definition (object).');
             this.validate(previewUrl, 'string', 'You must provide the preview url (string).');
             return this.method({
@@ -610,7 +610,8 @@
                     themeDefinition: themeDef,
                     theme: theme,
                     previewUrl: previewUrl,
-                    previewAsset: previewAsset
+                    previewAsset: previewAsset,
+                    fonts: fonts
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
