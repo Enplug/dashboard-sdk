@@ -55,7 +55,7 @@
                 name: 'set.title',
                 params: title,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -89,7 +89,7 @@
                     return displayType;
                 },
 
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -109,7 +109,7 @@
                 name: 'set.selectorEnabled',
                 params: show,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -131,7 +131,7 @@
                 name: 'switchToView',
                 params: view,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -187,7 +187,7 @@
                     }
                 },
 
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -215,7 +215,7 @@
                     }
                 },
 
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -242,7 +242,7 @@
             return this.method({
                 name: 'page.error',
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -257,7 +257,7 @@
             return this.method({
                 name: 'page.notFound',
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -278,7 +278,7 @@
                 name: 'indicator.loading',
                 params: message,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -298,7 +298,7 @@
                 name: 'indicator.success',
                 params: message,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -318,7 +318,7 @@
                 name: 'indicator.error',
                 params: message,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -349,7 +349,7 @@
                 name: 'confirm',
                 params: options,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -367,7 +367,31 @@
             return this.method({
                 name: 'unsavedChanges',
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
+            });
+        };
+
+        /**
+         * Opens app preview modal.
+         *
+         *
+         * @param {string} url
+         * @param {object} asset
+         * @param {object} theme
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.preview = function (url, asset, theme, onSuccess, onError) {
+            return this.method({
+                name: 'preview',
+                params: {
+                    url :  url,
+                    asset: asset,
+                    theme: theme
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
             });
         };
 
@@ -384,7 +408,7 @@
                 name: 'upload',
                 params: options,
                 successCallback: onSuccess,
-                errorCallback: onError,
+                errorCallback: onError
             });
         };
 
@@ -408,7 +432,7 @@
         this.click = function () {
             return this.method({
                 name: 'click',
-                transient: true, // don't wait for a response
+                transient: true // don't wait for a response
             });
         };
 
