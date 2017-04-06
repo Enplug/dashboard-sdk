@@ -372,6 +372,26 @@
         };
 
         /**
+         * Navigate to url.
+         *
+         *
+         * @param {string} url
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.navigate = function (url, onSuccess, onError) {
+            return this.method({
+                name: 'navigate',
+                params: {
+                    url: url
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
          * Opens app preview modal.
          *
          *
