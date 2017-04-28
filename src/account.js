@@ -181,7 +181,7 @@
                 asset : asset,
                 dialogOptions : dialogOptions || {}
             };
-            
+
             return this.method({
                 name: 'saveAsset',
                 params: params,
@@ -315,7 +315,7 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, fonts, onSuccess, onError) {
+        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, fonts, layout, onSuccess, onError) {
             this.validate(themeDef, 'object', 'You must provide the theme definition (object).');
             this.validate(previewUrl, 'string', 'You must provide the preview url (string).');
             return this.method({
@@ -325,7 +325,8 @@
                     theme: theme,
                     previewUrl: previewUrl,
                     previewAsset: previewAsset,
-                    fonts: fonts
+                    fonts: fonts,
+                    layout: layout
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
