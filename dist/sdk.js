@@ -467,7 +467,7 @@
                 asset : asset,
                 dialogOptions : dialogOptions || {}
             };
-            
+
             return this.method({
                 name: 'saveAsset',
                 params: params,
@@ -601,7 +601,7 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, fonts, onSuccess, onError) {
+        this.editTheme = function (themeDef, theme, previewUrl, previewAsset, layout, fonts, onSuccess, onError) {
             this.validate(themeDef, 'object', 'You must provide the theme definition (object).');
             this.validate(previewUrl, 'string', 'You must provide the preview url (string).');
             return this.method({
@@ -611,6 +611,7 @@
                     theme: theme,
                     previewUrl: previewUrl,
                     previewAsset: previewAsset,
+                    layout: layout,
                     fonts: fonts
                 },
                 successCallback: onSuccess,
@@ -814,7 +815,6 @@
                 errorCallback: onError
             });
         };
-
 
         /**
          * Sets the primary action buttons for a page in the titlebar.
@@ -1082,13 +1082,14 @@
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.preview = function (url, asset, theme, onSuccess, onError) {
+        this.preview = function (url, asset, theme, layout, onSuccess, onError) {
             return this.method({
                 name: 'preview',
                 params: {
                     url :  url,
                     asset: asset,
-                    theme: theme
+                    theme: theme,
+                    layout: layout
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
