@@ -1,0 +1,424 @@
+/* - DASHBOARD types - */
+
+export interface Dashboard {
+  /**
+   * Removes this sender's {@link Transport} event listeners to prevent memory leaks.
+   */
+  cleanup(): void;
+
+  /**
+   * Notifies the parent dashboard of a click in the child iFrame. Used to close
+   * dropdown windows etc which were opened in parent window and are unable to
+   * respond to click events in child iFrame.
+   *
+   * Event handler is automatically bound when a DashboardSender is created.
+   */
+  click(): CallId;
+
+  /**
+   * Opens a confirm window asking the user to confirm their unsaved changes.
+   *
+   * If the user clicks the confirm button, the success callback is called.
+   * Otherwise the error callback is called.
+   */
+  confirmUnsavedChanges(onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Shows the error indicator.
+   *
+   * Should only be used after a call has been made to .loadingIndicator().
+   */
+  errorIndicator(message: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Synchronously returns the current loading state.
+   *
+   * Updated asynchronously when this sender receives an acknowledgement
+   * of successful SDK call from the dashboard.
+   */
+  isLoading(): boolean;
+
+  /**
+   * Turns on the progress indicator, typically used during asynchronous actions.
+   *
+   * Note that the progress indicator will continue until a call is made to the
+   * errorIndicator or successIndicator APIs.
+   */
+  loadingIndicator(message: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Navigate to url.
+   */
+  navigate(url: string, onSuccess?: Function, onError?: Function): CallId;
+
+  novalidate: boolean;
+
+  /**
+   * Opens a confirm window with Yes/No buttons and configurable messages.
+   * If the user clicks the Confirm button, the success callback is called.
+   * Otherwise the error callback is called.
+   */
+  openConfirm(options: OpenConfirmOptions, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Puts the page into error state.
+   */
+  pageError(onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Controls the loading state for the entire page. Every application starts off in
+   * loading state, and must set pageLoading(false) to notify the dashboard that it
+   * has successfully loaded.
+   *
+   * Use .isLoading() to synchronously check current loading state.
+   */
+  pageLoading(bool: boolean, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Puts the page into 404 state.
+   */
+  pageNotFound(onSuccess?: Function, onError?: Function): CallId;
+
+  prefix: 'dashboard';
+
+  /**
+   * Opens app preview modal.
+   */
+  preview(url: string, asset: Asset<any>, theme: ThemeAsset<any>, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Sets the current callback for the title bar breadcrumb display selector dropdown.
+   * Attaching a callback enables the dropdown, it is disabled by default.
+   * The title is reset when the dashboard changes routes.
+   *
+   * the callback is fired when a display is selected, the callback will get the ID
+   * value when a single display is fired, or null when the 'All' selection is selected
+   */
+  setDisplaySelectorCallback(callback: Function, onError?: Function): CallId;
+
+  /**
+   * Hides or shows the display dropdown selector in the page title breadcrumb bar.
+   * Send true to show the selector, false to hide it.
+   */
+  setDisplaySelectorVisibility(show: boolean, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Sets the primary action buttons for a page in the titlebar.
+   *
+   * Accepts either a single button object, or an array of buttons.
+   * Each button must have a button.action callback.
+   */
+  setHeaderButtons(button: Button, onSuccess?: Function, onError?: Function): CallId;
+  setHeaderButtons(buttons: Button[], onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Sets the last part of the title bar breadcrumb.
+   * Set an empty title '' to clear the title.
+   * Re-setting this value wipes out the old one.
+   *
+   * The home/default page for an app should have no title set.
+   */
+  setHeaderTitle(title: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Shows the success indicator.
+   *
+   * Should only be used after a call has been made to .loadingIndicator().
+   */
+  successIndicator(message: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Switches to account view aka "All" selection of instance selector or DisplayGroup view
+   */
+  switchToView(displayGroupId: any, displayGroupName: any, onSuccess?: Function, onError?: Function): CallId;
+
+  transport: any
+
+  /**
+   * Uses Filepicker upload interface and Enplug encoding service, returns uploaded object
+   */
+  upload(options: FilepickerOptions, onSuccess?: (files: FilepickerUploadedFile[]) => void, onError?: Function): any;
+}
+
+
+export type CallId = number;
+
+export interface Asset<T> {
+  Created?: string;      // WCF date
+  Id: string | null;     // Asset ID
+  Value: T;              // Value object provided when created
+  VenueIds: string[];    // Array of Ids of Display Groups this asset is currently deployed to
+  ThemeId?: string;      // Optional Theme Id if set
+}
+
+export interface ThemeAsset<T> {
+  Id: string | null;
+  IsDefault: boolean;
+  Name: string;
+  Value: T;
+}
+
+export interface ThemeBackground {
+  backgroundAlpha: number;
+  backgroundAlpha2: number;
+  backgroundColor: string;
+  backgroundColor2: string;
+  backgroundImage: string;
+  backgroundImageLabel: string;
+  backgroundTypes: [boolean, boolean];
+  gradient: 'Solid' | 'Vertical Gradient' | 'Horizontal Gradient' | 'Radial Gradient';
+}
+
+export interface Theme {
+  name: string;
+  sections: ThemeSection[];
+}
+
+export interface ThemeSection {
+  label: string;
+  name: string;
+  properties: ThemeSectionProperties[]
+}
+
+export interface ThemeSectionProperties {
+  label: string;
+  type: ThemePropertyType;
+  name: string;
+}
+
+export type ThemePropertyType = 'color' | 'font' | 'backgroundSelector';
+
+export interface Button {
+  text: string;
+  class: string;
+  action: Function;
+  disabled: boolean;
+  icon?: string;
+}
+
+export interface OpenConfirmOptions {
+  title: string;
+  text: string;
+  cancelText?: string;
+  confirmText?: string;
+  confirmClass?: string;
+}
+
+export interface FilepickerOptions {
+  maxFiles?: number;
+  multiple?: boolean;
+  folders?: boolean;
+  openTo?: string;
+  webcamDim?: [width, height];
+  customSourceContainer?: string;
+  customSourcePath?: string;
+  debug?: boolean;
+  policy?: any,
+  signature?: any;
+  backgroundUpload?: boolean;
+  hide?: boolean;
+  customCss?: string;
+  customText?: string;
+  imageQuality?: number;
+  imageDim?: [width, height];
+  imageMax?: [width, height];
+  imageMin?: [width, height];
+  conversions?: FilepickerConversion[];
+  cropRatio?: number;
+  cropDim?: [width, height];
+  cropMax?: [width, height];
+  cropMin?: [width, height];
+  cropForce?: boolean;
+  storeTo?: FilepickerStoreToOptions;
+}
+
+export interface FilepickerUploadedFile {
+  url: string;      // publicly accessible URL for the encoded file
+  filename: string; // filename of the uploaded file
+  mimetype: string; // mimetype of the uploaded file
+  size?: number     // the size of the uploaded file in bytes, if available
+}
+
+export interface FilepickerStoreToOptions {
+  location?: 's3';
+  path?: string;
+  container?: string;
+  region?: string;
+  access?: 'public' | 'private';
+}
+
+export type width = number;
+export type height = number;
+
+export type FilepickerConversion = 'crop' | 'rotate' | 'filter';
+
+
+/* - ACCOUNT types - */
+
+export interface Account {
+  /**
+   * Loads all information for the current user. App instance ID,
+   * account type, token, account ID, venue ID, and environment.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getAccount(onSuccess: Function, onError?: Function): CallId;
+
+  /**
+   * Loads all information for the current user.
+   */
+   getUser(onSuccess: (user: User) => void, onError?: Function): CallId;
+
+  /**
+   * Loads information for the display groups available in current view.
+   * In the Display Group view it will return currently selected Display Group.
+   * In Account view it will return all DisplayGroups in the account.
+   * Language, orientation and time zone.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getDisplayGroups(onSuccess: (groups: DisplayGroup[]) => void, onError?: Function): CallId;
+
+  /**
+   * Loads information for the display groups available in current view.
+   * Language, orientation and time zone.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getSelectedDisplayId(onSuccess: (groupId: string | null) => void, onError?: Function): CallId;
+
+  /***************
+   * ASSETS
+   ***************/
+
+  /**
+   * Loads an array of assets for the current app instance.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getAssets<T>(onSuccess?: (assets: Asset<T>[]) => void, onError?: Function): CallId;
+
+  /**
+   * Creates an asset under the current app instance.
+   */
+   bulkCreateAssets<T>(assets: Asset<T>[], dialogOptions?: {}, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Creates an asset under the current app instance.
+   */
+   bulkDeployAssets<T>(assets: Asset<T>[], dialogOptions?: {}, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Saves an asset without showing the deployment dialog.
+   */
+   saveAsset<T>(asset: Asset<T>, dialogOptions?: DeployDialogOptions, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * This is for saving an order of assets if needed for the current app. An array of asset Ids
+   * is all that is needed, but the implementation also accepts an array of asset objects with "Id" string properties.
+   */
+   updateAssetOrder(assets: string[] | Asset<any>[], onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Deletes an asset for the current app instance.
+   */
+   deleteAsset(id: string | string[], onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Loads an array of default assets for the current instance's app definition.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getDefaultAssets(onSuccess: Function, onError?: Function): CallId;
+
+
+  /***************
+   * THEMES
+   ***************/
+
+  /**
+   * Loads available themes for the current app or for specified appId.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getThemes(appId: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Loads theme by id.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getTheme(themeId: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Creates a new theme under the current app instance app definition.
+   * The new theme will be available only under the current user's account.
+   */
+   editTheme<T>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T>[], layout?: any, fonts?: any, onSuccess?: Function, onError?: Function): Promise<any>;
+
+  /**
+   * Creates a new theme under the current app definition.
+   * The new theme will be available to all users in the account.
+   */
+   saveTheme(theme: Theme, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
+   * Deletes a theme from the current user's account for
+   * the current app definition. Cannot remove default themes.
+   */
+   deleteTheme(themeId: string, onSuccess?: Function, onError?: Function): CallId;
+}
+
+export interface User {
+  id: string;             // User id in the system
+  accountId: string       // Current user's account ID
+  type: string;           // User access type
+  data: {
+      email: string;
+      firstName: string;
+      accountName: string;
+      locale: string;
+  },
+  has: {
+      rootAccess: boolean;
+      limitedAccess: boolean;
+  }
+}
+
+export interface DisplayGroup {
+  language: string;     // e.g. English, Russian, French
+  orientation: string;  // Landscape or Portrait
+  timezone: string;
+}
+
+export interface DeployDialogOptions {
+  showSchedule?: boolean;
+  scheduleOptions?: {                // option to show duration slider when showDuration is set to true
+    showDuration: boolean,           // allow user to choose the duration of each asset shown on player
+  },
+  initialTab?: string;               // by default, other option is 'schedule'
+  successMessage?: string;           // Message to show when the save is successful
+  loadingMessage?: string;           // Message to show while the save call is in progress
+  showDeployDialog?: boolean;        // To force showing the DeployDialog when updating existing asset,
+                                     // it will be always shown when saving a new asset irrespective of this option
+}
+
+
+/***************
+ * ENPLUG OBJECT
+ ***************/
+
+declare const enplug: {
+  debug: boolean;
+  account: Account;
+  classes: {
+    AccountSender: () => any,
+    DashboardSender: () => any,
+    SenderSender: () => any,
+    TransportSender: () => any,
+  },
+  dashboard: Dashboard;
+  noop: () => void;
+};
+
+export default enplug;
