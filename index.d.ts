@@ -404,6 +404,11 @@ export interface DeployDialogOptions {
 }
 
 
+/* - SOCIAL types - */
+export interface Social {
+  ttest: (msg: string, onSuccess?: Function, onError?: Function) => CallId;
+}
+
 /***************
  * ENPLUG OBJECT
  ***************/
@@ -418,6 +423,7 @@ declare const enplug: {
     TransportSender: () => any,
   },
   dashboard: Dashboard;
+  social: Social;
   noop: () => void;
 };
 
