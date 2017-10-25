@@ -406,7 +406,9 @@ export interface DeployDialogOptions {
 
 /* - SOCIAL types - */
 export interface Social {
-  ttest: (msg: string, onSuccess?: Function, onError?: Function) => CallId;
+  authenticate: (authCode: string, redirectUrl: string, onSuccess?: Function, onError?: Function) => CallId;
+  getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
+  saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;
 }
 
 /***************
