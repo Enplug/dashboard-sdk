@@ -406,9 +406,10 @@ export interface DeployDialogOptions {
 
 /* - SOCIAL types - */
 export interface Social {
-  authenticate: (authCode: string, redirectUrl: string, onSuccess?: Function, onError?: Function) => CallId;
+  authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
   getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
   saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;
+  openPreapprovalDialog: (feed: Object, onSuccess?: Function, onError?: Function) => CallId;
 }
 
 /***************
