@@ -23,6 +23,27 @@
             });
         };
 
+        this.authFacebook = function (params, onSuccess, onError) {
+            return this.method({
+                name: 'addFacebookPage',
+                params: params,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.addFacebookPage = function (feedId, pageId, accessToken, onSuccess, onError) {
+            this.validate(feedId, 'string', 'No feedId provided');
+            this.validate(pageId, 'string', 'No pageId provided');
+            this.validate(accessToken, 'string', 'No accessToken provided');
+            return this.method({
+                name: 'addFacebookPage',
+                params: {feedId: feedId, pageId: pageId, accessToken: accessToken},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
         this.getFeeds = function (assetid, onSuccess, onError) {
             this.validate(assetid, 'string', 'No assetid provided.');
             return this.method({
