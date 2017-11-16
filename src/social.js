@@ -24,8 +24,9 @@
         };
 
         this.authFacebook = function (params, onSuccess, onError) {
+            console.log('authFacebook', params);
             return this.method({
-                name: 'addFacebookPage',
+                name: 'authFacebook',
                 params: params,
                 successCallback: onSuccess,
                 errorCallback: onError

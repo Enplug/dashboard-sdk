@@ -405,9 +405,15 @@ export interface DeployDialogOptions {
 
 
 /* - SOCIAL types - */
+export interface FacebookAuthParams {
+    FeedId: string;
+    AdminAccessToken: string;
+    PageId: string;
+}
+
 export interface Social {
   authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
-  authFacebook: (params: any, onSuccess?: Function, onError?: Function) => CallId;
+  authFacebook: (params: FacebookAuthParams, onSuccess?: Function, onError?: Function) => CallId;
   addFacebookPage: (feedId: string, pageId: string, accessToken: string, onSuccess?: Function, onError?: Function) => CallId;
   getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
   saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;

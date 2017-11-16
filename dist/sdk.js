@@ -1203,6 +1203,16 @@
             });
         };
 
+        this.authFacebook = function (params, onSuccess, onError) {
+            console.log('authFacebook', params);
+            return this.method({
+                name: 'authFacebook',
+                params: params,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
         this.addFacebookPage = function (feedId, pageId, accessToken, onSuccess, onError) {
             this.validate(feedId, 'string', 'No feedId provided');
             this.validate(pageId, 'string', 'No pageId provided');
