@@ -412,6 +412,7 @@ export interface FacebookAuthParams {
 }
 
 export interface Social {
+  clearQueryString: () => CallId,
   authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
   authFacebook: (params: FacebookAuthParams, onSuccess?: Function, onError?: Function) => CallId;
   addFacebookPage: (feedId: string, pageId: string, accessToken: string, onSuccess?: Function, onError?: Function) => CallId;

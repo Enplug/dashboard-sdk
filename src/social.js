@@ -12,6 +12,12 @@
         // Call parent constructor with namespace
         enplug.classes.Sender.call(this, 'social');
 
+        this.clearQueryString = function () {
+            return this.method({
+                name: 'clearQueryString'
+            });
+        };
+
         this.authenticate = function (authCode, redirectUri, onSuccess, onError) {
             this.validate(authCode, 'string', 'No authCode provided.');
             this.validate(redirectUri, 'string', 'No redirectUri provided.');
