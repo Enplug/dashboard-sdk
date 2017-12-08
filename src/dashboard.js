@@ -371,19 +371,39 @@
         };
 
         /**
-         * Navigate to url.
+         * Navigate to widget.
          *
          *
-         * @param {string} url
+         * @param {string} data
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.navigate = function (url, onSuccess, onError) {
+        this.navigate = function (data, onSuccess, onError) {
             return this.method({
                 name: 'navigate',
                 params: {
                     url: url
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
+         * Navigate back from widget.
+         *
+         *
+         * @param {string} assetId
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.navigateBack = function (assetId, onSuccess, onError) {
+            return this.method({
+                name: 'navigate',
+                params: {
+                    assetId: asetId
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
@@ -397,18 +417,20 @@
          * @param {string} url
          * @param {object} asset
          * @param {object} theme
+         * @param {array} items
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.preview = function (url, asset, theme, layout, onSuccess, onError) {
+        this.preview = function (url, asset, theme, layout, items, onSuccess, onError) {
             return this.method({
                 name: 'preview',
                 params: {
                     url :  url,
                     asset: asset,
                     theme: theme,
-                    layout: layout
+                    layout: layout,
+                    items : items
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
