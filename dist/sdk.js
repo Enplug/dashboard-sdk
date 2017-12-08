@@ -1064,7 +1064,7 @@
             return this.method({
                 name: 'navigate',
                 params: {
-                    url: url
+                    data: data
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
@@ -1084,7 +1084,7 @@
             return this.method({
                 name: 'navigate',
                 params: {
-                    assetId: asetId
+                    assetId: assetId
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
