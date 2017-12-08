@@ -401,7 +401,7 @@
          */
         this.navigateBack = function (assetId, onSuccess, onError) {
             return this.method({
-                name: 'navigate',
+                name: 'navigateBack',
                 params: {
                     assetId: assetId
                 },
