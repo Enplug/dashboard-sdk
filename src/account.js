@@ -317,7 +317,7 @@
          */
         this.editTheme = function (themeDef, theme, previewUrl, previewAsset, layout, fonts, onSuccess, onError) {
             this.validate(themeDef, 'object', 'You must provide the theme definition (object).');
-            this.validate(previewUrl, 'string', 'You must provide the preview url (string).');
+
             return this.method({
                 name: 'editTheme',
                 params: {
