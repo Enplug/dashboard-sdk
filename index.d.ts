@@ -186,7 +186,7 @@ export interface ThemeSectionProperties {
   name: string;
 }
 
-export type ThemePropertyType = 'color' | 'font' | 'backgroundSelector';
+export type ThemePropertyType = 'color' | 'font' | 'backgroundSelector' | 'backgroundColor';
 
 export interface Button {
   text: string;
