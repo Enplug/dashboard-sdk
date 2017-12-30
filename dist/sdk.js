@@ -1192,6 +1192,12 @@
         // Call parent constructor with namespace
         enplug.classes.Sender.call(this, 'social');
 
+        this.clearQueryString = function () {
+            return this.method({
+                name: 'clearQueryString'
+            });
+        };
+
         this.authenticate = function (authCode, redirectUri, onSuccess, onError) {
             this.validate(authCode, 'string', 'No authCode provided.');
             this.validate(redirectUri, 'string', 'No redirectUri provided.');
@@ -1220,6 +1226,16 @@
             return this.method({
                 name: 'addFacebookPage',
                 params: {feedId: feedId, pageId: pageId, accessToken: accessToken},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.lookupTwitterId = function (username, onSuccess, onError) {
+            this.validate(username, 'string', 'No username provided');
+            return this.method({
+                name: 'lookupTwitterId',
+                params: username,
                 successCallback: onSuccess,
                 errorCallback: onError
             });
@@ -1254,6 +1270,74 @@
                 errorCallback: onError
             });
         };
+
+        this.loadAllItems = function (assetId, onSuccess, onError) {
+            this.validate(assetId, 'string', 'No assetId provided.');
+            return this.method({
+                name: 'loadAllItems',
+                params: assetId,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.approveItem = function (itemId, assetId, onSuccess, onError) {
+            this.validate(itemId, 'string', 'No itemId provided.');
+            this.validate(assetId, 'string', 'No assetId provided.');
+            return this.method({
+                name: 'approveItem',
+                params: {itemId: itemId, assetId: assetId},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.removeItem = function (itemId, assetId, onSuccess, onError) {
+            this.validate(itemId, 'string', 'No itemId provided.');
+            this.validate(assetId, 'string', 'No assetId provided.');
+            return this.method({
+                name: 'removeItem',
+                params: {itemId: itemId, assetId: assetId},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.favoriteItem = function (itemId, assetId, network, onSuccess, onError) {
+            this.validate(itemId, 'string', 'No itemId provided.');
+            this.validate(assetId, 'string', 'No assetId provided.');
+            this.validate(network, 'string', 'No network provided.');
+            return this.method({
+                name: 'favoriteItem',
+                params: {itemId: itemId, assetId: assetId, network: network},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.unfavoriteItem = function (itemId, assetId, network, onSuccess, onError) {
+            this.validate(itemId, 'string', 'No itemId provided.');
+            this.validate(assetId, 'string', 'No assetId provided.');
+            this.validate(network, 'string', 'No network provided.');
+            return this.method({
+                name: 'unfavoriteItem',
+                params: {itemId: itemId, assetId: assetId, network: network},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.banItem = function (itemId, assetId, onSuccess, onError) {
+            this.validate(itemId, 'string', 'No itemId provided.');
+            this.validate(assetId, 'string', 'No assetId provided.');
+            return this.method({
+                name: 'banItem',
+                params: {itemId: itemId, assetId: assetId},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
     }
 
     // Inherit

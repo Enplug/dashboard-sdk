@@ -411,14 +411,52 @@ export interface FacebookAuthParams {
     PageId: string;
 }
 
+export interface SocialItemMedia {
+    Source: string;
+    Type: string;
+}
+
+export interface SocialItemUser {
+    Avatar: string;
+    Link: string;
+    Name: string;
+}
+
+export interface SocialItem {
+    Created: Date;
+    FlaggedWords: any[];
+    Id: string;
+    IsFavorited: boolean;
+    Link: string;
+    Media: SocialItemMedia;
+    SocialItemId: string;
+    SocialNetwork: string;
+    Text: string;
+    User: User;
+}
+
+export interface SocialItemsResponse {
+    __type: string;
+    LiveItems: SocialItem[];
+    PendingItems: SocialItem[];
+}
+
 export interface Social {
   clearQueryString: () => CallId,
   authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
   authFacebook: (params: FacebookAuthParams, onSuccess?: Function, onError?: Function) => CallId;
+  lookupTwitterId: (username: string, onSuccess?: Function, onError?: Function) => CallId;
   addFacebookPage: (feedId: string, pageId: string, accessToken: string, onSuccess?: Function, onError?: Function) => CallId;
   getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
   saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;
   openPreapprovalDialog: (feed: Object, onSuccess?: Function, onError?: Function) => CallId;
+
+  loadAllItems: (assetId: string, onSuccess?: (response: SocialItemsResponse) => any, onError?: Function) => CallId;
+  approveItem: (itemId: string, assetId: string, onSuccess?: Function, onError?: Function) => CallId;
+  removeItem: (itemId: string, assetId: string, onSuccess?: Function, onError?: Function) => CallId;
+  favoriteItem: (itemId: string, assetId: string, network: string, onSuccess?: Function, onError?: Function) => CallId;
+  unfavoriteItem: (itemId: string, assetId: string, network: string, onSuccess?: Function, onError?: Function) => CallId;
+  banItem: (itemId: string, assetId: string, onSuccess?: Function, onError?: Function) => CallId;
 }
 
 /***************
