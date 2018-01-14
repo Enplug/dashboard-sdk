@@ -299,6 +299,13 @@ export interface Account {
    getAssets<T>(onSuccess?: (assets: Asset<T>[]) => void, onError?: Function): CallId;
 
   /**
+   * Loads an array of assets for a specifig app instance.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+   getAssetsForApp<T>(appId: string, onSuccess?: (assets: Asset<T>[]) => void, onError?: Function): CallId;
+
+  /**
    * Creates an asset under the current app instance.
    */
    bulkCreateAssets<T>(assets: Asset<T>[], dialogOptions?: {}, onSuccess?: Function, onError?: Function): CallId;
