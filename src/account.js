@@ -106,6 +106,25 @@
         };
 
         /**
+         * Loads an array of assets for a specific app instance.
+         *
+         * Data is passed as the first param to the success callback.
+         *
+         * @param {string} appId
+         * @param {function} onSuccess
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.getAssetsForApp = function (appId, onSuccess, onError) {
+            return this.method({
+                name: 'getAssetsForApp',
+                appId: appId,
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
          * Creates an asset under the current app instance.
          *
          * @param {{Value:*, SecureValue:*}[]} assets -- the asset as an array or single asset object

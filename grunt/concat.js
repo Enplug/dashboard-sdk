@@ -8,6 +8,7 @@ module.exports = {
             'src/sender.js',
             'src/account.js',
             'src/dashboard.js',
+            'src/social.js',
             'src/angular-plugin.js',
         ],
         dest: 'dist/sdk.js',
