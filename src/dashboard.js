@@ -417,12 +417,13 @@
          * @param {string} url
          * @param {object} asset
          * @param {object} theme
-         * @param {array} items
+         * @param {object} layout
+         * @param {array} feedData
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.preview = function (url, asset, theme, layout, items, onSuccess, onError) {
+        this.preview = function (url, asset, theme, layout, feedData, onSuccess, onError) {
             return this.method({
                 name: 'preview',
                 params: {
@@ -430,7 +431,7 @@
                     asset: asset,
                     theme: theme,
                     layout: layout,
-                    items : items
+                    feedData : feedData
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
