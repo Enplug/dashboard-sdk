@@ -81,6 +81,16 @@
             });
         };
 
+        this.deleteFeed = function (feedid, onSuccess, onError) {
+            this.validate(feedid, 'string', 'No feedid provided.');
+            return this.method({
+                name: 'deleteFeed',
+                params: feedid,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
         this.openPreapprovalDialog = function (feed, iconUrl, onSuccess, onError) {
             this.validate(feed, 'object', 'No feed provided.');
             return this.method({
