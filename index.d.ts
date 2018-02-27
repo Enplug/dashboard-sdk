@@ -446,6 +446,7 @@ export interface SocialItemsResponse {
     __type: string;
     LiveItems: SocialItem[];
     PendingItems: SocialItem[];
+    SocialNetworks: string[];
 }
 
 export interface Social {
@@ -456,6 +457,7 @@ export interface Social {
   addFacebookPage: (feedId: string, pageId: string, accessToken: string, onSuccess?: Function, onError?: Function) => CallId;
   getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
   saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;
+  deleteFeed: (feedId: string, onSuccess?: Function, onError?: Function) => CallId;
   openPreapprovalDialog: (feed: Object, iconUrl: string, onSuccess?: Function, onError?: Function) => CallId;
 
   loadAllItems: (assetId: string, onSuccess?: (response: SocialItemsResponse) => any, onError?: Function) => CallId;
@@ -464,6 +466,9 @@ export interface Social {
   favoriteItem: (itemId: string, assetId: string, network: string, onSuccess?: Function, onError?: Function) => CallId;
   unfavoriteItem: (itemId: string, assetId: string, network: string, onSuccess?: Function, onError?: Function) => CallId;
   banItem: (itemId: string, assetId: string, onSuccess?: Function, onError?: Function) => CallId;
+
+  loadBlacklist: (accountId: string, socialNetwork: string, onSuccess?: Function, onError?: Function) => CallId;
+  unbanUser: (username: string, socialNetwork: string, accountId: string, onSuccess?: Function, onError?: Function) => CallId;
 }
 
 /***************

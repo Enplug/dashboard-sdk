@@ -1285,6 +1285,16 @@
             });
         };
 
+        this.deleteFeed = function (feedid, onSuccess, onError) {
+            this.validate(feedid, 'string', 'No feedid provided.');
+            return this.method({
+                name: 'deleteFeed',
+                params: feedid,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
         this.openPreapprovalDialog = function (feed, iconUrl, onSuccess, onError) {
             this.validate(feed, 'object', 'No feed provided.');
             return this.method({
@@ -1362,6 +1372,28 @@
             });
         };
 
+        this.loadBlacklist = function (accountId, socialNetwork, onSuccess, onError) {
+            this.validate(accountId, 'string', 'No accountId provided.');
+            this.validate(socialNetwork, 'string', 'No socialNetwork provided.');
+            return this.method({
+                name: 'loadBlacklist',
+                params: {accountId: accountId, socialNetwork: socialNetwork},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.unbanUser = function (username, socialNetwork, accountId, onSuccess, onError) {
+            this.validate(username, 'string', 'No username provided.');
+            this.validate(socialNetwork, 'string', 'No socialNetwork provided.');
+            this.validate(accountId, 'string', 'No accountId provided.');
+            return this.method({
+                name: 'unbanUser',
+                params: {username: username, socialNetwork: socialNetwork, accountId: accountId},
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
     }
 
     // Inherit
