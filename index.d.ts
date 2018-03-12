@@ -449,6 +449,11 @@ export interface SocialItemsResponse {
     SocialNetworks: string[];
 }
 
+export interface PreapprovalDialogOptions {
+    showVideoEnabled?: boolean;
+    showImagesEnabled?: boolean;
+}
+
 export interface Social {
   clearQueryString: () => CallId,
   authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
@@ -458,7 +463,7 @@ export interface Social {
   getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
   saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;
   deleteFeed: (feedId: string, onSuccess?: Function, onError?: Function) => CallId;
-  openPreapprovalDialog: (feed: Object, iconUrl: string, onSuccess?: Function, onError?: Function) => CallId;
+  openPreapprovalDialog: (feed: Object, iconUrl: string, options?: PreapprovalDialogOptions, onSuccess?: Function, onError?: Function) => CallId;
 
   loadAllItems: (assetId: string, onSuccess?: (response: SocialItemsResponse) => any, onError?: Function) => CallId;
   approveItem: (itemId: string, assetId: string, onSuccess?: Function, onError?: Function) => CallId;

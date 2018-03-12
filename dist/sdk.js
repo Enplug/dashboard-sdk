@@ -1295,11 +1295,11 @@
             });
         };
 
-        this.openPreapprovalDialog = function (feed, iconUrl, onSuccess, onError) {
+        this.openPreapprovalDialog = function (feed, iconUrl, options, onSuccess, onError) {
             this.validate(feed, 'object', 'No feed provided.');
             return this.method({
                 name: 'openPreapprovalDialog',
-                params: {feed: feed, iconUrl: iconUrl},
+                params: {feed: feed, iconUrl: iconUrl, options: options},
                 successCallback: onSuccess,
                 errorCallback: onError
             });
