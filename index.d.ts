@@ -452,6 +452,7 @@ export interface SocialItemsResponse {
 export interface PreapprovalDialogOptions {
     showVideoEnabled?: boolean;
     showImagesEnabled?: boolean;
+    showConnectedUserNeedsApproval?: boolean;
 }
 
 export interface Social {
