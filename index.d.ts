@@ -84,7 +84,7 @@ export interface Dashboard {
   /**
    * Opens app preview modal.
    */
-  preview(url: string, asset: Asset<any>, theme: ThemeAsset<any>, onSuccess?: Function, onError?: Function): CallId;
+  preview(url: string, asset: Asset<any>, theme: ThemeAsset<any>, layout?: Layout, feedData?: FeedData, onSuccess?: Function, onError?: Function): CallId;
 
   /**
    * Sets the current callback for the title bar breadcrumb display selector dropdown.
@@ -187,6 +187,24 @@ export interface ThemeSectionProperties {
 }
 
 export type ThemePropertyType = 'color' | 'font' | 'backgroundSelector' | 'backgroundColor';
+
+export type Orientation = 'landscape' | 'protrait';
+
+export type WidgetType = 'banner' | 'ticker';
+
+export interface Layout {
+  orientation: Orientation;
+  widgetType: WidgetType;
+  zones: number;
+  position: number;
+  flip: boolean;
+}
+
+export interface FeedData {
+  socialItems?: Array<any>,
+  socialFeeds?: Array<any>,
+  trigger: Object;
+}
 
 export interface Button {
   text: string;
