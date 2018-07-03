@@ -188,7 +188,7 @@ export interface ThemeSectionProperties {
 
 export type ThemePropertyType = 'color' | 'font' | 'backgroundSelector' | 'backgroundColor';
 
-export type Orientation = 'landscape' | 'protrait';
+export type Orientation = 'landscape' | 'portrait';
 
 export type WidgetType = 'main' | 'banner' | 'ticker';
 
@@ -203,7 +203,7 @@ export interface Layout {
 export interface FeedData {
   socialItems?: Array<any>,
   socialFeeds?: Array<any>,
-  trigger: Object;
+  trigger: any;
 }
 
 export interface Button {
