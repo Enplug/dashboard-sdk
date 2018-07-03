@@ -201,8 +201,8 @@ export interface Layout {
 }
 
 export interface FeedData {
-  socialItems?: Array<any>,
-  socialFeeds?: Array<any>,
+  socialItems?: Array<any>;
+  socialFeeds?: Array<any>;
   trigger: any;
 }
 
