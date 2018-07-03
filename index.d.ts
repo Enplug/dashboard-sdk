@@ -379,7 +379,7 @@ export interface Account {
    * Creates a new theme under the current app instance app definition.
    * The new theme will be available only under the current user's account.
    */
-   editTheme<T>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T>[], layout?: Layout, fonts?: any, onSuccess?: Function, onError?: Function): Promise<any>;
+   editTheme<T>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T>[], layout?: Layout, fonts?: any, feedData?: FeedData, onSuccess?: Function, onError?: Function): Promise<any>;
 
   /**
    * Creates a new theme under the current app definition.
