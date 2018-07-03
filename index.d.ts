@@ -190,14 +190,14 @@ export type ThemePropertyType = 'color' | 'font' | 'backgroundSelector' | 'backg
 
 export type Orientation = 'landscape' | 'protrait';
 
-export type WidgetType = 'banner' | 'ticker';
+export type WidgetType = 'main' | 'banner' | 'ticker';
 
 export interface Layout {
   orientation: Orientation;
-  widgetType: WidgetType;
-  zones: number;
-  position: number;
-  flip: boolean;
+  widgetType?: WidgetType;
+  zones?: number;
+  position?: number;
+  flip?: boolean;
 }
 
 export interface FeedData {
@@ -379,7 +379,7 @@ export interface Account {
    * Creates a new theme under the current app instance app definition.
    * The new theme will be available only under the current user's account.
    */
-   editTheme<T>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T>[], layout?: any, fonts?: any, onSuccess?: Function, onError?: Function): Promise<any>;
+   editTheme<T>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T>[], layout?: Layout, fonts?: any, onSuccess?: Function, onError?: Function): Promise<any>;
 
   /**
    * Creates a new theme under the current app definition.
