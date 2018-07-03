@@ -1117,12 +1117,11 @@
         /**
          * Opens app preview modal.
          *
-         *
          * @param {string} url
          * @param {object} asset
          * @param {object} theme
          * @param {object} layout
-         * @param {array} feedData
+         * @param {object} feedData
          * @param {function} [onSuccess]
          * @param {function} [onError]
          * @returns {number} callId
