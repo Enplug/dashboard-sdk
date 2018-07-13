@@ -84,7 +84,7 @@ export interface Dashboard {
   /**
    * Opens app preview modal.
    */
-  preview(url: string, asset: Asset<any>, theme: ThemeAsset<any>, layout?: Layout, feedData?: FeedData, onSuccess?: Function, onError?: Function): CallId;
+  preview<T1, T2, T3>(url: string, asset: Asset<T1>, theme: ThemeAsset<T2>, layout?: Layout, feedData?: FeedData<T3>, onSuccess?: Function, onError?: Function): CallId;
 
   /**
    * Sets the current callback for the title bar breadcrumb display selector dropdown.
@@ -200,10 +200,10 @@ export interface Layout {
   flip?: boolean;
 }
 
-export interface FeedData {
-  socialItems?: Array<any>;
-  socialFeeds?: Array<any>;
-  trigger: any;
+export interface FeedData<T> {
+  socialItems?: any[];
+  socialFeeds?: any[];
+  trigger: T;
 }
 
 export interface Button {
@@ -379,7 +379,7 @@ export interface Account {
    * Creates a new theme under the current app instance app definition.
    * The new theme will be available only under the current user's account.
    */
-   editTheme<T>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T>[], layout?: Layout, fonts?: any, feedData?: FeedData, onSuccess?: Function, onError?: Function): Promise<any>;
+   editTheme<T1, T2>(themeDef: {}, theme: Theme, previewUrl: string, previewAsset?: Asset<T1>[], layout?: Layout, fonts?: any, feedData?: FeedData<T2>, onSuccess?: Function, onError?: Function): Promise<any>;
 
   /**
    * Creates a new theme under the current app definition.
