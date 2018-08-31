@@ -39,6 +39,16 @@
             });
         };
 
+        this.authSlack = function(authToken, onSuccess, onError) {
+            this.validate(authToken, 'No Slack auth token provided');
+            return this.method({
+                name: 'authSlack',
+                params: { token: authToken },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
+
         this.addFacebookPage = function (feedId, pageId, accessToken, onSuccess, onError) {
             this.validate(feedId, 'string', 'No feedId provided');
             this.validate(pageId, 'string', 'No pageId provided');
@@ -60,6 +70,24 @@
                 errorCallback: onError
             });
         };
+
+        this.getSlackTeams = function(onSuccess, onError) {
+            return this.method({
+                name: 'getSlackTeams',
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        this.getSlackChannels = function(teamId, onSuccess, onError) {
+            this.validate(teamId, 'No teamId provided');
+            return this.method({
+                name: 'getSlackChannels',
+                params: teamId,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.getFeeds = function (assetid, onSuccess, onError) {
             this.validate(assetid, 'string', 'No assetid provided.');
