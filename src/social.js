@@ -40,10 +40,10 @@
         };
 
         this.authSlack = function(authToken, onSuccess, onError) {
-            this.validate(authToken, 'No Slack auth token provided');
+            this.validate(authToken, 'string', 'No Slack auth token provided');
             return this.method({
                 name: 'authSlack',
-                params: { token: authToken },
+                params: { verificationCode: authToken },
                 successCallback: onSuccess,
                 errorCallback: onError
             });
@@ -80,7 +80,7 @@
         };
 
         this.getSlackChannels = function(teamId, onSuccess, onError) {
-            this.validate(teamId, 'No teamId provided');
+            this.validate(teamId, 'string', 'No teamId provided');
             return this.method({
                 name: 'getSlackChannels',
                 params: teamId,
