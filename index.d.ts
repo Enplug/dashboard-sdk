@@ -477,10 +477,10 @@ export interface Social {
   clearQueryString: () => CallId,
   authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
   authFacebook: (params: FacebookAuthParams, onSuccess?: Function, onError?: Function) => CallId;
-  authSlack: (authCode: string, onSuccess?: Function, onError?: Function) => CallId;
+  authSlack: (authCode: string, redirectUrl: string, onSuccess?: Function, onError?: Function) => CallId;
   lookupTwitterId: (username: string, onSuccess?: Function, onError?: Function) => CallId;
   getSlackTeams: (onSuccess?: Function, onError?: Function) => CallId;
-  getSlachChannels: (teamId: string, onSuccess?: Function, onError?: Function) => CallId;
+  getSlackChannels: (teamId: string, onSuccess?: Function, onError?: Function) => CallId;
   addFacebookPage: (feedId: string, pageId: string, accessToken: string, onSuccess?: Function, onError?: Function) => CallId;
   getFeeds: (assetid: string, onSuccess?: Function, onError?: Function) => CallId;
   saveFeed: (feed: any, onSuccess?: Function, onError?: Function) => CallId;

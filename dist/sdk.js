@@ -1242,12 +1242,12 @@
             });
         };
 
-        this.authSlack = function(authToken, onSuccess, onError) {
-            console.log('[DASHBOARD SDK] authSlack', authToken)
+        this.authSlack = function(authToken, redirectUrl, onSuccess, onError) {
             this.validate(authToken, 'string', 'No Slack auth token provided');
+            this.validate(redirectUrl, 'string', 'No redirect url provided');
             return this.method({
                 name: 'authSlack',
-                params: { verificationCode: authToken },
+                params: { verificationCode: authToken, redirectUrl: redirectUrl },
                 successCallback: onSuccess,
                 errorCallback: onError
             });
