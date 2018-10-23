@@ -210,7 +210,7 @@ export interface Button {
   text: string;
   class: string;
   action: Function;
-  disabled: boolean;
+  disabled?: boolean;
   icon?: string;
 }
 
