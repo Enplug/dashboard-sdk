@@ -517,3 +517,9 @@ declare const enplug: {
 };
 
 export default enplug;
+
+declare global {
+  interface Window {
+    enplug;
+  }
+}
