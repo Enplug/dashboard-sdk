@@ -437,7 +437,7 @@
         };
 
         /**
-         * Returns current progress of content encoding
+         * Returns flag status on account
          * @param {string} flagName
          * @param {function} [onSuccess]
          * @param {function} [onError]
