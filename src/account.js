@@ -401,6 +401,60 @@
         };
 
         /**
+         * Initializes content encoding process
+         * @param {string} contentUrl
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.encodeUpload = function (contentUrl, onSuccess, onError) {
+            return this.method({
+                name: 'encodeUpload',
+                params: {
+                    contentUrl: contentUrl
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
+         * Returns current progress of content encoding
+         * @param {string} contentUrl
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.encodeUploadCheck = function (contentUrl, onSuccess, onError) {
+            return this.method({
+                name: 'encodeUploadCheck',
+                params: {
+                    contentUrl: contentUrl
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
+         * Returns current progress of content encoding
+         * @param {string} flagName
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.hasFeatureFlag = function (flagName, onSuccess, onError) {
+            return this.method({
+                name: 'hasFeatureFlag',
+                params: {
+                    flagName: flagName
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
          * @deprecated
          */
         this.getDisplay = this.getDisplayGroups;
