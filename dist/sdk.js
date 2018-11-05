@@ -686,6 +686,60 @@
             });
         };
 
+        // /**
+        //  * Initializes content encoding process
+        //  * @param {string} contentUrl
+        //  * @param {function} [onSuccess]
+        //  * @param {function} [onError]
+        //  * @returns {number} callId
+        //  */
+        // this.encodeUpload = function (contentUrl, onSuccess, onError) {
+        //     return this.method({
+        //         name: 'encodeUpload',
+        //         params: {
+        //             contentUrl: contentUrl
+        //         },
+        //         successCallback: onSuccess,
+        //         errorCallback: onError
+        //     });
+        // };
+
+        // /**
+        //  * Returns current progress of content encoding
+        //  * @param {string} contentUrl
+        //  * @param {function} [onSuccess]
+        //  * @param {function} [onError]
+        //  * @returns {number} callId
+        //  */
+        // this.encodeUploadCheck = function (contentUrl, onSuccess, onError) {
+        //     return this.method({
+        //         name: 'encodeUploadCheck',
+        //         params: {
+        //             contentUrl: contentUrl
+        //         },
+        //         successCallback: onSuccess,
+        //         errorCallback: onError
+        //     });
+        // };
+
+        /**
+         * Returns flag status on account
+         * @param {string} flagName
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.hasFeatureFlag = function (flagName, onSuccess, onError) {
+            return this.method({
+                name: 'hasFeatureFlag',
+                params: {
+                    flagName: flagName
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
         /**
          * @deprecated
          */
@@ -733,7 +787,7 @@
          * The last callback registered with the dashboard title bar.
          * @type {function}
          */
-        var currentDisplayCallback = function () {};
+        var currentDisplayCallback = function () { };
 
         /**
          * Keeps track of whether the dashboard is loading mode so clients can check.
@@ -827,8 +881,8 @@
          */
         this.switchToView = function (displayGroupId, displayGroupName, onSuccess, onError) {
             var view = {
-                displayGroupId : displayGroupId,
-                displayGroupName : displayGroupName
+                displayGroupId: displayGroupId,
+                displayGroupName: displayGroupName
             };
 
             return this.method({
@@ -1130,11 +1184,11 @@
             return this.method({
                 name: 'preview',
                 params: {
-                    url :  url,
+                    url: url,
                     asset: asset,
                     theme: theme,
                     layout: layout,
-                    feedData : feedData
+                    feedData: feedData
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
@@ -1179,6 +1233,29 @@
             return this.method({
                 name: 'click',
                 transient: true // don't wait for a response
+            });
+        };
+
+        /**
+        * // todo
+        *
+        * @param {string} appName
+        * @param {string} level - Enplug | Account | Venue
+        * @param {string} levelId
+        * @param {function} onSuccess
+        * @param {function} onError
+        * @returns {number} callId
+        */
+        this.openContentIntervalSettingsDialog = function (appName, level, levelId, onSuccess, onError) {
+            return this.method({
+                name: 'openContentIntervalSettingsDialog',
+                params: {
+                    appName: appName,
+                    level: level,
+                    levelId: levelId
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
             });
         };
 
