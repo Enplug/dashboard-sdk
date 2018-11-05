@@ -686,42 +686,6 @@
             });
         };
 
-        // /**
-        //  * Initializes content encoding process
-        //  * @param {string} contentUrl
-        //  * @param {function} [onSuccess]
-        //  * @param {function} [onError]
-        //  * @returns {number} callId
-        //  */
-        // this.encodeUpload = function (contentUrl, onSuccess, onError) {
-        //     return this.method({
-        //         name: 'encodeUpload',
-        //         params: {
-        //             contentUrl: contentUrl
-        //         },
-        //         successCallback: onSuccess,
-        //         errorCallback: onError
-        //     });
-        // };
-
-        // /**
-        //  * Returns current progress of content encoding
-        //  * @param {string} contentUrl
-        //  * @param {function} [onSuccess]
-        //  * @param {function} [onError]
-        //  * @returns {number} callId
-        //  */
-        // this.encodeUploadCheck = function (contentUrl, onSuccess, onError) {
-        //     return this.method({
-        //         name: 'encodeUploadCheck',
-        //         params: {
-        //             contentUrl: contentUrl
-        //         },
-        //         successCallback: onSuccess,
-        //         errorCallback: onError
-        //     });
-        // };
-
         /**
          * Returns flag status on account
          * @param {string} flagName
