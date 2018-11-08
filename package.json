@@ -11,7 +11,9 @@
   "main": "dist/sdk.min.js",
   "scripts": {
     "test": "grunt test",
-    "build": "grunt build"
+    "build": "grunt build",
+    "dev-release": "npm run build && cd dist/ && npm publish --tag dev",
+    "release": "npm run test && npm run build && cd dist/ && npm publish"
   },
   "devDependencies": {
     "bower": "^1.3.12",
