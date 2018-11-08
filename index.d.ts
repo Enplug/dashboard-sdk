@@ -210,7 +210,7 @@ export interface Button {
   text: string;
   class: string;
   action: Function;
-  disabled: boolean;
+  disabled?: boolean;
   icon?: string;
 }
 
@@ -517,3 +517,9 @@ declare const enplug: {
 };
 
 export default enplug;
+
+declare global {
+  interface Window {
+    enplug;
+  }
+}
