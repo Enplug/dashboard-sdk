@@ -479,7 +479,7 @@
         };
 
         /**
-        * // todo
+        * opens content interval settings dialog for ad-sheduler app
         *
         * @param {string} appName
         * @param {string} level - Enplug | Account | Venue
