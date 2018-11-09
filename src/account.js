@@ -408,6 +408,7 @@
          * @returns {number} callId
          */
         this.hasFeatureFlag = function (flagName, onSuccess, onError) {
+            this.validate(flagName, 'string', 'You must provide the flag name (string).');
             return this.method({
                 name: 'hasFeatureFlag',
                 params: {

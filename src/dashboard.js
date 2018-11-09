@@ -479,7 +479,7 @@
         };
 
         /**
-        * opens content interval settings dialog for ad-sheduler app
+        * opens content interval settings dialog for ad-scheduler app
         *
         * @param {string} appName
         * @param {string} level - Enplug | Account | Venue
@@ -489,6 +489,10 @@
         * @returns {number} callId
         */
         this.openContentIntervalSettingsDialog = function (appName, level, levelId, onSuccess, onError) {
+            this.validate(appName, 'string', 'You must provide the appName (string).');
+            this.validate(level, 'string', 'You must provide the level (string).');
+            this.validate(levelId, 'string', 'You must provide the levelId (string).');
+
             return this.method({
                 name: 'openContentIntervalSettingsDialog',
                 params: {
