@@ -401,6 +401,25 @@
         };
 
         /**
+         * Returns flag status on account
+         * @param {string} flagName
+         * @param {function} [onSuccess]
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.hasFeatureFlag = function (flagName, onSuccess, onError) {
+            this.validate(flagName, 'string', 'You must provide the flag name (string).');
+            return this.method({
+                name: 'hasFeatureFlag',
+                params: {
+                    flagName: flagName
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+        /**
          * @deprecated
          */
         this.getDisplay = this.getDisplayGroups;

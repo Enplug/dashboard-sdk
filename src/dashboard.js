@@ -29,7 +29,7 @@
          * The last callback registered with the dashboard title bar.
          * @type {function}
          */
-        var currentDisplayCallback = function () {};
+        var currentDisplayCallback = function () { };
 
         /**
          * Keeps track of whether the dashboard is loading mode so clients can check.
@@ -123,8 +123,8 @@
          */
         this.switchToView = function (displayGroupId, displayGroupName, onSuccess, onError) {
             var view = {
-                displayGroupId : displayGroupId,
-                displayGroupName : displayGroupName
+                displayGroupId: displayGroupId,
+                displayGroupName: displayGroupName
             };
 
             return this.method({
@@ -426,11 +426,11 @@
             return this.method({
                 name: 'preview',
                 params: {
-                    url :  url,
+                    url: url,
                     asset: asset,
                     theme: theme,
                     layout: layout,
-                    feedData : feedData
+                    feedData: feedData
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
@@ -475,6 +475,33 @@
             return this.method({
                 name: 'click',
                 transient: true // don't wait for a response
+            });
+        };
+
+        /**
+        * opens content interval settings dialog for ad-scheduler app
+        *
+        * @param {string} appName
+        * @param {string} level - Enplug | Account | Venue
+        * @param {string} levelId
+        * @param {function} onSuccess
+        * @param {function} onError
+        * @returns {number} callId
+        */
+        this.openContentIntervalSettingsDialog = function (appName, level, levelId, onSuccess, onError) {
+            this.validate(appName, 'string', 'You must provide the appName (string).');
+            this.validate(level, 'string', 'You must provide the level (string).');
+            this.validate(levelId, 'string', 'You must provide the levelId (string).');
+
+            return this.method({
+                name: 'openContentIntervalSettingsDialog',
+                params: {
+                    appName: appName,
+                    level: level,
+                    levelId: levelId
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
             });
         };
 
