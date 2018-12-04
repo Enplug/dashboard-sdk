@@ -1267,6 +1267,7 @@
             });
         };
 
+        // Old Instagram auth method. TODO(arek): remove when it's safe to do so.
         this.authenticate = function (authCode, redirectUri, onSuccess, onError) {
             this.validate(authCode, 'string', 'No authCode provided.');
             this.validate(redirectUri, 'string', 'No redirectUri provided.');
@@ -1277,6 +1278,18 @@
                 errorCallback: onError
             });
         };
+
+        // Current Instagram auth method.
+        this.authInstagram = function(authCode, redirectUri, onSuccess, onError) {
+            this.validate(authCode, 'string', 'No authCode provided.');
+            this.validate(redirectUri, 'string', 'No redirectUri provided.');
+            return this.method({
+                name: 'authInstagram',
+                params: { authCode: authCode, redirectUri: redirectUri },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.authFacebook = function (params, onSuccess, onError) {
             console.log('authFacebook', params);
