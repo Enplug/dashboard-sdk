@@ -1280,12 +1280,11 @@
         };
 
         // Current Instagram auth method.
-        this.authInstagram = function(authCode, redirectUri, onSuccess, onError) {
-            this.validate(authCode, 'string', 'No authCode provided.');
-            this.validate(redirectUri, 'string', 'No redirectUri provided.');
+        this.authInstagram = function(token, onSuccess, onError) {
+            this.validate(token, 'string', 'No authCode provided.');
             return this.method({
                 name: 'authInstagram',
-                params: { authCode: authCode, redirectUri: redirectUri },
+                params: { accessToken: token },
                 successCallback: onSuccess,
                 errorCallback: onError
             });
@@ -1323,6 +1322,16 @@
                 errorCallback: onError
             });
         };
+
+        this.getInstagramAccounts = function(facebookUserId, onSuccess, onError) {
+            this.validate(facebookUserId, 'string', 'No Facebook User Id provided')
+            return this.method({
+                name: 'getInstagramAccounts',
+                params: { userId: facebookUserId },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.lookupTwitterId = function (username, onSuccess, onError) {
             this.validate(username, 'string', 'No username provided');
