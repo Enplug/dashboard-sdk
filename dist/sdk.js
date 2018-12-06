@@ -1267,6 +1267,7 @@
             });
         };
 
+        // Old Instagram auth method. TODO(arek): remove when it's safe to do so.
         this.authenticate = function (authCode, redirectUri, onSuccess, onError) {
             this.validate(authCode, 'string', 'No authCode provided.');
             this.validate(redirectUri, 'string', 'No redirectUri provided.');
@@ -1277,6 +1278,17 @@
                 errorCallback: onError
             });
         };
+
+        // Current Instagram auth method.
+        this.authInstagram = function(token, onSuccess, onError) {
+            this.validate(token, 'string', 'No authCode provided.');
+            return this.method({
+                name: 'authInstagram',
+                params: { accessToken: token },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.authFacebook = function (params, onSuccess, onError) {
             console.log('authFacebook', params);
@@ -1310,6 +1322,16 @@
                 errorCallback: onError
             });
         };
+
+        this.getInstagramAccounts = function(facebookUserId, onSuccess, onError) {
+            this.validate(facebookUserId, 'string', 'No Facebook User Id provided')
+            return this.method({
+                name: 'getInstagramAccounts',
+                params: { userId: facebookUserId },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.lookupTwitterId = function (username, onSuccess, onError) {
             this.validate(username, 'string', 'No username provided');
