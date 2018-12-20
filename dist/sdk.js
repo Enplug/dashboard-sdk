@@ -1178,6 +1178,51 @@
         };
 
         /**
+         * Creates new assets and begins encoding process
+         *
+         * @param {Array<Object>} assets
+         * @param {string} source default: undefined, used by Graphics dashboard
+         * @param {function} onSuccess
+         * @param {function} onError
+         * @returns {number} callId
+         */
+        this.processAssetResource = function (accountId, appId, assets, onSuccess, onError) {
+            this.validate(accountId, 'string', 'You must provide the accountId (string).');
+            this.validate(appId, 'string', 'You must provide the appId (string).');
+            this.validate(assets, 'array', 'You must provide the assets (array).');
+
+            return this.method({
+                name: 'processAssetResource',
+                params: {
+                    accountId:accountId,
+                    appId:appId,
+                    assets:assets
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        /**
+         * Returns current encoding status of an asset
+         *
+         * @param {string} url asset url
+         * @param {function} onSuccess
+         * @param {function} onError
+         * @returns {number} callId
+         */
+        this.encodeStatus = function (url, onSuccess, onError) {
+            this.validate(url, 'string', 'You must provide the url (string).');
+
+            return this.method({
+                name: 'encodeStatus',
+                params: url,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        /**
          * Removes event listeners to prevent memory leaks.
          */
         this.cleanup = function () {
