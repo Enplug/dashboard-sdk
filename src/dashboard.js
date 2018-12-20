@@ -455,7 +455,7 @@
         };
 
         /**
-         * //todo
+         * Creates new assets and begins encoding process
          *
          * @param {Array<Object>} assets
          * @param {string} source default: undefined, used by Graphics dashboard
@@ -481,7 +481,7 @@
         },
 
         /**
-         * //todo
+         * Returns current encoding status of an asset
          *
          * @param {string} url asset url
          * @param {function} onSuccess

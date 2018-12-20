@@ -477,7 +477,9 @@ export interface Social {
   clearQueryString: () => CallId,
   authenticate: (authCode: string, redirectUri: string, onSuccess?: Function, onError?: Function) => CallId;
   authFacebook: (params: FacebookAuthParams, onSuccess?: Function, onError?: Function) => CallId;
+  authInstagram: (accessToken: string, onSuccess?: Function, onError?: Function) => CallId;
   authSlack: (authCode: string, redirectUrl: string, onSuccess?: Function, onError?: Function) => CallId;
+  getInstagramAccounts: (facebookUserId: string, onSuccess: Function, onError: Function) => CallId;
   lookupTwitterId: (username: string, onSuccess?: Function, onError?: Function) => CallId;
   getSlackTeams: (onSuccess?: Function, onError?: Function) => CallId;
   getSlackChannels: (teamId: string, onSuccess?: Function, onError?: Function) => CallId;

@@ -1178,6 +1178,51 @@
         };
 
         /**
+         * Creates new assets and begins encoding process
+         *
+         * @param {Array<Object>} assets
+         * @param {string} source default: undefined, used by Graphics dashboard
+         * @param {function} onSuccess
+         * @param {function} onError
+         * @returns {number} callId
+         */
+        this.processAssetResource = function (accountId, appId, assets, onSuccess, onError) {
+            this.validate(accountId, 'string', 'You must provide the accountId (string).');
+            this.validate(appId, 'string', 'You must provide the appId (string).');
+            this.validate(assets, 'array', 'You must provide the assets (array).');
+
+            return this.method({
+                name: 'processAssetResource',
+                params: {
+                    accountId:accountId,
+                    appId:appId,
+                    assets:assets
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        /**
+         * Returns current encoding status of an asset
+         *
+         * @param {string} url asset url
+         * @param {function} onSuccess
+         * @param {function} onError
+         * @returns {number} callId
+         */
+        this.encodeStatus = function (url, onSuccess, onError) {
+            this.validate(url, 'string', 'You must provide the url (string).');
+
+            return this.method({
+                name: 'encodeStatus',
+                params: url,
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        },
+
+        /**
          * Removes event listeners to prevent memory leaks.
          */
         this.cleanup = function () {
@@ -1267,6 +1312,7 @@
             });
         };
 
+        // Old Instagram auth method. TODO(arek): remove when it's safe to do so.
         this.authenticate = function (authCode, redirectUri, onSuccess, onError) {
             this.validate(authCode, 'string', 'No authCode provided.');
             this.validate(redirectUri, 'string', 'No redirectUri provided.');
@@ -1277,6 +1323,17 @@
                 errorCallback: onError
             });
         };
+
+        // Current Instagram auth method.
+        this.authInstagram = function(token, onSuccess, onError) {
+            this.validate(token, 'string', 'No authCode provided.');
+            return this.method({
+                name: 'authInstagram',
+                params: { accessToken: token },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.authFacebook = function (params, onSuccess, onError) {
             console.log('authFacebook', params);
@@ -1310,6 +1367,16 @@
                 errorCallback: onError
             });
         };
+
+        this.getInstagramAccounts = function(facebookUserId, onSuccess, onError) {
+            this.validate(facebookUserId, 'string', 'No Facebook User Id provided')
+            return this.method({
+                name: 'getInstagramAccounts',
+                params: { userId: facebookUserId },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        }
 
         this.lookupTwitterId = function (username, onSuccess, onError) {
             this.validate(username, 'string', 'No username provided');
