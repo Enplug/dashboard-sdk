@@ -419,7 +419,15 @@ export interface DisplayGroup {
 export interface DeployDialogOptions {
   showSchedule?: boolean;
   scheduleOptions?: {                // option to show duration slider when showDuration is set to true
-    showDuration: boolean,           // allow user to choose the duration of each asset shown on player
+    showDuration?: boolean;          // allow user to choose the duration of each asset shown on player
+    showLimitDays?: boolean;             
+    showLimitTime?: boolean;
+    showScheduleForLater?: boolean;
+    showEventScheduling?: boolean;
+    showRepeat?: boolean;
+    showRepeatYearly?: boolean;
+    showPriorityPlay?: boolean;
+    setDefaultDurationForNewImages?: boolean;
   },
   initialTab?: string;               // by default, other option is 'schedule'
   successMessage?: string;           // Message to show when the save is successful
