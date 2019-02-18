@@ -431,7 +431,7 @@ export interface DeployDialogOptions {
   loadingMessage?: string;           // Message to show while the save call is in progress
   showDeployDialog?: boolean;        // To force showing the DeployDialog when updating existing asset,
                                      // it will be always shown when saving a new asset irrespective of this option
-  requiredAssetProps: string[];      // asset.Value props to validate
+  requiredAssetProps?: string[];      // asset.Value props to validate
   showTagsEditor?: boolean;          // allow user to edit assets' tags
   loadingMessage?: string;           // save message
   successMessage?: string;           // save successful message
