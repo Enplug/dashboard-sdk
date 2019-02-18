@@ -433,8 +433,6 @@ export interface DeployDialogOptions {
                                      // it will be always shown when saving a new asset irrespective of this option
   requiredAssetProps?: string[];      // asset.Value props to validate
   showTagsEditor?: boolean;          // allow user to edit assets' tags
-  loadingMessage?: string;           // save message
-  successMessage?: string;           // save successful message
 
   assetsToNavigate?: Asset<any>[] // Graphics app only this one - list of assets to traverse with < > buttons
   canNavigate?: false; // Graphics app only this one
