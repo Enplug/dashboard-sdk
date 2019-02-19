@@ -419,21 +419,31 @@ export interface DisplayGroup {
 export interface DeployDialogOptions {
   showSchedule?: boolean;
   scheduleOptions?: {                // option to show duration slider when showDuration is set to true
-    showDuration?: boolean;          // allow user to choose the duration of each asset shown on player
+    showDuration: boolean;          // allow user to choose the duration of each asset shown on player
     showLimitDays?: boolean;             
     showLimitTime?: boolean;
     showScheduleForLater?: boolean;
+    showDuration: boolean;           // allow user to choose the duration of each asset shown on player
     showEventScheduling?: boolean;
-    showRepeat?: boolean;
-    showRepeatYearly?: boolean;
-    showPriorityPlay?: boolean;
-    setDefaultDurationForNewImages?: boolean;
-  },
+    showRepeatYearly?: boolean;      // a subsetting of event scheduling
+    showRepeat?: boolean;            // allow user to choose the schedule repeat options
+    showPriorityPlay?: boolean;      // allow user to edit Priotiy Play flag
+    setDefaultDurationForNewImages?: boolean; // Graphics app only this one
+  };
+  singleton?: boolean;
+  isNew?: boolean;
   initialTab?: string;               // by default, other option is 'schedule'
   successMessage?: string;           // Message to show when the save is successful
   loadingMessage?: string;           // Message to show while the save call is in progress
   showDeployDialog?: boolean;        // To force showing the DeployDialog when updating existing asset,
                                      // it will be always shown when saving a new asset irrespective of this option
+  requiredAssetProps?: string[];      // asset.Value props to validate
+  showTagsEditor?: boolean;          // allow user to edit assets' tags
+
+  assetsToNavigate?: Asset<any>[] // Graphics app only this one - list of assets to traverse with < > buttons
+  canNavigate?: false; // Graphics app only this one
+  showDetails?: false; // Graphics app only this one
+  showReporting?: false; // Graphics app only this one
 }
 
 

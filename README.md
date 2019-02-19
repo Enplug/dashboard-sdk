@@ -18,7 +18,6 @@ The official Enplug JavaScript SDK for the dashboard/control interface of apps b
 ## Installing
 
 - **CDN:** `<script src="http://cdn.enplug.net/libs/dashboard-sdk/3.0.3/sdk.min.js"></script>`
-- **Bower:** `bower install enplug-dashboard-sdk --save-dev`
 - **NPM:** `npm install @enplug/dashboard-sdk --save`
 
 ## Usage and Getting Started
@@ -297,7 +296,6 @@ Please send any issues to support@enplug.com.
 Clone the repository, then install the dependencies:
 ```
 npm install
-bower install
 grunt build
 ```
 To compile files as they're changed, run:
