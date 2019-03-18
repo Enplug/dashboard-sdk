@@ -440,9 +440,9 @@ export interface DeployDialogOptions {
   showTagsEditor?: boolean;          // allow user to edit assets' tags
 
   assetsToNavigate?: Asset<any>[] // Graphics app only this one - list of assets to traverse with < > buttons
-  canNavigate?: false; // Graphics app only this one
-  showDetails?: false; // Graphics app only this one
-  showReporting?: false; // Graphics app only this one
+  canNavigate?: boolean; // Graphics app only this one
+  showDetails?: boolean; // Graphics app only this one
+  showReporting?: boolean; // Graphics app only this one
 }
 
 
