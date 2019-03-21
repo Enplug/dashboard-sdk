@@ -423,8 +423,6 @@ export interface DeployDialogOptions {
     showLimitDays?: boolean;             
     showLimitTime?: boolean;
     showScheduleForLater?: boolean;
-    showEventScheduling?: boolean;
-    showRepeatYearly?: boolean;      // a subsetting of event scheduling
     showRepeat?: boolean;            // allow user to choose the schedule repeat options
     showPriorityPlay?: boolean;      // allow user to edit Priotiy Play flag
     setDefaultDurationForNewImages?: boolean; // Graphics app only this one
