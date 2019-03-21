@@ -420,11 +420,6 @@ export interface DeployDialogOptions {
   showSchedule?: boolean;
   scheduleOptions?: {                // option to show duration slider when showDuration is set to true
     showDuration: boolean;           // allow user to choose the duration of each asset shown on player
-    showLimitDays?: boolean;             
-    showLimitTime?: boolean;
-    showScheduleForLater?: boolean;
-    showEventScheduling?: boolean;
-    showRepeatYearly?: boolean;      // a subsetting of event scheduling
     showRepeat?: boolean;            // allow user to choose the schedule repeat options
     showPriorityPlay?: boolean;      // allow user to edit Priotiy Play flag
     setDefaultDurationForNewImages?: boolean; // Graphics app only this one
