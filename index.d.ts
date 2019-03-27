@@ -168,8 +168,8 @@ export interface Schedule {
 }
 
 export interface TimeRange {
-  StartTime: string;  // "2019-03-27T00:00:00"
-  EndTime: string;    // "2019-03-27T00:00:00"
+  StartTime: string;  // "09:00:00"
+  EndTime: string;    // "22:59:00"
 }
 
 export interface ThemeAsset<T> {
