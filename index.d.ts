@@ -146,9 +146,30 @@ export type CallId = number;
 export interface Asset<T> {
   Created?: string;      // WCF date
   Id: string | null;     // Asset ID
+  Schedule?: Schedule;
   Value: T;              // Value object provided when created
   VenueIds: string[];    // Array of Ids of Display Groups this asset is currently deployed to
   ThemeId?: string;      // Optional Theme Id if set
+}
+
+export interface Schedule {
+  ActivationDate?: string;    // "2019-03-27T00:00:00"
+  ActiveDays: string[];       // Limit days
+  Created: string;            // WCF date
+  DeleteWhenExpired: boolean;
+  ExpirationCount: number;
+  ExpirationDate: string;     // "2019-03-27T00:00:00"
+  Id: string;                 // Schedule ID
+  IsDeleted: boolean;
+  IsPriority: boolean;
+  LastSaved: string;          // WCF date
+  PlayTimes: TimeRange[];
+  Recurrence: number;
+}
+
+export interface TimeRange {
+  StartTime: string;  // "2019-03-27T00:00:00"
+  EndTime: string;    // "2019-03-27T00:00:00"
 }
 
 export interface ThemeAsset<T> {
