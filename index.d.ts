@@ -244,6 +244,7 @@ export interface OpenConfirmOptions {
 }
 
 export interface FilepickerOptions {
+  accept?: string | string[];
   maxFiles?: number;
   multiple?: boolean;
   folders?: boolean;
