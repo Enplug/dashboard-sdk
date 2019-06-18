@@ -137,9 +137,28 @@ export interface Dashboard {
   /**
    * Uses Filepicker upload interface and Enplug encoding service, returns uploaded object
    */
-  upload(options: FilepickerOptions, onSuccess?: (files: FilepickerUploadedFile[]) => void, onError?: Function): any;
-}
+  upload(options: FilepickerOptions, onSuccess?: (files: FilepickerUploadedFile[]) => void, onError?: Function): CallId;
 
+  /**
+   * Creates new assets and begins encoding process
+   */
+  processAssetResource(accountId: string, appId: string, assets: Asset<any>[], onSuccess: Function, onError: Function): CallId;
+
+  /**
+   * Returns current encoding status of an asset
+   */
+  encodeStatus(url: string, onSuccess: Function, onError: Function): CallId; 
+
+  /**
+   * opens content interval settings dialog for ad-scheduler app
+   */
+  openContentIntervalSettingsDialog(appName: string, level: string, levelId: string, onSuccess: Function, onError: Function): CallId; 
+
+  /**
+   * Lets dashboard know that the state of user changes in the app changed
+   */
+  setAppHasUnsavedChanges(hasUnsavedChanges: boolean, onError?: Function): CallId;
+}
 
 export type CallId = number;
 
@@ -413,7 +432,11 @@ export interface Account {
    * Deletes a theme from the current user's account for
    * the current app definition. Cannot remove default themes.
    */
-   deleteTheme(themeId: string, onSuccess?: Function, onError?: Function): CallId;
+  deleteTheme(themeId: string, onSuccess?: Function, onError?: Function): CallId;
+  /**
+   * Returns flag status on account
+   */
+  hasFeatureFlag(flagName: string, onSuccess?: Function, onError?: Function): CallId;
 }
 
 export interface User {
