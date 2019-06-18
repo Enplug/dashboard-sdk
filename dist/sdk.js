@@ -753,7 +753,7 @@
          * @type {function}
          */
         var currentDisplayCallback = function () { };
-
+        
         /**
          * Keeps track of whether the dashboard is loading mode so clients can check.
          * @type {boolean}
@@ -1266,12 +1266,33 @@
                 params: {
                     appName: appName,
                     level: level,
-                    levelId: levelId
+                    levelId: levelId,
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
             });
         };
+
+
+        /**
+         * Lets dashboard know that the state of user changes in the app changed
+         *
+         * @param {function} callback -- the callback to call when the app is to be unloaded
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.setAppHasUnsavedChanges = function (hasUnsavedChanges, onError) {
+            this.validate(hasUnsavedChanges, 'boolean', 'To report changes to the dashboard you must supply a value.');
+
+            return this.method({
+                name: 'appHasUnsavedChanges',
+                params: {
+                    hasUnsavedChanges: hasUnsavedChanges
+                },
+                errorCallback: onError
+            });
+        };
+
 
         // Broadcast clicks up to parent window so that we can
         // react to clicks for things like closing nav dropdowns
