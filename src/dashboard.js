@@ -541,9 +541,9 @@
             return this.method({
                 name: 'openContentIntervalSettingsDialog',
                 params: {
-                    appName,
-                    level,
-                    levelId,
+                    appName: appName,
+                    level: level,
+                    levelId: levelId,
                 },
                 successCallback: onSuccess,
                 errorCallback: onError
@@ -563,7 +563,9 @@
 
             return this.method({
                 name: 'appHasUnsavedChanges',
-                params: { hasUnsavedChanges },
+                params: {
+                    hasUnsavedChanges: hasUnsavedChanges
+                },
                 errorCallback: onError
             });
         };
