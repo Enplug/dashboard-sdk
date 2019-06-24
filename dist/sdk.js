@@ -1333,19 +1333,6 @@
             });
         };
 
-        // Old Instagram auth method. TODO(arek): remove when it's safe to do so.
-        this.authenticate = function (authCode, redirectUri, onSuccess, onError) {
-            this.validate(authCode, 'string', 'No authCode provided.');
-            this.validate(redirectUri, 'string', 'No redirectUri provided.');
-            return this.method({
-                name: 'authenticate',
-                params: {authCode: authCode, redirectUri: redirectUri},
-                successCallback: onSuccess,
-                errorCallback: onError
-            });
-        };
-
-        // Current Instagram auth method.
         this.authInstagram = function(token, onSuccess, onError) {
             this.validate(token, 'string', 'No authCode provided.');
             return this.method({
@@ -1355,16 +1342,6 @@
                 errorCallback: onError
             });
         }
-
-        this.authFacebook = function (params, onSuccess, onError) {
-            console.log('authFacebook', params);
-            return this.method({
-                name: 'authFacebook',
-                params: params,
-                successCallback: onSuccess,
-                errorCallback: onError
-            });
-        };
 
         this.authSlack = function(authToken, redirectUrl, onSuccess, onError) {
             this.validate(authToken, 'string', 'No Slack auth token provided');
