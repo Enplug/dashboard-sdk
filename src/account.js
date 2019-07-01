@@ -263,13 +263,19 @@
          *
          * Data is passed as the first param to the success callback.
          *
+         * @param {string} [level] 'Default', 'Network', 'Account'
+         * @param {string} [levelId] NetworkId or AccountId
          * @param {function} onSuccess
          * @param {function} [onError]
          * @returns {number} callId
          */
-        this.getDefaultAssets = function (onSuccess, onError) {
-            return this.method({
+        this.getDefaultAssets = function (level, levelId, onSuccess, onError) {
+           return this.method({
                 name: 'getDefaultAssets',
+                params: {
+                    level: level,
+                    levelId: levelId
+                },
                 successCallback: onSuccess,
                 errorCallback: onError,
             });
