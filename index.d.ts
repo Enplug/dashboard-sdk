@@ -51,6 +51,11 @@ export interface Dashboard {
    */
   navigate(url: string, onSuccess?: Function, onError?: Function): CallId;
 
+  /**
+   * Navigate back from widget.
+   */
+  navigateBack(assetId: string, onSuccess?: Function, onError?: Function): CallId;
+
   novalidate: boolean;
 
   /**
@@ -356,6 +361,13 @@ export interface Account {
    * Data is passed as the first param to the success callback.
    */
    getAssets<T>(onSuccess?: (assets: Asset<T>[]) => void, onError?: Function): CallId;
+
+  /**
+   * Loads an array of assets by Ids
+   *
+   * Data is passed as the first param to the success callback.
+   */
+  getAssetsByIds<T>(assetsIds: string[], onSuccess?: (assets: Asset<T>[]) => void, onError?: Function): CallId;
 
   /**
    * Loads an array of assets for a specifig app instance.
