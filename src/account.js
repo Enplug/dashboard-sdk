@@ -120,6 +120,9 @@
 
             return this.method({
                 name: 'getAssetsByIds',
+                params: {
+                    assetsIds: assetsIds,
+                },
                 successCallback: onSuccess,
                 errorCallback: onError,
             });

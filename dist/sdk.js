@@ -392,6 +392,29 @@
         };
 
         /**
+         * Loads an array of assets by Ids
+         *
+         * Data is passed as the first param to the success callback.
+         *
+         * @param {String[]} assetsIds
+         * @param {function} onSuccess
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.getAssetsByIds = function (assetsIds, onSuccess, onError) {
+            this.validate(assetsIds, 'array', 'You must provide an array of assets Ids.');
+
+            return this.method({
+                name: 'getAssetsByIds',
+                params: {
+                    assetsIds: assetsIds,
+                },
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        };
+
+        /**
          * Loads an array of assets for a specific app instance.
          *
          * Data is passed as the first param to the success callback.
