@@ -297,10 +297,11 @@ export interface FilepickerOptions {
 }
 
 export interface FilepickerUploadedFile {
-  url: string;      // publicly accessible URL for the encoded file
-  filename: string; // filename of the uploaded file
-  mimetype: string; // mimetype of the uploaded file
-  size?: number     // the size of the uploaded file in bytes, if available
+  url: string;        // publicly accessible URL for the encoded file
+  filename: string;   // filename of the uploaded file
+  mimetype: string;   // mimetype of the uploaded file
+  size?: number       // the size of the uploaded file in bytes, if available
+  thumbnail?: string; // thumbnail for the encoded file
 }
 
 export interface FilepickerStoreToOptions {
