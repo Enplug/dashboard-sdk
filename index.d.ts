@@ -459,8 +459,10 @@ export interface User {
   data: {
       email: string;
       firstName: string;
+      lastName: string;
       accountName: string;
       locale: string;
+      accountStatus: string;
   },
   has: {
       rootAccess: boolean;
