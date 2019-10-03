@@ -169,6 +169,7 @@ export type CallId = number;
 
 export interface Asset<T> {
   Created?: string;      // WCF date
+  Duration?: number      // Duration of play in seconds.
   Id: string | null;     // Asset ID
   Schedule?: Schedule;
   Value: T;              // Value object provided when created
