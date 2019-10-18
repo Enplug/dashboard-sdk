@@ -498,9 +498,10 @@ export interface DeployDialogOptions {
   requiredAssetProps?: string[];      // asset.Value props to validate
   showTagsEditor?: boolean;          // allow user to edit assets' tags
 
-  assetsToNavigate?: Asset<any>[] // Graphics app only this one - list of assets to traverse with < > buttons
-  canNavigate?: boolean; // Graphics app only this one
-  showDetails?: boolean; // Graphics app only this one
+  assetsToNavigate?: Asset<any>[] // Graphics and Arts app only this one - list of assets to traverse with < > buttons
+  canNavigate?: boolean; // Graphics and Arts app only this one
+  showDetails?: boolean; // Graphics and Arts app only this one
+  detailsType?: 'graphic' | 'art'; // The type of presented asset
   showReporting?: boolean; // Graphics app only this one
 }
 
