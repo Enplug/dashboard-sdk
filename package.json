@@ -16,7 +16,7 @@
     "release": "npm run test && npm run build && npm publish"
   },
   "devDependencies": {
-    "angular": "~1.4.8",
+    "angular": "~1.7.9",
     "angular-mocks": "~1.4.8",
     "grunt": "^1.0.3",
     "grunt-aws": "^0.6.2",
