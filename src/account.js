@@ -304,6 +304,33 @@
             });
         };
 
+
+        /***************
+         * Fonts API
+         ***************/
+
+        /**
+         * Loads available fonts for the current app or for specified appId.
+         *
+         * Data is passed as the first param to the success callback.
+         *
+         * @param {function} [appId]
+         * @param {function} onSuccess
+         * @param {function} [onError]
+         * @returns {number} callId
+         */
+        this.getFonts = function (appId, onSuccess, onError) {
+            return this.method({
+                name: 'getFonts',
+                params: {
+                    appId: appId
+                },
+                successCallback: onSuccess,
+                errorCallback: onError
+            });
+        };
+
+    
         /***************
          * THEMES
          ***************/
