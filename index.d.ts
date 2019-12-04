@@ -313,6 +313,13 @@ export interface FilepickerStoreToOptions {
   access?: 'public' | 'private';
 }
 
+export interface FontsApiItem {
+  Name: string;
+  FontFamily: string;
+  Category: string;
+  Css: string;
+} 
+
 export type width = number;
 export type height = number;
 
@@ -410,6 +417,18 @@ export interface Account {
    * Data is passed as the first param to the success callback.
    */
    getDefaultAssets(onSuccess: Function, onError?: Function): CallId;
+
+   
+  /***************
+   * Fonts API
+   ***************/
+
+  /**
+   * Loads available fonts for the current app or for specified appId.
+   *
+   * Data is passed as the first param to the success callback.
+   */
+  getFonts(appId: string, onSuccess: Function, onError?: Function): CallId;
 
 
   /***************
