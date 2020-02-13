@@ -568,6 +568,20 @@
         };
 
         /**
+         * Marks asset as recently viewed
+         */
+        this.touchAsset = function(id, onSuccess, onError) {
+            this.validate(id, 'string', 'You must provide an id string to touchAsset call');
+
+            return this.method({
+                name: 'touchAsset',
+                params: { id: id },
+                successCallback: onSuccess,
+                errorCallback: onError,
+            });
+        }
+                
+        /**
          * Loads an array of default assets for the current instance's app definition.
          *
          * Data is passed as the first param to the success callback.
