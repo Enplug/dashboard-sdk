@@ -412,6 +412,11 @@ export interface Account {
    deleteAsset(id: string | string[], onSuccess?: Function, onError?: Function): CallId;
 
   /**
+   * Touch an asset (signal to dashboard it has been interacted with)
+   */
+  touchAsset(id: string, onSuccess?: Function, onError?: Function): CallId;
+
+  /**
    * Loads an array of default assets for the current instance's app definition.
    *
    * Data is passed as the first param to the success callback.
